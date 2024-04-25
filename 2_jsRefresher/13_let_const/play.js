@@ -1,6 +1,8 @@
 const firstName = 'Max';
-const  age = 29;
+let age = 29;
 const hasHobbies = true;
+
+age = 30;
 
 function summarizeUser(userName, userAge, userHasHobby) {
   return (
@@ -14,6 +16,3 @@ function summarizeUser(userName, userAge, userHasHobby) {
 }
 
 console.log(summarizeUser(firstName, age, hasHobbies));
-
-// NOTE: Reference vs. primitives values
-// https://academind.com/tutorials/reference-vs-primitive-values
