@@ -1,0 +1,12 @@
+{
+  "name": "30_sendresponses",
+  "version": "1.0.0",
+  "description": "sending responses",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "ecr",
+  "license": "ISC"
+}
