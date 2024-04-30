@@ -20,3 +20,5 @@ you have to stop that process separately which you can do from the terminal whic
 ```"console": "integratedTerminal"```  
 ```cwd``` - launch the program to debug in this directory. 
 >>**It is important to define this parameter if you use relative path, and debug with node && nodemon**
+
+## [Debugging Node.js](https://nodejs.org/en/learn/getting-started/debugging)
