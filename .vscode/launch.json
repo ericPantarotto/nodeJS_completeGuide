@@ -1,0 +1,21 @@
+{
+  "configurations": [
+    {
+      "type": "node-terminal",
+      "name": "lesson45",
+      "request": "launch",
+      "command": "npm run start",
+      "cwd": "${workspaceFolder}/4_improvedWorkflow_debugging/45_nodemon"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "lesson45_nodemon",
+      "program": "${workspaceFolder}/4_improvedWorkflow_debugging/45_nodemon/app.js",
+      "cwd": "${workspaceFolder}/4_improvedWorkflow_debugging/45_nodemon",
+      "restart": true,
+      "runtimeExecutable": "nodemon",
+      "console": "integratedTerminal"
+    }
+  ]
+}
