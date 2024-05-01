@@ -1,7 +1,7 @@
 {
-  "name": "59_installing_expressjs",
+  "name": "60_middleware",
   "version": "1.0.0",
-  "description": "installing expressjs",
+  "description": "middleware",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
