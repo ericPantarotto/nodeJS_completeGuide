@@ -16,6 +16,16 @@
       "restart": true,
       "runtimeExecutable": "nodemon",
       "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "lesson59",
+      "program": "${workspaceFolder}/5_expressjs/59_installing_expressjs/app.js",
+      "cwd": "${workspaceFolder}/5_expressjs/59_installing_expressjs",
+      "restart": true,
+      "runtimeExecutable": "nodemon",
+      "console": "integratedTerminal"
     }
   ]
 }
