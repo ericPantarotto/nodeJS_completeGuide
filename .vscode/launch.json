@@ -26,6 +26,16 @@
       "restart": true,
       "runtimeExecutable": "nodemon",
       "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "lesson65",
+      "program": "${workspaceFolder}/5_expressjs/65_limitingToPostRequest/app.js",
+      "cwd": "${workspaceFolder}/5_expressjs/65_limitingToPostRequest",
+      "restart": true,
+      "runtimeExecutable": "nodemon",
+      "console": "integratedTerminal"
     }
   ]
 }
