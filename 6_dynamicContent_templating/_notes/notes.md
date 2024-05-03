@@ -13,3 +13,15 @@ But sharing this data across requests, across users is typically something you d
 
 >So this is a pattern we can use for now here and it's fine for practicing what we want to practice here but later we'll learn about a technique to share data in memory here, in the node app across different requests but only for one and the same user and not across users because now we have shared data across requests and across users.  
 we will also use database.
+
+## Templating Engines
+![image info](./sc1.png)
+
+A templating engine understands a certain syntax for which it scans your html-ish template and where it then replaces placeholders or certain snippets depending on the engine you're using with real html content but that content, this **html content it uses there is generated on the fly, on the server by the templating engine taking that dynamic content into account.**
+>With a templating engine, in the end, the result will be dynamically, on the fly generated html file which is then sent back to your users.  
+So the users never see the template, they never see the placeholders, **all that happens on the server,** they just get a normal html page but it's not hardcoded 
+
+The 3 most popular templating engines are:
+- EJS
+- Pug (Jade)
+- Handlebars
