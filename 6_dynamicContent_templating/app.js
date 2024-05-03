@@ -7,11 +7,12 @@ import { fileURLToPath } from 'url';
 import adminData from './routes/admin.js';
 import { expRouter as shopRoutes } from './routes/shop.js';
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+app.set('view engine', 'pug');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));

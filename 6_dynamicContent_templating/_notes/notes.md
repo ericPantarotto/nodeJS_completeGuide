@@ -25,3 +25,38 @@ The 3 most popular templating engines are:
 - EJS
 - Pug (Jade)
 - Handlebars
+
+## Installing &  Implementing Pug
+
+**<span style='color: #bcdbf9'> Note:** remember that we must quit the development server when we install another package.
+
+`npm install --save ejs pug express-handlebars` (So let's install them with npm install --save because all three engines are part of our node code and ship with the code we deploy on some computer in the end)
+
+We need to install a global configuration value; `app.set()` allows us to set any values globally on our express application  
+[https://expressjs.com/en/api.html#app.set](https://expressjs.com/en/api.html#app.set)
+
+
+| Property    | Description | Default |
+| -------- | ------- | ------- |
+| view engine  | The default engine extension to use when omitted. NOTE: Sub-apps will inherit the value of this setting.    | |
+| views | 	A directory or an array of directories for the application's views. If an array, the views are looked up in the order they occur in the array. | `process.cwd() + '/views'` |
+
+```js
+app.set('view engine', 'pug');
+```
+**<span style='color: #bcdbf9'> Note:** **Pug** engine actually ships with built in express support and auto registers itself with express.  
+Pug is supported out of the box and with that, we're already set to go.
+
+
+>**<span style='color: #cc9464'> HACK:** Thanks to our IDE/Emmet, if you `CTRL+Enter HTML:5`, we get a **Pug** structure.  
+Keep in mind that the **Pug** templating engine will compile our code to normal html in the end.
+
+Indentation matters with **Pug**, to manage siblings.
+
+As we defined that all the views are in the `/views` folder, we also don't have to construct a path to that folder instead we can just say `'shop'`.  
+We also don't need shop.pug because we defined pug as the default templating engine so it will look for `.pug file`
+
+From shop.js,
+```js
+router.get('/', (req, res, next) => res.render('shop'));
+```
