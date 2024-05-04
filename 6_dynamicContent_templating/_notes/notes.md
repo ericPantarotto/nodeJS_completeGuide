@@ -60,3 +60,5 @@ From shop.js,
 ```js
 router.get('/', (req, res, next) => res.render('shop'));
 ```
+## Official Pug Documentation
+[https://pugjs.org/api/getting-started.html](https://pugjs.org/api/getting-started.html)
