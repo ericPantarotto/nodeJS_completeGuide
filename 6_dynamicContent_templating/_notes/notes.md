@@ -62,3 +62,56 @@ router.get('/', (req, res, next) => res.render('shop'));
 ```
 ## Official Pug Documentation
 [https://pugjs.org/api/getting-started.html](https://pugjs.org/api/getting-started.html)
+
+## Adding a Layout
+**<span style='color: #bcdbf9'> Note:** we can define some hooks in the base layout, and other views that will extend the base layout, can add more *links references* for example (you can choose whatever name after the reserved keyword **block**):     
+`block styles`  
+`block content`
+
+**<span style='color: #a8c62c'> main-layout.pug:** 
+
+```html
+<!DOCTYPE html>
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        title #{pageTitle}
+        link(rel="stylesheet", href="/css/main.css")
+        block styles
+    body   
+        header.main-header
+            nav.main-header__nav
+                ul.main-header__item-list
+                    li.main-header__item
+                        a(href="/", class=(path === '/' ? 'active' : '')) Shop
+                    li.main-header__item
+                        a(href="/admin/add-product", class=(path === '/admin/add-product' ? 'active' : '')) Add Product
+        
+        block content
+```
+
+**<span style='color: #a8c62c'> 404.pug:** 
+```html
+extends layouts/main-layout.pug
+
+block content
+    h1 Page Not Found!
+```
+**<span style='color: #a8c62c'> add-product.pug:** 
+```html
+extends layouts/main-layout.pug
+
+block styles
+    link(rel="stylesheet", href="/css/forms.css")
+    link(rel="stylesheet", href="/css/product.css")
+
+block content
+    main
+        form.product-form(action="/admin/add-product", method="POST")
+            .form-control
+                label(for="title") Title
+                input(type="text", name="title")#title
+            button.btn(type="submit") Add Product
+```
