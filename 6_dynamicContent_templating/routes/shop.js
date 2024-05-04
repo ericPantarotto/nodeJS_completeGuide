@@ -1,8 +1,11 @@
 import express from 'express';
 
+import adminData from './admin.js';
 const router = express.Router();
 
-router.get('/', (req, res, next) => res.render('shop'));
+router.get('/', (req, res, next) =>
+  res.render('shop', { prods: adminData.products, docTitle: 'My Shop' })
+);
 
 export const expRouter = router;
 
