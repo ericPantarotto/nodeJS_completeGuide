@@ -115,3 +115,28 @@ block content
                 input(type="text", name="title")#title
             button.btn(type="submit") Add Product
 ```
+
+## Finishing Pug template
+### Active item `navbar`
+
+**<span style='color: #a8c62c'> admin.js:** 
+```js
+router.get('/add-product', (req, res, next) =>
+  res.render('add-product', { pageTitle: 'Add Product', path: '/admin/add-product' })
+);
+```
+**<span style='color: #a8c62c'> main-layout.pug:** 
+```
+li.main-header__item
+    a(href="/", class=(path === '/' ? 'active' : '')) Shop
+li.main-header__item
+    a(href="/admin/add-product", class=(path === '/admin/add-product' ? 'active' : '')) Add Product
+```
+
+### Passing the PageTitle
+*Option 1*: we could create a block section in **<span style='color: #a8c62c'> main-layout.pug:**  , and define it in our views
+
+*Option 2*: we use a dynamic field in **<span style='color: #a8c62c'> main-layout.pug:**   
+`title #{pageTitle}`
+
+**<span style='color:   #875c5c'>IMPORTANT:** we need to make sure that in all our `res.render()` function, we pass that `pageTitle` key.
