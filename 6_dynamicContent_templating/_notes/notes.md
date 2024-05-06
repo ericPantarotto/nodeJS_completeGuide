@@ -140,3 +140,37 @@ li.main-header__item
 `title #{pageTitle}`
 
 **<span style='color:   #875c5c'>IMPORTANT:** we need to make sure that in all our `res.render()` function, we pass that `pageTitle` key.
+
+## Working with Handlebars
+### Set-up
+**<span style='color: #bcdbf9'> Note:** Unlike Pug, Handlebars is not auto-installed by Express,js, so we manually have to tell express that there is such an express handlebars engine available.
+
+so that object we just imported, that just turns out to be a function that we can call to basically initialises this engine 
+
+**<span style='color:   #875c5c'>IMPORTANT:** **applies up to version 3**
+
+```js
+import expressHbs from 'express-handlebars';
+app.engine('handlebars', expressHbs());
+app.set('view engine', 'handlebars');
+```
+Note that the extension for you files in `views` folder,  will follow the convention you defined your app.set() function  
+- 'handlebars' => **<span style='color: #a8c62c'> *404*.handlebars**  
+- 'hbs' => **<span style='color: #a8c62c'> *404*.hbs**
+
+**<span style='color:   #875c5c'>IMPORTANT:** **set-up with current version (at the the time of the course 7.1.2**  
+[https://www.npmjs.com/package/express-handlebars](https://www.npmjs.com/package/express-handlebars)
+
+```js
+import { engine } from 'express-handlebars';
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', './views');
+```
+you must have a **<span style='color: #a8c62c'>main.handlebars** file under `/views/layouts`
+
+### Handlebars syntax
+Handlebars uses normal html with some custom syntax, there is no minimal html version as it was with Pug.
+```html
+<title>{{ pageTitle }}</title>
+```

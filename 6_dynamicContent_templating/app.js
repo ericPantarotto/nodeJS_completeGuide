@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import express from 'express';
+import { engine } from 'express-handlebars';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -12,7 +13,11 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-app.set('view engine', 'pug');
+// app.set('view engine', 'pug');
+
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', './views');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
