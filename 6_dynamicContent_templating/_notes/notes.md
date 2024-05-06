@@ -178,8 +178,67 @@ Handlebars uses normal html with some custom syntax, there is no minimal html ve
 Handlebars just supports output of keys that yield true or false.  
 `{{ #if prods.length > 0}}`  
 
-Now this means that we have to move that logic from the template into our Node Express code and pass the result of this check into the template.
+Now this means that we have to move that logic from the template into our
+ Node Express code and pass the result of this check into the template.
 
 This is a core difference to Pug already besides that html syntax. In Handlebars, we can't run any logic in our handlebars template, we just can output single property, single variables and their value and we can only use these in `if blocks`.
 
 **<span style='color: #bcdbf9'> Note:** it might sound very complex but it forces us to put all our logic into the node express code where our logic typically should live and keep our templates lean because if you put too much logic in your templates, it can be hard to understand your code because you always have to check both, your express code and your templates
+
+## Adding a Layout with Handlebars
+you define layout folder and default template:  
+```js
+app.engine('handlebars', engine({layoutsDir: 'views/layouts/', defaultLayout: 'main-layout'}));
+```
+
+Unlike Pug , you can't define block section, instead the only thing we can do there is we can define a placeholder with three curly braces, `{{{body}}}`
+
+However if you have some part like this where you need to add some styling depending on the page you are on, you will have to solve this differently, in a kind of a similar approach as we solved the active lass here in pug, you will have to add an if statement here in your main layout
+
+**<span style='color: #a8c62c'>main-layout.handlebars**  
+```js
+{{#if productCSS}}
+    <link rel='stylesheet' href='/css/forms.css' />
+{{/if}}
+{{#if formsCSS}}
+    <link rel='stylesheet' href='/css/product.css' />
+{{/if}}
+
+<li class='main-header__item'>
+    <a class='{{#if activeShop}}active{{/if}}' href='/'>Shop</a>
+</li>
+<li class='main-header__item'>
+    <a class='{{#if activeAddProduct}}active{{/if}}' href='/admin/add-product'>Add Product</a>
+</li>
+```
+
+**<span style='color: #a8c62c'>shop.js**  
+```js
+router.get('/', (req, res, next) =>
+  res.render('shop', {
+    prods: adminData.products,
+    pageTitle: 'My Shop',
+    path: '/',
+    hasProducts: adminData.products.length > 0,
+    activeShop: true,
+    productCSS: true,
+  })
+);
+```
+
+**<span style='color: #bcdbf9'> Note:**  for any views you can pass `layout: false` in your `res.render()`, this is a special key that is understood by handlebars and it would not use the default layout,
+
+### renaming .handlebars extension to .hbs
+**<span style='color: #a8c62c'>app.js**, you have to add an extname property in your engine configuration:
+```js
+app.engine(
+  'hbs',
+  engine({
+    layoutsDir: 'views/layouts/',
+    defaultLayout: 'main-layout',
+    extname: 'hbs',
+  })
+);
+app.set('view engine', 'hbs');
+app.set('views', './views');
+```
