@@ -174,3 +174,12 @@ Handlebars uses normal html with some custom syntax, there is no minimal html ve
 ```html
 <title>{{ pageTitle }}</title>
 ```
+
+Handlebars just supports output of keys that yield true or false.  
+`{{ #if prods.length > 0}}`  
+
+Now this means that we have to move that logic from the template into our Node Express code and pass the result of this check into the template.
+
+This is a core difference to Pug already besides that html syntax. In Handlebars, we can't run any logic in our handlebars template, we just can output single property, single variables and their value and we can only use these in `if blocks`.
+
+**<span style='color: #bcdbf9'> Note:** it might sound very complex but it forces us to put all our logic into the node express code where our logic typically should live and keep our templates lean because if you put too much logic in your templates, it can be hard to understand your code because you always have to check both, your express code and your templates
