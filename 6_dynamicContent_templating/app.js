@@ -1,6 +1,5 @@
 import bodyParser from 'body-parser';
 import express from 'express';
-import { engine } from 'express-handlebars';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -24,7 +23,7 @@ app.use('/admin', adminData.routes);
 app.use(shopRoutes);
 
 app.use((req, res, next) => {
-  res.status(404).render('404', { pageTitle: 'Page Not Found' });
+  res.status(404).render('404', { pageTitle: 'Page Not Found', path: '' });
 });
 
 app.listen(3000);
@@ -38,6 +37,7 @@ app.listen(3000);
 // app.set('view engine', 'pug');
 
 //NOTE: handlebars
+// import { engine } from 'express-handlebars';
 // app.engine(
 //   'hbs',
 //   engine({
