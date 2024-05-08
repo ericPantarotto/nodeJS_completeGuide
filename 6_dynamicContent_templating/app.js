@@ -13,17 +13,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// app.set('view engine', 'pug');
-
-app.engine(
-  'hbs',
-  engine({
-    layoutsDir: 'views/layouts/',
-    defaultLayout: 'main-layout',
-    extname: 'hbs',
-  })
-);
-app.set('view engine', 'hbs');
+// NOTE: E  JS
+app.set('view engine', 'ejs');
 app.set('views', './views');
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -42,3 +33,18 @@ app.listen(3000);
 // app.use('/admin', adminRoutes);
 
 // res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+
+//NOTE: PUG
+// app.set('view engine', 'pug');
+
+//NOTE: handlebars
+// app.engine(
+//   'hbs',
+//   engine({
+//     layoutsDir: 'views/layouts/',
+//     defaultLayout: 'main-layout',
+//     extname: 'hbs',
+//   })
+// );
+// app.set('view engine', 'hbs');
+// app.set('views', './views');

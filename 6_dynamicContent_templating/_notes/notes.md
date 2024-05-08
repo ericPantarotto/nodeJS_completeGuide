@@ -242,3 +242,20 @@ app.engine(
 app.set('view engine', 'hbs');
 app.set('views', './views');
 ```
+
+## Working with EJS
+EJS is a templating engine which is just like pug, supported out of the box so we don't need to register the engine as we did it with handlebars.
+
+It has a nice mixture of the extended functionalities of Pug, and uses normal HTML.
+
+ejs does not support layouts but we will find a solution to at least have some kind of reusability of certain building blocks
+
+**<span style='color: #bcdbf9'> Note:** we can write normal javascript code in blocks like `if`, `for`:
+```html
+<% if (prods.length >0) %>
+
+<% if (prods.length >0) { %>
+    <div class="grid">
+    <% for (let product of prods) { %>
+    <article class="card product-item">
+```
