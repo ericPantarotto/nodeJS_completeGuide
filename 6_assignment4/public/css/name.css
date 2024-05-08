@@ -1,0 +1,15 @@
+.name-form {
+  width: 20rem;
+  max-width: 90%;
+  margin: auto;
+}
+
+.name-item {
+  width: 20rem;
+  max-width: 95%;
+}
+
+.name__title {
+  font-size: 1.2rem;
+  text-align: center;
+}
