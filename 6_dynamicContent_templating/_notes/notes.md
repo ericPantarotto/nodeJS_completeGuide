@@ -142,6 +142,10 @@ li.main-header__item
 **<span style='color:   #875c5c'>IMPORTANT:** we need to make sure that in all our `res.render()` function, we pass that `pageTitle` key.
 
 ## Working with Handlebars
+
+### Official Handlebars Documentation
+[https://handlebarsjs.com/](https://handlebarsjs.com/)
+
 ### Set-up
 **<span style='color: #bcdbf9'> Note:** Unlike Pug, Handlebars is not auto-installed by Express,js, so we manually have to tell express that there is such an express handlebars engine available.
 
@@ -244,6 +248,10 @@ app.set('views', './views');
 ```
 
 ## Working with EJS
+
+### Official EJS Documentation
+[http://ejs.co/#docs](http://ejs.co/#docs)
+
 EJS is a templating engine which is just like pug, supported out of the box so we don't need to register the engine as we did it with handlebars.
 
 It has a nice mixture of the extended functionalities of Pug, and uses normal HTML.
