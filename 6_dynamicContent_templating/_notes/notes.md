@@ -259,3 +259,42 @@ ejs does not support layouts but we will find a solution to at least have some k
     <% for (let product of prods) { %>
     <article class="card product-item">
 ```
+## Working on layouts with EJS Partials
+One thing that is missing here is the layout functionality pug or handlebars gave us and indeed ejs doesn't have layouts but we can use so-called **partials or includes**, by the way a feature that pug and handlebars also know.
+
+Instead of having one master layout where you put your individual view parts into, you have a couple of separated shared view parts which you can merge into the views
+
+Create a folder `includes` under `/views`
+
+to use our **partials**, taking the example of **<span style='color: #a8c62c'>404.ejs**
+We need to import it and this can be imported into the 404.ejs file by adding our ejs syntax, using a **minus sign** and you use that if you want to output **unescaped html code**, if you would render some variable that holds a string that holds html code, it would not render that html code but render it as text to avoid cross-site scripting attacks, with a minus you can avoid this and really render the html code.
+
+```html
+<%- include('includes/head.ejs') %>
+```
+
+if instead we use an **equal sign**, it gets rendered as text, this is escaping the values so it's not rendering it. So if you had some script tag or anything fishy in there, it would not render it. it would just display it as text and therefore protect you, but if you know what you're doing like we do here because we wrote the code we're including, we can and we should of course include it as html.
+```html
+<%= include('includes/head.ejs') %>
+```
+
+To manage the active class of the header/navigation, we can use this code, with the ejs syntax:
+```html
+<li class="main-header__item"><a class="<%= path === '/' ? 'active' : '' %>" href="/">Shop</a></li>
+<li class="main-header__item"><a class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product">Add Product</a></li>
+```
+
+Note: in any `.ejs` file you can add ejs syntax to console.log something
+`<% console.log(path); %>`
+
+**<span style='color: #a8c62c'>404.ejs** using **partials**
+```html
+<%- include('includes/head.ejs') %>
+  </head>
+  <%- include('includes/navigation.ejs') %>
+  <body>
+    <main>  
+      <h1>Page Not Found!</h1>
+    </main>
+<%- include('includes/end.ejs') %>
+```
