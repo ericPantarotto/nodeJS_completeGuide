@@ -4,7 +4,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import adminData from './routes/admin.js';
+import adminRoutes from './routes/admin.js';
 import { expRouter as shopRoutes } from './routes/shop.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -12,14 +12,13 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// NOTE: E  JS
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/admin', adminData.routes);
+app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 
 app.use((req, res, next) => {

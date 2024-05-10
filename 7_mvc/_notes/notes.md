@@ -24,3 +24,30 @@ It's all about a separation of concerns, so making sure that different parts of 
 
 **<span style='color: #bcdbf9'> Note:**  in an app with express or built with express as we are doing it which heavily relies on this middleware concept, the controllers are also kind of split up across middleware functions or some of the logic might be separated and moved into another middleware function 
 
+## Adding Controllers
+**<span style='color:   #875c5c'>Important:** [https://stackoverflow.com/questions/33178843/es6-export-default-with-multiple-functions-referring-to-each-other](https://stackoverflow.com/questions/33178843/es6-export-default-with-multiple-functions-referring-to-each-other)
+  
+So therefore you could of course say well we already got controllers, these two files hold our controller logic and you would be right.
+
+but as our application grows if you put everything into your route files, this can quickly become a very big file and therefore separating this into separate files can be a good idea.
+
+>you can then quickly see which routes you have and if you want to see the code which executes per route, you simply go into the respective controller file and function.
+
+**<span style='color: #a8c62c'> /controllers/products.js:** 
+```js
+function getAddProduct(req, res, next) {
+  return res.render('add-product', {
+    pageTitle: 'Add Product',
+    path: '/admin/add-product',
+  });
+}
+
+export default { getAddProduct };
+```
+**<span style='color: #a8c62c'> /routes/admin.js:** 
+**<span style='color: #bcdbf9'>  
+Note:** we don't execute our imported function from `/controllers/`, we just pass a reference to this function: So we're just telling the express router that it should take this function and store it and whenever a request reaches this route, it should go ahead and execute it.
+```js
+import  productsController  from "../controllers/products.js";
+router.get('/add-product', productsController.getAddProduct);
+```

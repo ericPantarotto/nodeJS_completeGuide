@@ -1,18 +1,13 @@
 import express from 'express';
+import productsController from '../controllers/products.js';
 
-import adminData from './admin.js';
 const router = express.Router();
 
-router.get('/', (req, res, next) =>
-  res.render('shop', {
-    prods: adminData.products,
-    pageTitle: 'My Shop',
-    path: '/',
-  })
-);
+router.get('/', productsController.getProducts);
 
 export const expRouter = router;
 
+// import adminData from './admin.js';
 // import { fileURLToPath } from 'url';
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
