@@ -44,10 +44,51 @@ function getAddProduct(req, res, next) {
 
 export default { getAddProduct };
 ```
-**<span style='color: #a8c62c'> /routes/admin.js:** 
-**<span style='color: #bcdbf9'>  
-Note:** we don't execute our imported function from `/controllers/`, we just pass a reference to this function: So we're just telling the express router that it should take this function and store it and whenever a request reaches this route, it should go ahead and execute it.
+**<span style='color: #a8c62c'> /routes/admin.js:**  
+**<span style='color: #bcdbf9'>  Note:** we don't execute our imported function from `/controllers/`, we just pass a reference to this function: So we're just telling the express router that it should take this function and store it and whenever a request reaches this route, it should go ahead and execute it.
 ```js
 import  productsController  from "../controllers/products.js";
 router.get('/add-product', productsController.getAddProduct);
 ```
+
+## Adding a Product Model
+**<span style='color: #bcdbf9'>  Note:**  whilst this might look more complicated right now and it certainly is because we're just using our dummy storage here, this is great once you really got more complex models with more fields, with more methods and where you don't store them in some random array but where you got the whole database connection logic
+
+**<span style='color: #a8c62c'> /models/product.js:**  
+```js
+const products = [];
+
+class Product {
+  constructor(title) {
+    this.title = title;
+  }
+  save() {
+    products.push(this);
+  }
+
+  static fetchAll() {
+    return products;
+  }
+}
+
+export default Product;
+```
+
+**<span style='color: #a8c62c'> /controllers/products.js:**  
+**<span style='color:   #875c5c'>Important:** convention is to use Capital letter for ES6 classes *import Product...*:
+```js
+import Product from '../models/product.js';
+
+function postAddProduct(req, res, next) {
+  new Product(req.body.title).save();
+  res.redirect('/');
+}
+
+function getProducts(req, res, next) {
+  res.render('shop', {
+    prods: Product.fetchAll(),
+    pageTitle: 'My Shop',
+    path: '/',
+  });
+}
+``` 
