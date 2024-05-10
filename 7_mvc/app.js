@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 
 import adminRoutes from './routes/admin.js';
 import { expRouter as shopRoutes } from './routes/shop.js';
+import errorController from "./controllers/error.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,9 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 
-app.use((req, res, next) => {
-  res.status(404).render('404', { pageTitle: 'Page Not Found', path: '' });
-});
+app.use(errorController .get404);
 
 app.listen(3000);
 
