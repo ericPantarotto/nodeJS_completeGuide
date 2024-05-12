@@ -1,4 +1,4 @@
-  import Product from '../models/product.js';
+import Product from '../models/product.js';
 
 function getAddProduct(req, res, next) {
   return res.render('add-product', {
@@ -13,10 +13,12 @@ function postAddProduct(req, res, next) {
 }
 
 function getProducts(req, res, next) {
-  res.render('shop', {
-    prods: Product.fetchAll(),
-    pageTitle: 'My Shop',
-    path: '/',
+  Product.fetchAll(products => {
+    res.render('shop', {
+      prods: products,
+      pageTitle: 'My Shop',
+      path: '/',
+    });
   });
 }
 

@@ -92,3 +92,83 @@ function getProducts(req, res, next) {
   });
 }
 ``` 
+
+## Storing data in files via the Model
+**<span style='color: #a8c62c'> /models/product.js:**
+
+- construct the path where to save the file
+- we retreive the existing content using `readFile()` and parse it if no error, otherwise contine; using an `if(!err)` block. 
+  - for very big files, there are more efficient ways because you don't want to read them all into memory before you work with them, you can read them as a stream 
+- add the new product and write the file in `.json` format.
+
+Make the necessary imports:
+```js
+import { readFile, writeFile } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+```
+**<span style='color: #bcdbf9'>  Note:**  we push `this`; **the class**, and this works as we're using arrow function  
+```js
+ save() {
+    const p = path.join(path.dirname(__dirname), 'data', 'products.json');
+
+    readFile(p, (err, fileContent) => {
+      let products = [];
+      if (!err) {
+        products = JSON.parse(fileContent);
+      }
+      products.push(this);
+      writeFile(p, JSON.stringify(products), () =>  {});
+    });
+  }
+```
+
+**<span style='color:   #875c5c'>Important:** you must add the below lines in the `package.json` to avoid **nodemon** server restarting each time the `/data/products.json` changes!
+```json
+  "nodemonConfig": {
+    "ignore": [
+      "data/products.json"
+    ]
+  }
+```
+
+## Fetching data in files via the Model
+**<span style='color:   #875c5c'>Important:** This line of code is asynchronous:  
+`fs.readFile()`  
+So my fetch all method here executes the line of code,     and as you learned, it simply registers this callback in its event emitter registry but then it just finishes with this function and this function itself does not return anything.   
+**so fetch all does not return anything**, it returns **undefined** therefore and hence in my view, we get various errors.
+
+>**<span style='color: #cc9464'> HACK:**   I will simply accept an argument in `fetchAll()` and that's a callback function.  
+and that actually allows me to pass a function into `fetchAll()`, which it will execute once it is done.  
+
+**<span style='color: #a8c62c'> /models/product.js:**
+```js
+ static fetchAll(cb) {
+    const p = path.join(path.dirname(__dirname), 'data', 'products.json');
+
+    readFile(p, (err, fileContent) => {
+      if (err) {
+        return cb([]);
+      }
+      return cb(JSON.parse(fileContent));
+    });
+  }
+```
+**<span style='color: #a8c62c'> /controllers/products.js:**  
+I now simply have to pass in an **anonymous function** to `fetchAll()`, the required callback function; in our case `res.render(...)`  
+```js
+function getProducts(req, res, next) {
+  Product.fetchAll(products => {
+    res.render('shop', {
+      prods: products,
+      pageTitle: 'My Shop',
+      path: '/',
+    });
+  });
+}
+```
+
+`fetchAll()` takes a function it should execute once it's done and once it's done, we get the products.
