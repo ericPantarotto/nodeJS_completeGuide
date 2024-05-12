@@ -125,6 +125,8 @@ const __dirname = path.dirname(__filename);
     });
   }
 ```
+**<span style='color: #bcdbf9'>  Note:** `writeFile(p, JSON.stringify(products), () =>  {});` `fs.writeFile()` takes 3 arguments: the path, the buffer to write, and an error callback  
+as an alternative to pass a standard callback; `err => console.log(err)`, we pass an empty callback `() => {}`
 
 **<span style='color:   #875c5c'>Important:** you must add the below lines in the `package.json` to avoid **nodemon** server restarting each time the `/data/products.json` changes!
 ```json
@@ -138,11 +140,13 @@ const __dirname = path.dirname(__filename);
 ## Fetching data in files via the Model
 **<span style='color:   #875c5c'>Important:** This line of code is asynchronous:  
 `fs.readFile()`  
-So my fetch all method here executes the line of code,     and as you learned, it simply registers this callback in its event emitter registry but then it just finishes with this function and this function itself does not return anything.   
+So my fetch all method here executes the line of code, and as you learned, it simply registers this callback in its event emitter registry but then it just finishes with this function and this function itself does not return anything.   
 **so fetch all does not return anything**, it returns **undefined** therefore and hence in my view, we get various errors.
 
 >**<span style='color: #cc9464'> HACK:**   I will simply accept an argument in `fetchAll()` and that's a callback function.  
 and that actually allows me to pass a function into `fetchAll()`, which it will execute once it is done.  
+
+alternative would be to promisify the `fs.readFile()` function and use `.then()`. Note that async/await is not provided out of the box from `fs`  
 
 **<span style='color: #a8c62c'> /models/product.js:**
 ```js
@@ -172,3 +176,42 @@ function getProducts(req, res, next) {
 ```
 
 `fetchAll()` takes a function it should execute once it's done and once it's done, we get the products.
+
+## Refactoring the file storage code
+
+we will create a helper function that  will do:
+- path construction here for me 
+- it will also read the file, so it will basically do everything of `fetchAll()`, 
+- it will even get my callback as an argument
+
+>**<span style='color:   #875c5c'>Important:**  make sure to always use arrow functions so that this never loses its context and always refers to the class and therefore to the object based on the class
+
+**<span style='color: #bcdbf9'>  Note:** 
+- we create an internal helper function in our **<span style='color: #a8c62c'> /models/product.js:** 
+- in this helper function, when there are products, we return two arguments to the callback functions
+  - the products read from file 
+  - **the path that `writeFile()` will take in the `save()` method** (alternative would be to create p as a global property)
+
+```js
+const _getProductsFromFile = cb => {
+  const p = path.join(path.dirname(__dirname), 'data', 'products.json');
+
+  readFile(p, (err, fileContent) => {
+    if (err) {
+      return cb([]);
+    }
+    return cb(JSON.parse(fileContent), p);
+  });
+};
+```
+in the save method, we are doing more or less the same logic as fetchAll, we just need to add the logic/callback to be executed when our `_getProductsFromFile()` has finished:
+- adding the new product
+- writing the file
+```js
+ save() {
+    _getProductsFromFile((products, pathFromCallback) => {
+      products.push(this);
+      writeFile(pathFromCallback, JSON.stringify(products), () => {});
+    });
+  }
+```
