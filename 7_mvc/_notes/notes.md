@@ -146,7 +146,8 @@ So my fetch all method here executes the line of code, and as you learned, it si
 >**<span style='color: #cc9464'> HACK:**   I will simply accept an argument in `fetchAll()` and that's a callback function.  
 and that actually allows me to pass a function into `fetchAll()`, which it will execute once it is done.  
 
-alternative would be to promisify the `fs.readFile()` function and use `.then()`. Note that async/await is not provided out of the box from `fs`  
+>alternative would be to promisify the `fs.readFile()` function and use `.then()`. Note that async/await is not provided out of the box from `fs`  
+[https://www.geeksforgeeks.org/how-to-operate-callback-based-fs-writefile-method-with-promises-in-node-js/](https://www.geeksforgeeks.org/how-to-operate-callback-based-fs-writefile-method-with-promises-in-node-js/)
 
 **<span style='color: #a8c62c'> /models/product.js:**
 ```js
@@ -215,3 +216,6 @@ in the save method, we are doing more or less the same logic as fetchAll, we jus
     });
   }
 ```
+
+## Wrap-up
+![image info](./sc2.png)
