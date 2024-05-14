@@ -36,6 +36,16 @@
       "restart": true,
       "runtimeExecutable": "nodemon",
       "console": "integratedTerminal"
-    }
+    },
+     {
+       "type": "node",
+       "request": "launch",
+       "name": "8_enhancing",
+       "program": "${workspaceFolder}/8_enhancingApp/app.js",
+       "cwd": "${workspaceFolder}/8_enhancingApp",
+       "restart": true,
+       "runtimeExecutable": "nodemon",
+       "console": "integratedTerminal"
+     }
   ]
 }
