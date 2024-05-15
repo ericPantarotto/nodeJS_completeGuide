@@ -9,16 +9,19 @@ const _getProductsFromFile = cb => {
   const p = path.join(path.dirname(__dirname), 'data', 'products.json');
 
   readFile(p, (err, fileContent) => {
-    if (err) {
-      return cb([]);
+      if (err) {
+      return cb([], p);
     }
     return cb(JSON.parse(fileContent), p);
   });
 };
 
 class Product {
-  constructor(title) {
+  constructor(title, imageUrl, description, price) {
     this.title = title;
+    this.imageUrl = imageUrl;
+    this.description = description;
+    this.price = price;
   }
 
   save() {

@@ -8,15 +8,20 @@ function getAddProduct(req, res, next) {
 }
 
 function postAddProduct(req, res, next) {
-  new Product(req.body.title).save();
+  new Product(
+    req.body.title,
+    req.body.imageUrl,
+    req.body.description,
+    req.body.price
+  ).save();
   res.redirect('/');
 }
 
 function getProducts(req, res, next) {
-    res.render('admin/products', {
-      pageTitle: 'Admin Products',
-      path: '/admin/products',
-    });
+  res.render('admin/products', {
+    pageTitle: 'Admin Products',
+    path: '/admin/products',
+  });
 }
 
 export default { getAddProduct, postAddProduct, getProducts };
