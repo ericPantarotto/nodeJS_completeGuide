@@ -18,10 +18,13 @@ function postAddProduct(req, res, next) {
 }
 
 function getProducts(req, res, next) {
-  res.render('admin/products', {
-    pageTitle: 'Admin Products',
-    path: '/admin/products',
-  });
+   Product.fetchAll(products => {
+     res.render('admin/products', {
+       prods: products,
+       pageTitle: 'My Shop',
+       path: '/admin/products',
+     });
+   });
 }
 
 export default { getAddProduct, postAddProduct, getProducts };
