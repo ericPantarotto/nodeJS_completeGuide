@@ -1032,3 +1032,19 @@ in the save method, we are doing more or less the same logic as fetchAll, we jus
 ```
 ## Wrap-up
 ![image info](./7_sc2.png)
+
+# Dynamic Routes & Advanced Models
+
+## Addng the Product ID to the path
+### NPM uuid
+> [https://www.npmjs.com/package/uuid](https://www.npmjs.com/package/uuid)
+
+```js
+import { v4 as uuidv4 } from 'uuid';
+uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+```
+**<span style='color: #a8c62c'> /views/shop/product-list.js:** 
+```html
+<a href="/products/<%= product.id  %>"
+```
+Our URL now returns th id: http://localhost:3000/products/664a6f0d-e067-43f4-9b07-7aa51e10dfb3  
