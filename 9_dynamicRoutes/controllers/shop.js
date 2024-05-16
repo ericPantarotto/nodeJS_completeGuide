@@ -10,6 +10,11 @@ function getProducts(req, res, next) {
   });
 }
 
+function getProduct(req, res, next) {
+  const prodId = req.params.productId;
+  console.log(prodId);
+} 
+
 function getIndex(req, res, next) {
   Product.fetchAll(products => {
     res.render('shop/index', {
@@ -35,10 +40,17 @@ function getOrders(req, res, next) {
 }
 
 function getCheckout(req, res, next) {
-    res.render('shop/checkout', {
-      pageTitle: 'Checkout',
-      path: '/checkou',
-    });
+  res.render('shop/checkout', {
+    pageTitle: 'Checkout',
+    path: '/checkou',
+  });
 }
 
-export default { getProducts, getIndex, getCart, getCheckout, getOrders };
+export default {
+  getProducts,
+  getIndex,
+  getCart,
+  getCheckout,
+  getOrders,
+  getProduct,
+};

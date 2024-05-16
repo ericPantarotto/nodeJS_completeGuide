@@ -1048,3 +1048,17 @@ uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
 <a href="/products/<%= product.id  %>"
 ```
 Our URL now returns th id: http://localhost:3000/products/664a6f0d-e067-43f4-9b07-7aa51e10dfb3  
+
+## Extracting Dynamic Params
+
+Express.js router support dynamic parameters.  
+**<span style='color: #bcdbf9'> Note:** Always place the more specfic route first, before a dynamic route that would have the structure.
+`'/product/delete'` should precede `'/product/:productId'`  
+**<span style='color: #a8c62c'> /routes/shop.js:** 
+```js
+router.get('/products/:prouductId', shopController.getProduct);
+```
+
+**<span style='color: #a8c62c'> /controllers/shop.js:**   
+To extract it, Express.js gives us a params object on our **request** object, we just have to match the name`:productId` we use in our **router file**:  
+`const prodId = req.params.productId;`
