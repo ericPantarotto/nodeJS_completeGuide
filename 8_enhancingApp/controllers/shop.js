@@ -27,6 +27,13 @@ function getCart(req, res, next) {
   });
 }
 
+function getOrders(req, res, next) {
+  res.render('shop/orders', {
+    pageTitle: 'Your Orders',
+    path: '/orders',
+  });
+}
+
 function getCheckout(req, res, next) {
     res.render('shop/checkout', {
       pageTitle: 'Checkout',
@@ -34,4 +41,4 @@ function getCheckout(req, res, next) {
     });
 }
 
-export default { getProducts, getIndex, getCart, getCheckout };
+export default { getProducts, getIndex, getCart, getCheckout, getOrders };
