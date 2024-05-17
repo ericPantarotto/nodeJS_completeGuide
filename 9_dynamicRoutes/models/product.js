@@ -10,7 +10,7 @@ const _getProductsFromFile = cb => {
   const p = path.join(path.dirname(__dirname), 'data', 'products.json');
 
   readFile(p, (err, fileContent) => {
-      if (err) {
+    if (err) {
       return cb([], p);
     }
     return cb(JSON.parse(fileContent), p);
@@ -35,6 +35,13 @@ class Product {
 
   static fetchAll(cb) {
     _getProductsFromFile(cb);
+  }
+
+  static findById(id, cb) {
+    _getProductsFromFile(products => {
+      const product = products.find(p => p.id === id);
+      cb(product);
+    });
   }
 }
 
