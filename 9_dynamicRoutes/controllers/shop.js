@@ -38,6 +38,12 @@ function getCart(req, res, next) {
   });
 }
 
+function postCart(req, res, next) {
+  const prodId = req.body.productId;
+  console.log(prodId);
+  res.redirect('/cart');
+}
+
 function getOrders(req, res, next) {
   res.render('shop/orders', {
     pageTitle: 'Your Orders',
@@ -59,4 +65,5 @@ export default {
   getCheckout,
   getOrders,
   getProduct,
+  postCart,
 };

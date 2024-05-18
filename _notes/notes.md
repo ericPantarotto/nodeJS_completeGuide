@@ -1062,3 +1062,56 @@ router.get('/products/:prouductId', shopController.getProduct);
 **<span style='color: #a8c62c'> /controllers/shop.js:**   
 To extract it, Express.js gives us a params object on our **request** object, we just have to match the name`:productId` we use in our **router file**:  
 `const prodId = req.params.productId;`
+
+## Passing Data with POST Requests
+
+**<span style='color: #a8c62c'> /views/shop/product-detail.js:**  
+```html
+<form action="/cart" method="post">
+  <button class="btn" type="submit">Add to Cart</button>
+  <input type="hidden" name="productId" value="<%= product.id %>">
+</form>
+```
+
+**<span style='color:   #875c5c'>IMPORTANT:** as we have specified a `POST` request in our form, we can pass data in the request body  
+
+We have to add a hidden `input` for the `id` of the product, so that the name/value pair is encoded in the request that is being sent (we want to pass that id to our backend) 
+
+**<span style='color: #bcdbf9'> Note:** We don't want to use the URL as we have a `post` request, but if not, we could add a dynamic segment to the action of the form.
+
+**<span style='color: #a8c62c'> /routes/shop.js:**  
+```js
+router.post('/cart', shopController.postCart);
+```
+in our `controller`, we can access it:
+**<span style='color: #a8c62c'> /controllers/shop.js:**  
+```js
+const prodId = req.body.productId;
+```
+
+in all `.ejs` files, instead of always repeating the same block:
+```html
+ <form action="/cart" method="post">
+    <button class="btn" type="submit">Add to Cart</button>
+    <input type="hidden" name="productId" value="<%= product.id %>">
+</form>
+```
+we use an .include; **<span style='color: #a8c62c'> /views/includes/add-to-cart.ejs:**  
+```html
+<form action="/cart" method="post">
+  <button class="btn" type="submit">Add to Cart</button>
+  <input type="hidden" name="productId" value="<%= product.id %>" />
+</form>
+```
+>**<span style='color: #cc9464'> HACK:** inside a loop, you have to pass a second argument to the `include()` function, to make sure that the object is passed to the include:
+
+so for both **<span style='color: #a8c62c'> /views/shop/index.ejs** and **<span style='color: #a8c62c'> /views/shop/product-list.ejs**, we pass as a key the expected `product` object expected by `add-to-cart.ejs` and as a value, the local variable of the loop section:
+```html
+<div class="card__actions">
+  <%- include('../includes/add-to-cart.ejs', {product: product}) %>
+</div>
+```
+for **<span style='color: #a8c62c'> /views/shop/product-detal.ejs** (no loop) , we can simply use:
+```html
+<%- include('../includes/add-to-cart.ejs') %>
+```
