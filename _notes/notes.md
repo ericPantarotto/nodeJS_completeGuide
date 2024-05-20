@@ -1115,3 +1115,42 @@ for **<span style='color: #a8c62c'> /views/shop/product-detal.ejs** (no loop) , 
 ```html
 <%- include('../includes/add-to-cart.ejs') %>
 ```
+
+## Add a Cart Model
+
+**<span style='color: #bcdbf9'> Note:**
+Now what we need on this cart is a way to add and remove our products.  
+Now the problem we have is the cart itself is not really an object we'll constantly recreate, not for every new product that we add we want to have a new cart, instead there always will be a cart in our application and we just want to manage the products in there. 
+
+**<span style='color: #a8c62c'> /models/cart.js**  
+So we don't really add a constructor instead I'll add a static method, `addProduct()`.
+
+for the quantity to be corrctly written in the `data/cart.json`, we have to specify the `+` operator:  
+```js
+cart.totalPrice += +productPrice;
+```
+
+
+The model basically serves as a utility model you could say, we're not instantiating it, instead were using the static function:  
+**<span style='color: #a8c62c'> /controllers/shop.js**, `postCart()`  
+We are using the built-in callback function mechanism of the `findById` of the `Array prototype` to call our `Cart.addProduct` function
+
+```js
+function postCart(req, res, next) {
+  const prodId = req.body.productId;
+  Product.findById(prodId, product => {
+    Cart.addProduct(prodId, product.price);
+  })
+  res.redirect('/cart');
+}
+```
+
+**<span style='color:   #875c5c'>IMPORTANT:** update `package.json` to avoid nodemon server restart
+```json
+"nodemonConfig": {
+    "ignore": [
+      "data/products.json",
+      "data/cart.json"
+    ]
+  }
+```

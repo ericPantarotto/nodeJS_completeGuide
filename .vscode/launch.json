@@ -46,6 +46,16 @@
        "restart": true,
        "runtimeExecutable": "nodemon",
        "console": "integratedTerminal"
-     }
+     },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "9_dynamicRoutes",
+        "program": "${workspaceFolder}/9_dynamicRoutes/app.js",
+        "cwd": "${workspaceFolder}/9_dynamicRoutes",
+        "restart": true,
+        "runtimeExecutable": "nodemon",
+        "console": "integratedTerminal"
+      }
   ]
 }

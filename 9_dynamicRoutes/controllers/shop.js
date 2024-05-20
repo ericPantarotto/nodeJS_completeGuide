@@ -1,4 +1,5 @@
 import Product from '../models/product.js';
+import Cart from "../models/cart.js";
 
 function getProducts(req, res, next) {
   Product.fetchAll(products => {
@@ -40,7 +41,9 @@ function getCart(req, res, next) {
 
 function postCart(req, res, next) {
   const prodId = req.body.productId;
-  console.log(prodId);
+  Product.findById(prodId, product => {
+    Cart.addProduct(prodId, product.price);
+  })
   res.redirect('/cart');
 }
 
@@ -54,7 +57,7 @@ function getOrders(req, res, next) {
 function getCheckout(req, res, next) {
   res.render('shop/checkout', {
     pageTitle: 'Checkout',
-    path: '/checkou',
+    path: '/checkout',
   });
 }
 
