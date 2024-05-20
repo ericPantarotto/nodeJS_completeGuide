@@ -1154,3 +1154,19 @@ function postCart(req, res, next) {
     ]
   }
 ```
+## Using Query Params
+The router (determining which routes get reached) uses the path up to the question mark.
+
+**<span style='color: #875c5c'>IMPORTANT:** so you don't need to add any information about query parameters you might get to your routes file. But you can always check for query parameters in your controllers.
+
+**<span style='color: #a8c62c'> /routes/admin.js**  
+```js
+router.get('/edit-product/:productId', adminController.getEditProduct);
+```
+
+**<span style='color: #a8c62c'> /controllers/admin.js**  
+**<span style='color: #bcdbf9'> Note:** there is a query object, managed by Express.js.  
+```js
+const editMode = req.query.edit;
+```
+>**<span style='color:   #875c5c'>IMPORTANT:** The extracted value always is a **string**! so `'true'` instead of `true`
