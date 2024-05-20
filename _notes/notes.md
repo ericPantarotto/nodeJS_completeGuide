@@ -1170,3 +1170,37 @@ router.get('/edit-product/:productId', adminController.getEditProduct);
 const editMode = req.query.edit;
 ```
 >**<span style='color:   #875c5c'>IMPORTANT:** The extracted value always is a **string**! so `'true'` instead of `true`
+
+## Pre-Populating the Edit Product Page with Data
+
+**<span style='color: #a8c62c'> /views/admin/edit-product.ejs**   
+You can not check direcly variable `editing` in the ejs file, but instead `locals.editing`
+```html
+<button class="btn" type="submit"><% if (locals.editing) { %>Update Product <% } else { %>Add Product <% } %> </button>
+```
+>[https://www.solarwinter.net/ejs-and-optional-values/](https://www.solarwinter.net/ejs-and-optional-values/)
+
+the alternative is that in your controller **<span style='color: #a8c62c'> /controllers/admin.js** , to make sure that all function using that view, are passing the `editing` argument.
+```js
+function getAddProduct(req, res, next) {
+  return res.render('admin/edit-product', {
+    pageTitle: 'Add Product',
+    path: '/admin/add-product',
+    editing: false
+  });
+}
+```
+**<span style='color: #a8c62c'> /views/admin/edit-product.ejs**, for `product.title` to not be displayed as text, you have to wrap it inside `<%= product.title %>`
+```html
+<input type="text" name="title" id="title" value="<% if (locals.editing) { %> <%= product.title %> <% } %>">
+```
+>**<span style='color:   #875c5c'>IMPORTANT:** Do not leave space, in between, for the price for example :
+```html
+<!-- Your template is: -->
+%> <%= product.price %> <% 
+
+<!-- Not: -->
+%><%= product.price %><%
+```
+
+**<span style='color: #bcdbf9'> Note:** you can also use ES6 ternary operator combined with `<%= %>`
