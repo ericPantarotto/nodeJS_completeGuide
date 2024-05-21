@@ -1289,3 +1289,6 @@ function postAddProduct(req, res, next) {
   <input type="hidden" value="<%= product.id %>" name="productId">
 <% } %>
 ```
+## Adding the Product-Delete functionality
+
+our delete is a `POST` request, so we don't need to enclose any information in our path of the URL, we can instead use the body of our request
