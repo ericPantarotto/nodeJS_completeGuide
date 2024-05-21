@@ -2,6 +2,7 @@ import { readFile, writeFile } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
+import Cart from './cart.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,8 +46,11 @@ class Product {
 
   static deleteById(id) {
     _getProductsFromFile((products, pathFromCallback) => {
+      const product = products.find(prod => prod.id === id);
       const updatedProducts = products.filter(p => p.id !== id);
-      writeFile(pathFromCallback, JSON.stringify(updatedProducts), () => {});
+      writeFile(pathFromCallback, JSON.stringify(updatedProducts), err => {
+        if (!err) Cart.deleteProduct(id, +product.price);
+      });
     });
   }
 

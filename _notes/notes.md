@@ -1292,3 +1292,48 @@ function postAddProduct(req, res, next) {
 ## Adding the Product-Delete functionality
 
 our delete is a `POST` request, so we don't need to enclose any information in our path of the URL, we can instead use the body of our request
+
+## Deleting Cart Items
+
+>**<span style='color: #bcdbf9'> Note:**  
+**<span style='color: #a8c62c'> /controllers/admin.js**, in our functions, it would be best if we `redirect()` only once the delete / update process are done. we will update later
+
+**<span style='color: #a8c62c'> /models/cart.js**, `deleteProduct()`, in case a product has been created, but not added to the cart, we could either wrap into an `if(product)` *(which would be more efficient as we wouldn't re-write the file which is not necessary)* or do as below :
+- `filter()` wouldn't error
+```js
+updatedCart.products = updatedCart.products.filter(
+  prod => prod.id !== id
+);
+```
+- update TotalPrice would error, so we update to:
+```js
+updatedCart.totalPrice -= (product?.qty ?? 0) * productPrice;
+```
+
+**<span style='color:   #875c5c'>IMPORTANT:**  
+**<span style='color: #a8c62c'> /controllers/shop.js**, `getProduct()`, the callback function has to check `if(product)`, as for some product this block is called twice and on the second iteration it would return `undefined` and fail
+```js
+function getProduct(req, res, next) {
+  const prodId = req.params.productId;
+  Product.findById(prodId, product => {
+    if (product)
+      res.render('shop/product-detail', {
+        pageTitle: product.title,
+        product: product,
+        path: '/products',
+      });
+  });
+}
+```
+**<span style='color: #a8c62c'> /models/product.js**: the cart is updated as a callback of the function call of `writeFile()` from the `deleteById()` of the product, using the static method `deleteProduct` of the `Cart` class:
+```js
+static deleteById(id) {
+  _getProductsFromFile((products, pathFromCallback) => {
+    const product = products.find(prod => prod.id === id);
+    const updatedProducts = products.filter(p => p.id !== id);
+    writeFile(pathFromCallback, JSON.stringify(updatedProducts), err => {
+      if (!err) Cart.deleteProduct(id, +product.price);
+    });
+  });
+}
+```
