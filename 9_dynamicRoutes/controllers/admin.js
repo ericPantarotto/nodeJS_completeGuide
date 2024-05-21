@@ -10,6 +10,7 @@ function getAddProduct(req, res, next) {
 
 function postAddProduct(req, res, next) {
   new Product(
+    null, //INFO: id
     req.body.title,
     req.body.imageUrl,
     req.body.description,
@@ -34,7 +35,17 @@ function getEditProduct(req, res, next) {
   });
 }
 
-
+function postEditProduct(req, res, next) {
+  const prodId = req.body.productId;
+  new Product(
+    prodId,
+    req.body.title,
+    req.body.imageUrl,
+    req.body.description,
+    req.body.price
+  ).save();
+  res.redirect('/admin/products');
+}
 
 function getProducts(req, res, next) {
   Product.fetchAll(products => {
@@ -50,4 +61,10 @@ function getProducts(req, res, next) {
   });
 }
 
-export default { getAddProduct, postAddProduct, getProducts, getEditProduct };
+export default {
+  getAddProduct,
+  postAddProduct,
+  getProducts,
+  getEditProduct,
+  postEditProduct,
+};

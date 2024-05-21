@@ -18,7 +18,8 @@ const _getProductsFromFile = cb => {
 };
 
 class Product {
-  constructor(title, imageUrl, description, price) {
+  constructor(id, title, imageUrl, description, price) {
+    this.id = id;
     this.title = title;
     this.imageUrl = imageUrl;
     this.description = description;
@@ -26,10 +27,19 @@ class Product {
   }
 
   save() {
-    this.id = uuidv4();
     _getProductsFromFile((products, pathFromCallback) => {
-      products.push(this);
-      writeFile(pathFromCallback, JSON.stringify(products), () => {});
+      if (this.id) {
+        const existingProductIndex = products.findIndex(
+          prod => prod.id === this.id
+        );
+        const updatedProducts = [...products];
+        updatedProducts[existingProductIndex] = this;
+        writeFile(pathFromCallback, JSON.stringify(updatedProducts), () => {});
+      } else {
+        this.id = uuidv4();
+        products.push(this);
+        writeFile(pathFromCallback, JSON.stringify(products), () => {});
+      }
     });
   }
 

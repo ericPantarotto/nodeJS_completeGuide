@@ -1233,9 +1233,59 @@ To make sure that the edit page can be reached, we have to pass the `edit=true` 
 }
 ```
 
+## Editing the Product Data
+
 for editing a product, first we update the **<span style='color: #a8c62c'> /routes/admin.js**  
 this will not receive any dynamic segment because it's a post request so data can be enclosed in the request we're sending:
 ```js
-router.post('/edit-product');
+router.post('/edit-product', adminController.postEditProduct);
 ```
-   
+**<span style='color: #a8c62c'> /models/product.js**,  
+we modify the `save()` function to can be used for both:
+- adding new products
+- editing existing products  
+and we also modify our `constructor` to add the `id`:
+```js
+class Product {
+  constructor(id, title, imageUrl, description, price) {
+    this.id = id;
+...
+```
+
+```js
+ save() {
+    _getProductsFromFile((products, pathFromCallback) => {
+      if (this.id) {
+        const existingProductIndex = products.findIndex(
+          prod => prod.id === this.id
+        );
+        const updatedProducts = [...existingProduct];
+        updatedProducts[existingProductIndex] = this;
+        writeFile(pathFromCallback, JSON.stringify(updatedProducts), () => {});
+      } else {
+        this.id = uuidv4();
+        products.push(this);
+        writeFile(pathFromCallback, JSON.stringify(products), () => {});
+      }
+    });
+  }
+```
+**<span style='color: #a8c62c'> /constrollers/admin.js**, we need to add a `null` for the `id` property.  
+```js
+function postAddProduct(req, res, next) {
+  new Product(
+    null, //INFO: id
+    req.body.title,
+    req.body.imageUrl,
+    req.body.description,
+    req.body.price
+  ).save();
+  res.redirect('/');
+}
+````
+**<span style='color: #a8c62c'> /views/admin/edit-product.ejs**, we add an hidden input storing the existing `productId` when editing a product:
+```html
+<% if (locals.editing) { %>
+  <input type="hidden" value="<%= product.id %>" name="productId">
+<% } %>
+```
