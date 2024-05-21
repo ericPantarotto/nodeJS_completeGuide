@@ -1204,3 +1204,38 @@ function getAddProduct(req, res, next) {
 ```
 
 **<span style='color: #bcdbf9'> Note:** you can also use ES6 ternary operator combined with `<%= %>`
+
+## Linking to the Edit Page
+To make sure that the edit page can be reached, we have to pass the `edit=true` query parameter in **<span style='color: #a8c62c'> /views/admin/products.ejs**  
+- solution 1: hardcoding to `true` 
+```html
+ <a href="/admin/edit-product/<%= product.id %>?edit=true" class="btn">Edit</a>
+```
+- soltution 2: passing an `editing` property
+```html
+ <a href="/admin/edit-product/<%= product.id %>?edit=<%= product.editing %>" class="btn">Edit</a>
+ ```
+
+ **<span style='color: #a8c62c'> /controllers/admin.js**; modify `getProducts()` function, passing a new products array with the editing property set to `true`:
+ ```js
+ function getProducts(req, res, next) {
+  Product.fetchAll(products => {
+    const prodsEditing = products.map(obj => {
+      return { ...obj, editing: true };
+    });
+    
+    res.render('admin/products', {
+      prods: prodsEditing,
+      pageTitle: 'My Shop',
+      path: '/admin/products',
+    });
+  });
+}
+```
+
+for editing a product, first we update the **<span style='color: #a8c62c'> /routes/admin.js**  
+this will not receive any dynamic segment because it's a post request so data can be enclosed in the request we're sending:
+```js
+router.post('/edit-product');
+```
+   

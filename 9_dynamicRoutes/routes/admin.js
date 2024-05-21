@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import  adminController  from "../controllers/admin.js";
+import adminController from '../controllers/admin.js';
 
 const router = Router();
 
@@ -11,6 +11,8 @@ router.post('/add-product', adminController.postAddProduct);
 router.get('/products', adminController.getProducts);
 
 router.get('/edit-product/:productId', adminController.getEditProduct);
+
+router.post('/edit-product');
 
 export default {
   routes: router,

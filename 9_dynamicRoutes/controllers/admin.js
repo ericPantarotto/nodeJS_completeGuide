@@ -34,10 +34,16 @@ function getEditProduct(req, res, next) {
   });
 }
 
+
+
 function getProducts(req, res, next) {
   Product.fetchAll(products => {
+    const prodsEditing = products.map(obj => {
+      return { ...obj, editing: true };
+    });
+
     res.render('admin/products', {
-      prods: products,
+      prods: prodsEditing,
       pageTitle: 'My Shop',
       path: '/admin/products',
     });
