@@ -1354,15 +1354,14 @@ static getCart(cb) {
 **<span style='color: #a8c62c'> /controllers/shop.js**: function `getCart()` of the controller calls the `model: Cart getCart()` and passes the callback function:  
 **<span style='color: #bcdbf9'> Note:**  we return a new object with the **product** and the **quantity** (stored in the cart file)
 ```js
-
 function getCart(req, res, next) {
   Cart.getCart(cart => {
     Product.fetchAll(products => {
-      const cartProducts = products.map(prod => {
-        const cartProductData = cart.products.find(o => o.id === prod.id);
-        if (cartProductData)
-          return { productData: prod, qty: cartProductData.qty };
+      const cartProducts = cart.products.map(cartProduct => {
+        const productData = products.find(o => o.id === cartProduct.id);
+          return { productData: productData, qty: cartProduct.qty };
       });
+    
       res.render('shop/cart', {
         pageTitle: 'Your Cart',
         path: '/cart',
@@ -1372,3 +1371,6 @@ function getCart(req, res, next) {
   });
 }
 ```
+
+## Deleting Cart Items
+**<span style='color: #bcdbf9'> Note:** Of course we could have also used a hidden input to pass the price to the backend but I think this is the cleaner approach, if we only pass the `productId` through the request and then we do all the data retrieval on the backend in our *node express.js* code.
