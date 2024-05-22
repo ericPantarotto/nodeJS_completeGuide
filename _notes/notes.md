@@ -1309,6 +1309,10 @@ updatedCart.products = updatedCart.products.filter(
 ```js
 updatedCart.totalPrice -= (product?.qty ?? 0) * productPrice;
 ```
+**I added later the safeguard clause**:
+```js
+if (!product) return;
+```
 
 **<span style='color:   #875c5c'>IMPORTANT:**  
 **<span style='color: #a8c62c'> /controllers/shop.js**, `getProduct()`, the callback function has to check `if(product)`, as for some product this block is called twice and on the second iteration it would return `undefined` and fail
