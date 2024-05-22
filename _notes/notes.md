@@ -1337,3 +1337,38 @@ static deleteById(id) {
   });
 }
 ```
+
+## Displaying Cart Items on the Cart Page
+
+**<span style='color: #a8c62c'> /models/cart.js**: we add a static function `getCart()` that returns the cart, and calls a callback that is passed:
+```js
+static getCart(cb) {
+  readFile(p, (err, fileContent) => {
+    const cart = JSON.parse(fileContent);
+    if (err) return cb(null);
+    cb(cart);
+  });
+}
+```
+
+**<span style='color: #a8c62c'> /controllers/shop.js**: function `getCart()` of the controller calls the `model: Cart getCart()` and passes the callback function:  
+**<span style='color: #bcdbf9'> Note:**  we return a new object with the **product** and the **quantity** (stored in the cart file)
+```js
+
+function getCart(req, res, next) {
+  Cart.getCart(cart => {
+    Product.fetchAll(products => {
+      const cartProducts = products.map(prod => {
+        const cartProductData = cart.products.find(o => o.id === prod.id);
+        if (cartProductData)
+          return { productData: prod, qty: cartProductData.qty };
+      });
+      res.render('shop/cart', {
+        pageTitle: 'Your Cart',
+        path: '/cart',
+        products: cartProducts,
+      });
+    });
+  });
+}
+```

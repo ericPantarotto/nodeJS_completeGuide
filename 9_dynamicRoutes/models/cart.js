@@ -48,6 +48,14 @@ class Cart {
       writeFile(p, JSON.stringify(updatedCart), err => err && console.log(err));
     });
   }
+
+  static getCart(cb) {
+    readFile(p, (err, fileContent) => {
+      const cart = JSON.parse(fileContent);
+      if (err) return cb(null);
+      cb(cart);
+    });
+  }
 }
 
 export default Cart;
