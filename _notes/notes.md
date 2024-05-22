@@ -1378,3 +1378,6 @@ function getCart(req, res, next) {
 
 ## Deleting Cart Items
 **<span style='color: #bcdbf9'> Note:** Of course we could have also used a hidden input to pass the price to the backend but I think this is the cleaner approach, if we only pass the `productId` through the request and then we do all the data retrieval on the backend in our *node express.js* code.
+
+## Module Summary
+![image info](./9_sc1.png)
