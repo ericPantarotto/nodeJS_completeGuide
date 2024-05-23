@@ -1488,3 +1488,61 @@ Open the MySQL prompt: `sudo mysql`
 
 [Access Denied for user 'root@localhost'](https://dev.to/hellousermeta/fix-mysql-error-access-denied-for-user-rootlocalhost-n5e)
 >`mysql -u root -p`, then enter the password
+
+## Connecting our App to the SQL Database
+### Package: mysql2
+To use SQL or to interact with SQL from inside node, we need to install a new package.  
+It allows us to write SQL code and execute SQL code in node and interact with a database.
+> `npm i --save mysql2`  
+>**Documentation**: https://sidorares.github.io/node-mysql2/docs
+
+### Connect to our database from inside our application
+2 ways of connecting with a SQL database:
+
+- One is that we set up one connection which we can then use to run queries and we should always close the connection once we're done with a query and the downside is that we need to re-execute the code to create the connection for every new query  
+Creating new connections all the time quickly becomes very inefficient both in our code and also regarding the connection to the database which is established and the performance this may cost.
+- create a so-called connection pool:  
+instead of a single connection but a pool of connections which will allow us to always reach out to it whenever we have a query to run and then we get a new connection from that pool which manages multiple connections so that we can run multiple queries simultaneously.   because each query needs its own connection and once the query is done, the connection will be handed back into the pool and it's available again for a new query and the pool can then be finished when our application shuts down.
+
+### Set-up **<span style='color: #a8c62c'>/.env**
+Documentation: https://www.npmjs.com/package/dotenv
+
+**<span style='color: #a8c62c'>/app.js**
+```js
+import 'dotenv/config';
+import { expPool as db } from './util/database.js';
+
+const [results, fields] = await db.query('SELECT user FROM mysql.user;');
+console.log(results); // results contains rows returned by server
+console.log(fields); // fields contains extra meta data about results, if available
+```
+
+**<span style='color: #a8c62c'>/util/database.js**  
+```js
+import mysql from 'mysql2/promise.js';
+
+const pool = mysql.createPool({
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  database: process.env.MYSQL_DATABASE,
+  password: process.env.MYSQL_PASSWORD,
+});
+
+export const expPool = pool;
+```
+
+
+### **<span style='color:   #875c5c'>IMPORTANT:** Error encountered with WSL
+![image info](./10_sc7.png) 
+>**FIX:**  
+[https://10web.io/blog/mysql-error-1698/](https://10web.io/blog/mysql-error-1698/#:~:text=Behind%20the%20MySQL%20error%201698,the%20auth_socket%20or%20unix_socket%20plugin.)  
+solution kept: **Switch the user to mysql_native_password plugin**  
+(Add system user to MySQL user table didn't work)  
+`ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'your_new_password';`  
+`FLUSH PRIVILEGES;`  
+another source on this issue: [stackoverflow](https://stackoverflow.com/questions/10895163/how-to-find-out-the-mysql-root-password)  
+*I was stuck with this problem for a couple of minutes and the following was the only solution that actually worked:*  
+https://phoenixnap.com/kb/access-denied-for-user-root-localhost
+`ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'insert_password';`  
+`mysql -u root -p`  
+another source on this issue:https://linuxhint.com/mysql-access-denied-user-root-localhost/

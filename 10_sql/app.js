@@ -1,15 +1,20 @@
 import bodyParser from 'body-parser';
 import express from 'express';
-
+import 'dotenv/config';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import errorController from './controllers/error.js';
 import adminRoutes from './routes/admin.js';
 import { expRouter as shopRoutes } from './routes/shop.js';
-import errorController from "./controllers/error.js";
+import { expPool as db } from './util/database.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const [results, fields] = await db.query('SELECT user FROM mysql.user;');
+console.log(results); // results contains rows returned by server
+console.log(fields); // fields contains extra meta data about results, if available
 
 const app = express();
 
@@ -22,27 +27,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 
-app.use(errorController .get404);
+app.use(errorController.get404);
 
 app.listen(3000);
-
-// import adminRoutes from './routes/admin.js';
-// app.use('/admin', adminRoutes);
-
-// res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
-
-//NOTE: PUG
-// app.set('view engine', 'pug');
-
-//NOTE: handlebars
-// import { engine } from 'express-handlebars';
-// app.engine(
-//   'hbs',
-//   engine({
-//     layoutsDir: 'views/layouts/',
-//     defaultLayout: 'main-layout',
-//     extname: 'hbs',
-//   })
-// );
-// app.set('view engine', 'hbs');
-// app.set('views', './views');
