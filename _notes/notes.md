@@ -1406,3 +1406,33 @@ So that we have this strongly or strictly defined schema and all data in the tab
 We also have relations between our data, that is another core characteristic of SQL based database.
 
 ![image info](./10_sc2.png)
+
+## NoSQL
+
+Now the name NoSQL simply means that it doesn't follow the approach SQL follows, it also uses a different query language but instead of having schemas and relations, NoSQL has other focuses or other strengths.
+
+Now in NoSQL, tables are called collections but you can think of them as tables. Now in a collection, we don't find records but so-called documents, a bit like a javascript object.
+
+### Scehmaless
+![image info](./10_sc3.png)
+
+>**NoSQL doesn't have a strict schema.**  
+you can store multiple documents with different structures in the same collection.
+
+Now often you of course still try to have kind of a similar structure but it's also not uncommon for some applications that you don't always have exactly the same fields available for the data you are storing in the database and that is ok in NoSQL, you can definitely store documents which are generally equal but where some fields might differ.
+
+One other thing is that in the NoSQL world, we got no real relations, instead we go for duplicate data. 
+- *That of course means that if that data changes, we have to update it in multiple places.*
+- on the other hand gives us the huge advantage that if we ever retrieve data, we don't have to join multiple tables, which can impact performance, so this can be done in a super fast way 
+
+=> and that is one of the huge advantage of NoSQL, it can be fast and efficient
+
+### NoSQL Characteristics
+
+![image info](./10_sc4.png)
+Now we can relate documents in some way and this is possible, but generally we have no or only a few connections and instead try to copy data and have a collection with documents that work on their own.
+
+**<span style='color: #bcdbf9'> Note:**  
+we also got a difference between SQL and NoSQL regarding our scalability.
+
+So as our application grows and we need to store more add more data and access that data or work with it more frequently, we might need to scale our database servers and we can **differentiate between horizontal and vertical scaling.**
