@@ -1436,3 +1436,21 @@ Now we can relate documents in some way and this is possible, but generally we h
 we also got a difference between SQL and NoSQL regarding our scalability.
 
 So as our application grows and we need to store more add more data and access that data or work with it more frequently, we might need to scale our database servers and we can **differentiate between horizontal and vertical scaling.**
+
+## Comparing SQL and NoSQL
+### Horizontal vs Vertical Scaling
+![image info](./10_sc5.png) 
+>Horizontal Scaling: the advantage here of course is that we can do this infinitely.  
+We can always buy new servers, be that on a cloud provider or in our own data center and connect them to our database and split our data across all these servers, of course this means that we also need some process that runs queries on all of them and merges them together intelligently.
+
+>Vertical Scaling: simply means that we make our existing server stronger by adding more CPU or memory.  
+the problem here is that you have some limit, you can't fit infinitely much CPU power into a single machine.
+
+### SQL vs NoSQL
+![image info](./10_sc6.png) 
+if we have multiple or thousands of read and write queries per second, then maybe our SQL database especially if we do very complex joins between related tables can reach limits or can not be the best choice.
+
+if you are storing where the relations are really important and where you want to have a split up across tables and where you want to have strong schemas, SQL can be perfect, also not every part of your data is accessed multiple times per second.
+
+- You can have parts of your application where you manage general data, let's say user data which does not change that often and therefore, SQL might be very good there. 
+- Other parts of the application, let's say orders or shopping carts that do change frequently could be stored with NoSQL and there, the relations might also not be that important because you can always put all the information that belongs to a shopping cart or to an order in one single document and even if you do for example store some user data there, you might not need to touch that document just because the user change his photo because you probably didn't store that along with the order anyways.
