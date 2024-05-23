@@ -1381,3 +1381,28 @@ function getCart(req, res, next) {
 
 ## Module Summary
 ![image info](./9_sc1.png)
+
+# Introducing SQL
+## Choosing a Database
+
+### SQL vs NoSQL
+![image info](./10_sc1.png)
+
+it also helps us with things like we don't have to read the entire file to just find one piece of information.
+
+### What is SQL?
+**SQL = Structured Query Language**  
+
+SQL database thinks in so-called tables.  
+
+SQL based databases also have one important thing, they allow you to relate different tables.
+
+So basically we have such relations in SQL based databases,
+
+This is one of the core things about SQL and in general, the core SQL database characteristics are that we have a strong data schema so that for each table, we clearly define how the data in there should look like, so which fields do we have, which type of data does each field store.
+
+So that we have this strongly or strictly defined schema and all data in the table has to fit the schema for this table.
+
+We also have relations between our data, that is another core characteristic of SQL based database.
+
+![image info](./10_sc2.png)
