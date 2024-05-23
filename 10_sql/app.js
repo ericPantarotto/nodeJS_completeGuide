@@ -12,7 +12,7 @@ import { expPool as db } from './util/database.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const [results, fields] = await db.query('SELECT user FROM mysql.user;');
+const [results, fields] = await db.query('SELECT * FROM products;');
 console.log(results); // results contains rows returned by server
 console.log(fields); // fields contains extra meta data about results, if available
 

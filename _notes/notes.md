@@ -1546,3 +1546,25 @@ https://phoenixnap.com/kb/access-denied-for-user-root-localhost
 `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'insert_password';`  
 `mysql -u root -p`  
 another source on this issue:https://linuxhint.com/mysql-access-denied-user-root-localhost/
+
+## Creating a SQL table
+
+### create the table
+```sql
+create table if not exists `products` ( `id` INT UNSIGNED NOT NULL auto_increment UNIQUE , `title` varchar(255) NOT NULL, `price` double NOT NULL, `description` TEXT NOT NULL, `imageURL` varchar(255) NOT NULL,  PRIMARY KEY  (`id`));
+
+SHOW TABLES;
+SHOW COLUMNS FROM products;
+```
+
+```sql
+--show which db is selected:
+select database();
+--change db:
+USE node_complete;
+```
+### insert a record
+```sql
+INSERT INTO `products` (title, price, description, imageURL)
+values ('A Book', 12.99, 'This is an awsome book', 'https://as1.ftcdn.net/jpg/01/18/67/46/220_F_118674630_ct8BMi4p95r67QZ217nvEO3o2YlDZta2.jpg')
+```
