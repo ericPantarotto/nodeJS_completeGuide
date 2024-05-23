@@ -1454,3 +1454,37 @@ if you are storing where the relations are really important and where you want t
 
 - You can have parts of your application where you manage general data, let's say user data which does not change that often and therefore, SQL might be very good there. 
 - Other parts of the application, let's say orders or shopping carts that do change frequently could be stored with NoSQL and there, the relations might also not be that important because you can always put all the information that belongs to a shopping cart or to an order in one single document and even if you do for example store some user data there, you might not need to touch that document just because the user change his photo because you probably didn't store that along with the order anyways.
+
+## Setting-up MySQL
+### Windows Installation
+[https://www.mysql.com/downloads/](https://www.mysql.com/downloads/)
+
+[MySQL Community (GPL) Downloads](https://dev.mysql.com/downloads/)  
+- MySQL Community Server
+- MySQL Workbench
+
+### Creating a new database
+once installed/updated (at the time of this course v8.4), you can create a new schema, under `schema` section , right-click and `Create Schema...`  
+Click `Apply`
+
+### WSL MySQL
+[https://medium.com/@vjohn1234/set-up-mysql-database-on-wsl-270ede594df4](https://medium.com/@vjohn1234/set-up-mysql-database-on-wsl-270ede594df4)
+
+`sudo apt update`  
+`sudo apt install mysql-server`  
+`mysql -V`  
+Open the MySQL prompt: `sudo mysql`  
+`SHOW DATABASES;`  
+`CREATE SCHEMA IF NOT EXISTS node_complete;`  
+
+### Linux Ubuntu Install
+
+#### Installation documentation for APT-based distribution
+[https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/)
+>`mysql -V`  
+`systemctl status mysql`
+
+#### Connecting to mysql via the terminal error
+
+[Access Denied for user 'root@localhost'](https://dev.to/hellousermeta/fix-mysql-error-access-denied-for-user-rootlocalhost-n5e)
+>`mysql -u root -p`, then enter the password
