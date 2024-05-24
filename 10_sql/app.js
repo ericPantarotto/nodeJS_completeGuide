@@ -7,14 +7,9 @@ import { fileURLToPath } from 'url';
 import errorController from './controllers/error.js';
 import adminRoutes from './routes/admin.js';
 import { expRouter as shopRoutes } from './routes/shop.js';
-import { expPool as db } from './util/database.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-db.query('SELECT * FROM products;')
-  .then(results => console.log(results)) // results contains rows returned by server
-  .catch(err => err && console.log(err));
 
 const app = express();
 

@@ -1584,3 +1584,42 @@ db.query('SELECT * FROM products;')
   .then(results => console.log(results))
   .catch(err => err && console.log(err));
 ```
+
+## Fetching Products
+**<span style='color: #bcdbf9'> Note:**
+for all functions of our **product class**, we won't work with callbacks anymore but with promises, so we don't need that argument, the callback argument
+**<span style='color: #a8c62c'> /models/product.js**:
+
+```js
+static fetchAll() {
+  return db.execute('SELECT * FROM products')
+}
+```
+**<span style='color: #bcdbf9'> Note:** we don't chain `then()` in our `fetchAll()` function, but instead return an entire promise that can be used from where this function is called
+
+*Before (file+callback):*  
+```js
+function getProducts(req, res, next) {
+  Product.fetchAll(products => {
+    res.render('shop/product-list', {
+      prods: products,
+      pageTitle: 'All Products',
+      path: '/products',
+    });
+  });
+}
+```
+*Now (Db+Promise):*  
+```js
+function getProducts(req, res, next) {
+  Product.fetchAll()
+    .then(([rows, fields]) => {
+      res.render('shop/product-list', {
+        prods: rows,
+        pageTitle: 'All Products',
+        path: '/products',
+      });
+    })
+    .catch(err => console.log(err));
+}
+```
