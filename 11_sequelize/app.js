@@ -4,6 +4,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import { expPool as sequilize } from './util/database.js';
 import errorController from './controllers/error.js';
 import adminRoutes from './routes/admin.js';
 import { expRouter as shopRoutes } from './routes/shop.js';
@@ -24,4 +25,10 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-app.listen(3000);
+sequilize
+  .sync()
+  .then(result => {
+    // console.log(result);
+    app.listen(3000);
+  })
+  .catch(err => console.error(err));

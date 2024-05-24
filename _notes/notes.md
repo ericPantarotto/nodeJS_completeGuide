@@ -1728,3 +1728,23 @@ const Product = sequilize.define('product', {
   },
 });
 ```
+
+## Syncing JS Definitions to the Database
+
+I want to ensure that all my models are basically transferred into tables or get a table that belongs to them whenever we start our application.   
+and if the table already exists, it will of course not override it by default though we can tell it to do so.
+
+```js
+import { expPool as sequilize } from './util/database.js';
+sequilize
+  .sync()
+  .then(result => {
+    // console.log(result);
+    app.listen(3000);
+  })
+  .catch(err => console.error(err));
+```
+it syncs your models to the database by creating the appropriate tables and if you have them, relations.
+
+Our table(s) is created when we start the server (if the tabl doesn't exist), and 2 fields `createdAt`, `updatedAt` are added (it can be deactivated)
+![image info](./11_sc3.png) 
