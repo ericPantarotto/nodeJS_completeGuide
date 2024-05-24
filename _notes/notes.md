@@ -1681,6 +1681,7 @@ DROP TABLE IF EXISTS `products`
 
 **<span style='color: #a8c62c'>/util/database.js**, below will create a connection pool, just as we did with `mysql2` directly 
 
+**<span style='color: #ffe5c5'>Link:** https://sequelize.org/docs/v6/getting-started/
 ```js
 import Sequelize from 'sequelize';
 
@@ -1692,4 +1693,38 @@ const sequelize = new Sequelize(
 );
 
 export const expPool = sequelize;
+```
+
+## Defining a Model
+
+**<span style='color: #ffe5c5'>Link:** https://sequelize.org/docs/v6/core-concepts/model-basics/  
+
+so our `sequelize` objec is more than a connection pool, it's actually a fully configured sequelize environment which does also have the connection pool but also all the features of the sequelize package and there we can define a new model by calling `define()`.
+
+**<span style='color: #a8c62c'>/models/product.js**,  
+```js
+const Product = sequilize.define('product', {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  title: Sequelize.STRING,
+  price: {
+    type: Sequelize.DOUBLE,
+    allowNull: false,
+    validate: {
+      min: 0,
+    },
+  },
+  imageUrl: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  descrption: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+});
 ```
