@@ -1658,3 +1658,11 @@ function postAddProduct(req, res, next) {
 }
 ```
 # Understanding Sequelize
+## What is Sequelize?
+- third party package
+- object relational mapping library:
+  it does all the heavy liffting, all the SQL code so that we don't have to write SQL code on our own
+
+Object to Table mapping
+![image info](./11_sc1.png) 
+![image info](./11_sc2.png) 
