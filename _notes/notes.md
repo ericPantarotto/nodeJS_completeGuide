@@ -1666,3 +1666,30 @@ function postAddProduct(req, res, next) {
 Object to Table mapping
 ![image info](./11_sc1.png) 
 ![image info](./11_sc2.png) 
+
+## Connecting to the Database
+### Install Sequelize (production dependency)
+`npm i --save sequelize`  
+
+**<span style='color: #bcdbf9'> Note:** `sequelize` needs `mysql2` package that we already installed, as sequelize uses mysql2 behind the scenes
+
+### Creating a model that we connect to the database
+first we need to delete the previously created table; 
+```SQL
+DROP TABLE IF EXISTS `products`
+```
+
+**<span style='color: #a8c62c'>/util/database.js**, below will create a connection pool, just as we did with `mysql2` directly 
+
+```js
+import Sequelize from 'sequelize';
+
+const sequelize = new Sequelize(
+  process.env.MYSQL_DATABASE,
+  process.env.MYSQL_USER,
+  process.env.MYSQL_PASSWORD,
+  { dialect: 'mysql', host: process.env.MYSQL_HOST }
+);
+
+export const expPool = sequelize;
+```
