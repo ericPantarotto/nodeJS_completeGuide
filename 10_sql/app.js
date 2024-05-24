@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser';
-import express from 'express';
 import 'dotenv/config';
+import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -12,9 +12,9 @@ import { expPool as db } from './util/database.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const [results, fields] = await db.query('SELECT * FROM products;');
-console.log(results); // results contains rows returned by server
-console.log(fields); // fields contains extra meta data about results, if available
+db.query('SELECT * FROM products;')
+  .then(results => console.log(results)) // results contains rows returned by server
+  .catch(err => err && console.log(err));
 
 const app = express();
 

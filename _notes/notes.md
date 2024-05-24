@@ -1568,3 +1568,19 @@ USE node_complete;
 INSERT INTO `products` (title, price, description, imageURL)
 values ('A Book', 12.99, 'This is an awsome book', 'https://as1.ftcdn.net/jpg/01/18/67/46/220_F_118674630_ct8BMi4p95r67QZ217nvEO3o2YlDZta2.jpg')
 ```
+
+## Retreiving Data
+**<span style='color: #bcdbf9'> Note:**
+A promise is a basic javascript object not specific to node, it's also available in javascript in the browser which allows us to work with asynchronous code.  
+
+Instead of using callbacks which we could also use with the MySQL package, promises allow us to write more structured code because instead of having a nested anonymous function here as a second argument, we simply have a then block which will then get the anonymous function to execute.
+
+- `then()`
+- there is also `catch()` and this also has a function which executes in case of an error,
+
+**<span style='color: #a8c62c'>/app.js**
+```js
+db.query('SELECT * FROM products;')
+  .then(results => console.log(results))
+  .catch(err => err && console.log(err));
+```
