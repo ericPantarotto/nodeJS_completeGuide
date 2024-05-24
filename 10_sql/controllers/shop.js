@@ -15,14 +15,15 @@ function getProducts(req, res, next) {
 
 function getProduct(req, res, next) {
   const prodId = req.params.productId;
-  Product.findById(prodId, product => {
-    if (product)
+  Product.findById(prodId)
+    .then(([product]) => {
       res.render('shop/product-detail', {
-        pageTitle: product.title,
-        product: product,
-        path: '/products',
-      });
-  });
+          pageTitle: product[0].title,
+          product: product[0],
+          path: '/products',
+        })
+    })
+    .catch(err => console.error(err));
 }
 
 function getIndex(req, res, next) {
