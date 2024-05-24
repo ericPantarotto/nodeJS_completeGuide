@@ -1623,3 +1623,37 @@ function getProducts(req, res, next) {
     .catch(err => console.log(err));
 }
 ```
+**<span style='color: #bcdbf9'> Note:** we are using array destructuring with our Promise `.then(([rows, fields]) => {`  
+we can also omit the second element (`.then(([rows]) => {`)
+
+## Inserting Data Into the Database
+
+**<span style='color:   #875c5c'>IMPORTANT:** Now to safely insert values and not face the issue of SQL injection which is an attack pattern where users can insert special data into your input fields in your webpage that runs as SQL queries, we should use an approach where:
+- we just use question marks, one for each of the fields we insert data into,
+- and a second argument we pass to execute with the values that will be injected.
+
+**<span style='color: #a8c62c'> /models/product.js**:  
+```js
+save() {
+  return db.execute(
+    `INSERT INTO products (title, price, description, imageURL) 
+    VALUES(?, ?, ?, ?)`,
+    [this.title, this.price, this.description, this.imageUrl]
+  );
+}
+```
+**<span style='color: #a8c62c'> /controllers/admin.js**:  `postAddProduct()`
+```js
+function postAddProduct(req, res, next) {
+  new Product(
+    null, //INFO: id
+    req.body.title,
+    req.body.imageUrl,
+    req.body.description,
+    req.body.price
+  )
+    .save()
+    .then(_ => res.redirect('/'))
+    .catch(err => console.log(err));
+}
+```

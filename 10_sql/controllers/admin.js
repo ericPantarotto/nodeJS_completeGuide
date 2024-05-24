@@ -15,8 +15,10 @@ function postAddProduct(req, res, next) {
     req.body.imageUrl,
     req.body.description,
     req.body.price
-  ).save();
-  res.redirect('/');
+  )
+    .save()
+    .then(_ => res.redirect('/'))
+    .catch(err => console.log(err));
 }
 
 function getEditProduct(req, res, next) {

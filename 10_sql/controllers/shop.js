@@ -3,7 +3,7 @@ import Product from '../models/product.js';
 
 function getProducts(req, res, next) {
   Product.fetchAll()
-    .then(([rows, fields]) => {
+    .then(([rows]) => {
       res.render('shop/product-list', {
         prods: rows,
         pageTitle: 'All Products',
