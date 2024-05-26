@@ -15,11 +15,11 @@ function getProducts(req, res, next) {
 
 function getProduct(req, res, next) {
   const prodId = req.params.productId;
-  Product.findById(prodId)
-    .then(([product]) => {
+  Product.findByPk(prodId)
+    .then(product => {
       res.render('shop/product-detail', {
-        pageTitle: product[0].title,
-        product: product[0],
+        pageTitle: product.title,
+        product: product,
         path: '/products',
       });
     })

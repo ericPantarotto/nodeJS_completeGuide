@@ -1782,3 +1782,12 @@ function getIndex(req, res, next) {
   .catch (err => console.log(err))
 }
 ```
+
+## Getting a Single Product with the "where" Condition
+**<span style='color: #bcdbf9'> Note:**  with sequelize we don't get back an array when using `findByPk()`, but rather a single object
+`Product.findByPk(prodId).then()`
+
+alternative: combining `findAll()` with a `where` clause, you can add operators (https://sequelize.org/docs/v6/core-concepts/model-querying-basics/#operators)
+
+`Product.findAll(where: {id: prodId})`  
+**<span style='color:   #875c5c'>IMPORTANT:** findAll() will return an array
