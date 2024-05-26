@@ -2,10 +2,10 @@ import Cart from '../models/cart.js';
 import Product from '../models/product.js';
 
 function getProducts(req, res, next) {
-  Product.fetchAll()
-    .then(([rows]) => {
+  Product.findAll()
+    .then(products => {
       res.render('shop/product-list', {
-        prods: rows,
+        prods: products,
         pageTitle: 'All Products',
         path: '/products',
       });
@@ -18,19 +18,19 @@ function getProduct(req, res, next) {
   Product.findById(prodId)
     .then(([product]) => {
       res.render('shop/product-detail', {
-          pageTitle: product[0].title,
-          product: product[0],
-          path: '/products',
-        })
+        pageTitle: product[0].title,
+        product: product[0],
+        path: '/products',
+      });
     })
     .catch(err => console.error(err));
 }
 
 function getIndex(req, res, next) {
-  Product.fetchAll()
-    .then(([rows, fields]) => {
+  Product.findAll()
+    .then(products => {
       res.render('shop/index', {
-        prods: rows,
+        prods: products,
         pageTitle: 'My Shop',
         path: '/',
       });

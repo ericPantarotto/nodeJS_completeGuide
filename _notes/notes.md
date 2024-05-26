@@ -1765,3 +1765,20 @@ function postAddProduct(req, res, next) {
     .catch(err => console.log(err));
 }
 ```
+
+## Retrieving Data & Finding Products
+[https://sequelize.org/docs/v6/core-concepts/model-querying-finders/](https://sequelize.org/docs/v6/core-concepts/model-querying-finders/)
+
+**<span style='color: #a8c62c'>/controllers/shop.js:**  
+```js
+function getIndex(req, res, next) {
+  Product.findAll().then(products => {
+    res.render('shop/index', {
+      prods: products,
+      pageTitle: 'My Shop',
+      path: '/',
+    });
+  })
+  .catch (err => console.log(err))
+}
+```
