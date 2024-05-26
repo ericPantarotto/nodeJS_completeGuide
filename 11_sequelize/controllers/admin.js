@@ -9,15 +9,14 @@ function getAddProduct(req, res, next) {
 }
 
 function postAddProduct(req, res, next) {
-  new Product(
-    null, //INFO: id
-    req.body.title,
-    req.body.imageUrl,
-    req.body.description,
-    req.body.price
-  )
-    .save()
-    .then(_ => res.redirect('/'))
+  Product
+    .create({
+      title: req.body.title,
+      price: req.body.price,
+      imageUrl: req.body.imageUrl,
+      description: req.body.description,
+    })
+    .then(result => console.log(result))
     .catch(err => console.log(err));
 }
 

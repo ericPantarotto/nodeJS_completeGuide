@@ -1748,3 +1748,20 @@ it syncs your models to the database by creating the appropriate tables and if y
 
 Our table(s) is created when we start the server (if the tabl doesn't exist), and 2 fields `createdAt`, `updatedAt` are added (it can be deactivated)
 ![image info](./11_sc3.png) 
+
+## Inserting Data & Creating a Product
+
+**<span style='color: #a8c62c'>/controllers/admin.js**,  
+```js
+function postAddProduct(req, res, next) {
+  Product
+    .create({
+      title: req.body.title,
+      price: req.body.price,
+      imageUrl: req.body.imageUrl,
+      description: req.body.description,
+    })
+    .then(result => console.log(result))
+    .catch(err => console.log(err));
+}
+```
