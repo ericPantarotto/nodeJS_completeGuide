@@ -28,8 +28,11 @@ function getEditProduct(req, res, next) {
   if (!editMode) return res.redirect('/');
 
   const prodId = req.params.productId;
-  Product.findByPk(prodId)
-    .then(product => {
+
+  req.user
+    .getProducts({ where: { id: prodId } })
+    .then(products => {
+      const product = products[0];
       if (!product) return res.redirect('/');
       res.render('admin/edit-product', {
         pageTitle: 'Edit Product',
@@ -67,7 +70,8 @@ function postDeleteProduct(req, res, next) {
 }
 
 function getProducts(req, res, next) {
-  Product.findAll()
+  req.user
+    .getProducts()
     .then(products => {
       const prodsEditing = products.map(obj => {
         return { ...obj['dataValues'], editing: true };
