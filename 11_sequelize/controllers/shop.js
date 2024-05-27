@@ -50,7 +50,7 @@ function getCart(req, res, next) {
       });
     })
     .catch(err => console.error(err));
-  
+
   // Cart.getCart(cart => {
   //   Product.fetchAll(products => {
   //     const cartProducts = cart.products.map(cartProduct => {
@@ -69,10 +69,23 @@ function getCart(req, res, next) {
 
 function postCart(req, res, next) {
   const prodId = req.body.productId;
-  Product.findById(prodId, product => {
-    Cart.addProduct(prodId, product.price);
-  });
-  res.redirect('/cart');
+  let fetchCart;
+  req.user
+    .getCart()
+    .then(cart => {
+      fetchCart = cart;
+      return cart.getProducts({ where: { id: prodId } });
+    })
+    .then(products => {
+      const product = products[0];
+      if (product) {
+      }
+      return Product.findByPk(prodId).then(product =>
+        fetchCart.addProduct(product, { through: { quantity: 1 } })
+      );
+    })
+    .then(_ => res.redirect('/cart'))
+    .catch(err => console.error(err));
 }
 
 function postCartDeleteProduct(req, res, next) {
