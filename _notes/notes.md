@@ -1966,3 +1966,47 @@ NOTE: alternative
     .catch(err => console.log(err));
 } 
 ```
+## One-To-Many & Many-To-Many Relations
+**<span style='color: #a8c62c'>/models/cart.js:**  
+```js
+const Cart = sequilize.define('cart', {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+});
+```
+**<span style='color: #a8c62c'>/models/cart-item.js:**  
+```js
+const CartItem   = sequilize.define('cartItem', {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+    },
+    quantity: Sequelize.INTEGER
+});
+```
+**<span style='color: #a8c62c'>/app.js:**  
+```js
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
+```
+`mysql> show columns from carts;`
+| Field     | Type | Key |
+| -------- | ------- | ------- |
+| id  | int    | PRI|
+| userId | 	int | MUL |
+
+`mysql> show columns from cartItems;`
+| Field     | Type | Key |
+| -------- | ------- | ------- |
+| id  | int    | PRI|
+| quantity  | int    | |
+| cartId | 	int | MUL |
+| productId | 	int | MUL |

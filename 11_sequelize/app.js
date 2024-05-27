@@ -5,6 +5,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import errorController from './controllers/error.js';
+import CartItem from './models/cart-item.js';
+import Cart from './models/cart.js';
 import Product from './models/product.js';
 import User from './models/user.js';
 import adminRoutes from './routes/admin.js';
@@ -38,6 +40,11 @@ app.use(errorController.get404);
 
 Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product);
+
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
 
 sequilize
   .sync()
