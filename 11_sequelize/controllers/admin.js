@@ -15,7 +15,10 @@ function postAddProduct(req, res, next) {
     imageUrl: req.body.imageUrl,
     description: req.body.description,
   })
-    .then(result => console.log(result))
+    .then(result => {
+      console.log('CREATED PRODUCT!');
+      res.redirect('/admin/products');
+    })
     .catch(err => console.log(err));
 }
 
@@ -56,8 +59,10 @@ function postEditProduct(req, res, next) {
 
 function postDeleteProduct(req, res, next) {
   const prodId = req.body.productId;
-  Product.deleteById(prodId);
-  res.redirect('/admin/products');
+  Product.destroy({ where: { id: prodId } }).then(result => {
+    console.log('DESTROYED PRODUCT!');
+    res.redirect('/admin/products');
+  });
 }
 
 function getProducts(req, res, next) {

@@ -1796,6 +1796,8 @@ alternative: combining `findAll()` with a `where` clause, you can add operators 
 ## Updating Products
 If the product does not exist yet, it will create a new one but if it does as this one, then it will overwrite or update the old one with our new values.
 
+**<span style='color: #a8c62c'>/controllers/admin.js:**  
+
 ```js
 function postEditProduct(req, res, next) {
   const prodId = req.body.productId;
@@ -1821,4 +1823,17 @@ Javascript and nodejs simply executes your code from top to bottom but async ope
 
 So it will not wait for the block to finish but instead move onto the next line and the next line, so it will redirect before our promise is done.
 
-By the way this also means that for now if we have an error, we never load a new page which is not the best user experience 
+By the way this also means that for now if we have an error, we never load a new page which is not the best user experience.
+
+## Deleting Products
+**<span style='color: #a8c62c'>/controllers/admin.js:**  
+```js
+function postDeleteProduct(req, res, next) {
+  const prodId = req.body.productId;
+  Product.destroy({ where: { id: prodId } }).then(result => {
+    console.log('DESTROYED PRODUCT!');
+    res.redirect('/admin/products');
+  });
+}
+```
+https://sequelize.org/docs/v7/querying/delete/
