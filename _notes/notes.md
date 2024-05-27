@@ -1792,3 +1792,33 @@ alternative: combining `findAll()` with a `where` clause, you can add operators 
 
 `Product.findAll(where: {id: prodId})`  
 **<span style='color:   #875c5c'>IMPORTANT:** findAll() will return an array
+
+## Updating Products
+If the product does not exist yet, it will create a new one but if it does as this one, then it will overwrite or update the old one with our new values.
+
+```js
+function postEditProduct(req, res, next) {
+  const prodId = req.body.productId;
+  Product.findByPk(prodId)
+    .then(product => {
+      (product.title = req.body.title),
+        (product.imageUrl = req.body.imageUrl),
+        (product.description = req.body.description),
+        (product.price = req.body.price);
+      return product.save();
+    })
+    .then(result => {
+      console.log('UPDATED PRODUCT !!!');
+      res.redirect('/admin/products');
+    })
+    .catch(err => console.error(err));
+}
+```
+**<span style='color: #bcdbf9'> Note:**  `return product.save();` instead of nesting another `.then()` inside , and add it outisde, and our `.catch()` block would catch for both promises  
+
+**<span style='color:   #875c5c'>IMPORTANT:** we also have to nest our `res.render()` inside the `.then()` block.  
+Javascript and nodejs simply executes your code from top to bottom but async operations like this simply get registered and started and then here for promises, we registered that this function should be executed once the promise is resolved.
+
+So it will not wait for the block to finish but instead move onto the next line and the next line, so it will redirect before our promise is done.
+
+By the way this also means that for now if we have an error, we never load a new page which is not the best user experience 

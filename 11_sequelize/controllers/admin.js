@@ -24,27 +24,34 @@ function getEditProduct(req, res, next) {
   if (!editMode) return res.redirect('/');
 
   const prodId = req.params.productId;
-  Product.findById(prodId, product => {
-    if (!product) return res.redirect('/');
-    res.render('admin/edit-product', {
-      pageTitle: 'Edit Product',
-      path: '/admin/edit-product',
-      editing: editMode,
-      product: product,
-    });
-  });
+  Product.findByPk(prodId)
+    .then(product => {
+      if (!product) return res.redirect('/');
+      res.render('admin/edit-product', {
+        pageTitle: 'Edit Product',
+        path: '/admin/edit-product',
+        editing: editMode,
+        product: product,
+      });
+    })
+    .catch(err => console.error(err));
 }
 
 function postEditProduct(req, res, next) {
   const prodId = req.body.productId;
-  new Product(
-    prodId,
-    req.body.title,
-    req.body.imageUrl,
-    req.body.description,
-    req.body.price
-  ).save();
-  res.redirect('/admin/products');
+  Product.findByPk(prodId)
+    .then(product => {
+      (product.title = req.body.title),
+        (product.imageUrl = req.body.imageUrl),
+        (product.description = req.body.description),
+        (product.price = req.body.price);
+      return product.save();
+    })
+    .then(result => {
+      console.log('UPDATED PRODUCT !!!');
+      res.redirect('/admin/products');
+    })
+    .catch(err => console.error(err));
 }
 
 function postDeleteProduct(req, res, next) {
