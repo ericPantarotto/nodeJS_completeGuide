@@ -1768,7 +1768,7 @@ function postAddProduct(req, res, next) {
 ```
 
 ## Retrieving Data & Finding Products
-[https://sequelize.org/docs/v6/core-concepts/model-querying-finders/](https://sequelize.org/docs/v6/core-concepts/model-querying-finders/)
+**<span style='color: #ffe5c5'>Link:** [https://sequelize.org/docs/v6/core-concepts/model-querying-finders/](https://sequelize.org/docs/v6/core-concepts/model-querying-finders/)
 
 **<span style='color: #a8c62c'>/controllers/shop.js:**  
 ```js
@@ -1788,7 +1788,8 @@ function getIndex(req, res, next) {
 **<span style='color: #bcdbf9'> Note:**  with sequelize we don't get back an array when using `findByPk()`, but rather a single object
 `Product.findByPk(prodId).then()`
 
-alternative: combining `findAll()` with a `where` clause, you can add operators (https://sequelize.org/docs/v6/core-concepts/model-querying-basics/#operators)
+alternative: combining `findAll()` with a `where` clause, you can add operators.   
+**<span style='color: #ffe5c5'>Link:** https://sequelize.org/docs/v6/core-concepts/model-querying-basics/#operators
 
 `Product.findAll(where: {id: prodId})`  
 **<span style='color:   #875c5c'>IMPORTANT:** findAll() will return an array
@@ -1836,4 +1837,54 @@ function postDeleteProduct(req, res, next) {
   });
 }
 ```
-https://sequelize.org/docs/v7/querying/delete/
+**<span style='color: #ffe5c5'>Link:**  https://sequelize.org/docs/v7/querying/delete/
+
+## Adding a One-To-Many Relationship
+![image info](./11_sc4.png) 
+
+We need to define the assocation/relation of the models before syncing the sequilize.
+
+**<span style='color: #ffe5c5'>Link:**  https://sequelize.org/docs/v6/core-concepts/assocs/
+
+
+**<span style='color: #a8c62c'>/app.js:**  
+As we change the relations between our model, but the `Product` table already exists, we have to `force: true` the sync
+```js
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+User.hasMany(Product);
+
+sequilize
+  .sync({force: true})
+  .then(result => {
+    app.listen(3000);
+  })
+  .catch(err => console.error(err));
+```
+### Checking database Relations
+```sql
+show columns from `products`;
+
+SELECT
+`TABLE_NAME`,
+`COLUMN_NAME`,
+`REFERENCED_TABLE_NAME`,
+`REFERENCED_COLUMN_NAME`
+FROM `information_schema`.`KEY_COLUMN_USAGE`
+WHERE `CONSTRAINT_SCHEMA` = 'node_complete' AND
+`REFERENCED_TABLE_SCHEMA` IS NOT NULL AND
+`REFERENCED_TABLE_NAME` IS NOT NULL AND
+`REFERENCED_COLUMN_NAME` IS NOT NULL
+
+SELECT 
+  `TABLE_SCHEMA`,                          -- Foreign key schema
+  `TABLE_NAME`,                            -- Foreign key table
+  `COLUMN_NAME`,                           -- Foreign key column
+  `REFERENCED_TABLE_SCHEMA`,               -- Origin key schema
+  `REFERENCED_TABLE_NAME`,                 -- Origin key table
+  `REFERENCED_COLUMN_NAME`                 -- Origin key column
+FROM
+  `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE`  -- Will fail if user don't have privilege
+WHERE
+  `TABLE_SCHEMA` = SCHEMA()                -- Detect current schema in USE 
+  AND `REFERENCED_TABLE_NAME` IS NOT NULL; -- Only tables with foreign keys
+```
