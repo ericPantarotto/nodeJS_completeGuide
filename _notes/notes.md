@@ -1849,6 +1849,9 @@ We need to define the assocation/relation of the models before syncing the sequi
 
 **<span style='color: #a8c62c'>/app.js:**  
 As we change the relations between our model, but the `Product` table already exists, we have to `force: true` the sync
+
+**<span style='color:   #875c5c'>IMPORTANT:** you have to remove it, otherwise the data will be erased each time we restart the server
+
 ```js
 Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product);
@@ -1888,3 +1891,45 @@ WHERE
   `TABLE_SCHEMA` = SCHEMA()                -- Detect current schema in USE 
   AND `REFERENCED_TABLE_NAME` IS NOT NULL; -- Only tables with foreign keys
 ```
+
+## Creating & Managing a Dummy User
+**<span style='color: #a8c62c'>/app.js:**  
+
+in our second `.then()` block, we have to make sure to return the same type , a promise, so we explecitely use `Promise.resolve()`, this is actually necessary as, in a `.then()` block always returns a promise:
+
+```js
+sequilize
+  .sync()
+  .then(result => {
+    // console.log(result);
+    return User.findByPk(1);
+  })
+  .then(user => {
+    if (!user) return User.create({ name: 'Eric', email: 'ecr@gmail.com' });
+    return Promise.resolve(user);
+  })
+  .then(user => {
+    console.log(user);
+    app.listen(3000);
+  })
+```
+
+Next we will register a new middleware because I want to store that user in my request so that I can use it from anywhere in my app conveniently.
+
+```js
+app.use((req, res, next) => {
+  User.findByPk(1).then(user => {
+    req.user = user;
+    next();
+  }).catch(err => console.errror(err));
+});
+```
+Even though the user is created later in the code, keep in mind, app use here only registers a middleware so for an incoming request, we will then execute this function. 
+`npm start` is what runs sequelize here not incoming requests, incoming requests are only funneled through our middleware.
+it just registers it as middleware for incoming requests, and can only run if server was started, and initialization code is done.
+
+Also keep in mind the user we're retrieving from the database here is not just a javascript object with the values stored in a database, it's a sequelize object with the value stored in the database and with all these utility methods sequelize added, like destroy.
+
+So we're storing this sequelize object here in the request and not just a javascript object with the field values, it is that we got the extended version here and therefore whenever we call request user in the future in our app, we can also execute methods like destroy.
+
+all to do is to call `next()` of course so that we can continue with the next step if we get our user and stored it.

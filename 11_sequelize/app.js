@@ -5,7 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import errorController from './controllers/error.js';
-import Product  from './models/product.js';
+import Product from './models/product.js';
 import User from './models/user.js';
 import adminRoutes from './routes/admin.js';
 import { expRouter as shopRoutes } from './routes/shop.js';
@@ -22,6 +22,15 @@ app.set('views', './views');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.errror(err));
+});
+
 app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 
@@ -31,9 +40,17 @@ Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product);
 
 sequilize
-  .sync({force: true})
+  .sync()
   .then(result => {
     // console.log(result);
+    return User.findByPk(1);
+  })
+  .then(user => {
+    if (!user) return User.create({ name: 'Eric', email: 'ecr@gmail.com' });
+    return Promise.resolve(user);
+  })
+  .then(user => {
+    console.log(user);
     app.listen(3000);
   })
   .catch(err => console.error(err));
