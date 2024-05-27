@@ -2010,3 +2010,12 @@ Product.belongsToMany(Cart, { through: CartItem });
 | quantity  | int    | |
 | cartId | 	int | MUL |
 | productId | 	int | MUL |
+
+## Adding Existing Products & Retrieving Cart Items
+**<span style='color: #a8c62c'>/views/shop/cart.js:**  
+```html
+<% products.forEach(p => { %>
+  <li>
+      <p><%= p.title %> (<%= p.cartItem.quantity %> )</p>
+```
+In the products we're looping through, the quantity is not part of that but of the related cart item you could say and conveniently, sequelize also gives us a `cartitem` key for this, which stores information about this in-between table and the entry that is related to this product there.
