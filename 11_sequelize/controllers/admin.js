@@ -9,13 +9,12 @@ function getAddProduct(req, res, next) {
 }
 
 function postAddProduct(req, res, next) {
-  Product
-    .create({
-      title: req.body.title,
-      price: req.body.price,
-      imageUrl: req.body.imageUrl,
-      description: req.body.description,
-    })
+  Product.create({
+    title: req.body.title,
+    price: req.body.price,
+    imageUrl: req.body.imageUrl,
+    description: req.body.description,
+  })
     .then(result => console.log(result))
     .catch(err => console.log(err));
 }
@@ -55,17 +54,19 @@ function postDeleteProduct(req, res, next) {
 }
 
 function getProducts(req, res, next) {
-  Product.fetchAll(products => {
-    const prodsEditing = products.map(obj => {
-      return { ...obj, editing: true };
-    });
+  Product.findAll()
+    .then(products => {
+      const prodsEditing = products.map(obj => {
+        return { ...obj['dataValues'], editing: true };
+      });
 
-    res.render('admin/products', {
-      prods: prodsEditing,
-      pageTitle: 'My Shop',
-      path: '/admin/products',
-    });
-  });
+      res.render('admin/products', {
+        prods: prodsEditing,
+        pageTitle: 'My Shop',
+        path: '/admin/products',
+      });
+    })
+    .catch(err => console.log(err));
 }
 
 export default {

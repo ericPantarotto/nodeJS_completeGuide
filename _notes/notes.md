@@ -1747,6 +1747,7 @@ sequilize
 it syncs your models to the database by creating the appropriate tables and if you have them, relations.
 
 Our table(s) is created when we start the server (if the tabl doesn't exist), and 2 fields `createdAt`, `updatedAt` are added (it can be deactivated)
+
 ![image info](./11_sc3.png) 
 
 ## Inserting Data & Creating a Product
