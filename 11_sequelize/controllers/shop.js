@@ -39,20 +39,32 @@ function getIndex(req, res, next) {
 }
 
 function getCart(req, res, next) {
-  Cart.getCart(cart => {
-    Product.fetchAll(products => {
-      const cartProducts = cart.products.map(cartProduct => {
-        const productData = products.find(o => o.id === cartProduct.id);
-        return { productData: productData, qty: cartProduct.qty };
-      });
-
+  req.user
+    .getCart()
+    .then(cart => cart.getProducts())
+    .then(products => {
       res.render('shop/cart', {
         pageTitle: 'Your Cart',
         path: '/cart',
-        products: cartProducts,
+        products: products,
       });
-    });
-  });
+    })
+    .catch(err => console.error(err));
+  
+  // Cart.getCart(cart => {
+  //   Product.fetchAll(products => {
+  //     const cartProducts = cart.products.map(cartProduct => {
+  //       const productData = products.find(o => o.id === cartProduct.id);
+  //       return { productData: productData, qty: cartProduct.qty };
+  //     });
+
+  //     res.render('shop/cart', {
+  //       pageTitle: 'Your Cart',
+  //       path: '/cart',
+  //       products: cartProducts,
+  //     });
+  //   });
+  // });
 }
 
 function postCart(req, res, next) {

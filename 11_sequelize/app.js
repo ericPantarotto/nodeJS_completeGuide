@@ -57,7 +57,8 @@ sequilize
     return Promise.resolve(user);
   })
   .then(user => {
-    console.log(user);
-    app.listen(3000);
+    // console.log(user);
+    user.createCart();
   })
+  .then(cart => app.listen(3000))
   .catch(err => console.error(err));
