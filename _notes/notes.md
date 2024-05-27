@@ -1933,3 +1933,36 @@ Also keep in mind the user we're retrieving from the database here is not just a
 So we're storing this sequelize object here in the request and not just a javascript object with the field values, it is that we got the extended version here and therefore whenever we call request user in the future in our app, we can also execute methods like destroy.
 
 all to do is to call `next()` of course so that we can continue with the next step if we get our user and stored it.
+
+## Using Magic Assiocation Methods
+**<span style='color: #a8c62c'>/controllers/admin.js:**  
+**<span style='color: #bcdbf9'> Note:** for a `belongsTo()` association, sequelize adds methods that allows to create a new associated product! since a user has many products, or a product belongs to a user, with this relation defined, sequelize automatically adds a `createProduct()` methods to the `User`.  
+**the advantage is that we don't have to set explicitely the userId**
+
+**<span style='color: #ffe5c5'>Link:**  https://sequelize.org/docs/v6/core-concepts/assocs/#special-methodsmixins-added-to-instances
+```js
+function postAddProduct(req, res, next) {
+  Product.create({
+    title: req.body.title,
+    price: req.body.price,
+    imageUrl: req.body.imageUrl,
+    description: req.body.description,
+    userId: req.user.id,
+  })
+
+NOTE: alternative
+ function postAddProduct(req, res, next) {
+  req.user
+    .createProduct({
+      title: req.body.title,
+      price: req.body.price,
+      imageUrl: req.body.imageUrl,
+      description: req.body.description,
+    })
+    .then(result => {
+      console.log('CREATED PRODUCT!');
+      res.redirect('/admin/products');
+    })
+    .catch(err => console.log(err));
+} 
+```

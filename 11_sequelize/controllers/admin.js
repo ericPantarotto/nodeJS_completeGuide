@@ -9,12 +9,13 @@ function getAddProduct(req, res, next) {
 }
 
 function postAddProduct(req, res, next) {
-  Product.create({
-    title: req.body.title,
-    price: req.body.price,
-    imageUrl: req.body.imageUrl,
-    description: req.body.description,
-  })
+  req.user
+    .createProduct({
+      title: req.body.title,
+      price: req.body.price,
+      imageUrl: req.body.imageUrl,
+      description: req.body.description,
+    })
     .then(result => {
       console.log('CREATED PRODUCT!');
       res.redirect('/admin/products');
