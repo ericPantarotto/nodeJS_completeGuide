@@ -1,4 +1,3 @@
-import Cart from '../models/cart.js';
 import Product from '../models/product.js';
 
 function getProducts(req, res, next) {
@@ -97,10 +96,15 @@ function postCart(req, res, next) {
 
 function postCartDeleteProduct(req, res, next) {
   const prodId = req.body.productId;
-  Product.findById(prodId, product => {
-    Cart.deleteProduct(prodId, +product.price);
-    res.redirect('/cart');
-  });
+  req.user
+    .getCart()
+    .then(cart => cart.getProducts({ where: { id: prodId } }))
+    .then(products => {
+      const product = products[0];
+      return product.cartItem.destroy();
+    })
+    .then(_ => res.redirect('/cart'))
+    .catch(err => console.error(err));
 }
 
 function getOrders(req, res, next) {
