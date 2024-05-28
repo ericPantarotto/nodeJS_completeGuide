@@ -2082,3 +2082,6 @@ function getOrders(req, res, next) {
 **<span style='color: #bcdbf9'> Note:** **Eager-loading concept**; `req.user.getOrders({ include: ['products'] })`  
 Instruct sequelize when fetching `Orders` to also fetch related `Products` and return one array of orders also including products per order.  
 **Note:** this works as we have a relation between orders and products, so we can load both together 
+
+## Wrap-up
+![image info](./11_sc5.png)
