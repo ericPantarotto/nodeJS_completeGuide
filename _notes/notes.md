@@ -2043,3 +2043,42 @@ We can do this with the map method,a default javascript method that runs on an a
     product.orderItem = {quantity: product.cartItem.quantity};
     return product;
 }))`
+
+## Resetting the Cart & Fetching & Outputting Orders
+**<span style='color: #a8c62c'>/views/shop/order.ejs:**  
+
+```html
+       <main>
+            <% if (orders.length <= 0) { %>
+                <h1>Nothing there!</h1>
+            <% } else { %>
+                <ul>
+                    <% orders.forEach(order => { %>
+                        <li>
+                            <h1># <%= order.id %></h1>
+                            <ul>
+                                <% order.products.forEach(product => { %>
+                                    <li><%= product.title %> (<%= product.orderItem.quantity %>)</li>
+                                <% }); %>
+                            </ul>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } %>
+        </main>
+```
+**<span style='color: #a8c62c'>/controllers/shop.js:**  
+```js
+function getOrders(req, res, next) {
+  req.user.getOrders({ include: ['products'] }).then(orders =>
+    res.render('shop/orders', {
+      pageTitle: 'Your Orders',
+      path: '/orders',
+      orders: orders,
+    })
+  );
+}
+```
+**<span style='color: #bcdbf9'> Note:** **Eager-loading concept**; `req.user.getOrders({ include: ['products'] })`  
+Instruct sequelize when fetching `Orders` to also fetch related `Products` and return one array of orders also including products per order.  
+**Note:** this works as we have a relation between orders and products, so we can load both together 

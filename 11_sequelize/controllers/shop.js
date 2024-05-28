@@ -92,10 +92,13 @@ function postCartDeleteProduct(req, res, next) {
 }
 
 function getOrders(req, res, next) {
-  res.render('shop/orders', {
-    pageTitle: 'Your Orders',
-    path: '/orders',
-  });
+  req.user.getOrders({ include: ['products'] }).then(orders =>
+    res.render('shop/orders', {
+      pageTitle: 'Your Orders',
+      path: '/orders',
+      orders: orders,
+    })
+  );
 }
 
 function getCheckout(req, res, next) {
@@ -106,9 +109,13 @@ function getCheckout(req, res, next) {
 }
 
 function postOrder(req, res, next) {
+  let fetchedCart;
   req.user
     .getCart()
-    .then(cart => cart.getProducts())
+    .then(cart => {
+      fetchedCart = cart;
+      return cart.getProducts();
+    })
     .then(products =>
       req.user.createOrder().then(order =>
         order.addProducts(
@@ -119,6 +126,7 @@ function postOrder(req, res, next) {
         )
       )
     )
+    .then(_ => fetchedCart.setProducts(null))
     .then(_ => res.redirect('/orders'))
     .catch(err => console.error(err));
 }
