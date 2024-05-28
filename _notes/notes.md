@@ -2019,3 +2019,27 @@ Product.belongsToMany(Cart, { through: CartItem });
       <p><%= p.title %> (<%= p.cartItem.quantity %> )</p>
 ```
 In the products we're looping through, the quantity is not part of that but of the related cart item you could say and conveniently, sequelize also gives us a `cartitem` key for this, which stores information about this in-between table and the entry that is related to this product there.
+
+## Storing CartItems as OrderItems
+**<span style='color: #a8c62c'>/controllers/shop.js:**  
+```js
+function postOrder(req, res, next) {
+  req.user
+    .getCart()
+    .then(cart => cart.getProducts())
+    .then(products => req.user.createOrder().then(order => order.addProducts(products.map(product => {
+      product.orderItem = {quantity: product.cartItem.quantity};
+      return product;
+  }))))
+  .catch(err => console.error(err));
+}
+```
+To add products to our `Order`, that can be done easily by calling `order.addProducts()` and passing products as an argument.  
+**<span style='color:   #875c5c'>IMPORTANT:** , previously we passed also `{through: {...}}` to set the quantity here too, but now which value would we assign there because we get different quantities for all the products?
+
+The approach is a little different, we don't pass it like this, we just pass products to add products but each product needs to have a special key, a special field which is then understood by sequelize, and we name that *in-between table* `orderItem`.  
+We can do this with the map method,a default javascript method that runs on an array and returns a new array with slightly modified elements.
+`order.addProducts(products.map(product => {
+    product.orderItem = {quantity: product.cartItem.quantity};
+    return product;
+}))`

@@ -1,5 +1,4 @@
 import Product from '../models/product.js';
-
 function getProducts(req, res, next) {
   Product.findAll()
     .then(products => {
@@ -106,6 +105,24 @@ function getCheckout(req, res, next) {
   });
 }
 
+function postOrder(req, res, next) {
+  req.user
+    .getCart()
+    .then(cart => cart.getProducts())
+    .then(products =>
+      req.user.createOrder().then(order =>
+        order.addProducts(
+          products.map(product => {
+            product.orderItem = { quantity: product.cartItem.quantity };
+            return product;
+          })
+        )
+      )
+    )
+    .then(_ => res.redirect('/orders'))
+    .catch(err => console.error(err));
+}
+
 export default {
   getProducts,
   getIndex,
@@ -115,4 +132,5 @@ export default {
   getProduct,
   postCart,
   postCartDeleteProduct,
+  postOrder,
 };
