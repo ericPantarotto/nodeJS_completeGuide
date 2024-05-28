@@ -49,21 +49,6 @@ function getCart(req, res, next) {
       });
     })
     .catch(err => console.error(err));
-
-  // Cart.getCart(cart => {
-  //   Product.fetchAll(products => {
-  //     const cartProducts = cart.products.map(cartProduct => {
-  //       const productData = products.find(o => o.id === cartProduct.id);
-  //       return { productData: productData, qty: cartProduct.qty };
-  //     });
-
-  //     res.render('shop/cart', {
-  //       pageTitle: 'Your Cart',
-  //       path: '/cart',
-  //       products: cartProducts,
-  //     });
-  //   });
-  // });
 }
 
 function postCart(req, res, next) {

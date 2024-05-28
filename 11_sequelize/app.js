@@ -7,6 +7,8 @@ import { fileURLToPath } from 'url';
 import errorController from './controllers/error.js';
 import CartItem from './models/cart-item.js';
 import Cart from './models/cart.js';
+import OrderItem from './models/order-item.js';
+import Order from './models/order.js';
 import Product from './models/product.js';
 import User from './models/user.js';
 import adminRoutes from './routes/admin.js';
@@ -45,8 +47,14 @@ User.hasOne(Cart);
 Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: OrderItem });
+Product.belongsToMany(Order, { through: OrderItem });
 
 sequilize
+  //HACK: to use only if we want to force the database refresh!
+  // .sync({ force: true })
   .sync()
   .then(result => {
     // console.log(result);
