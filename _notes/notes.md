@@ -2105,3 +2105,21 @@ you don't have to do a lot of merging and so on but that you can really fetch da
 
 ![image info](./12_sc2.png)
 ![image info](./12_sc3.png)
+
+## Setting Up MongoDB
+- you can either install locally downloadng the *community edition* on [mongodb.com](mongodb.com), 
+- *mongodb Atlas*: using a cloud solution is the more realistic environment
+  we would use for deployment anyways and it's really easy to set up and it's free
+  you just need to sign up and you can spin up your own in the cloud best practice managed mongodb server which is a great environment for practicing
+**<span style='color: #ffe5c5'>Link:**  https://www.mongodb.com/atlas
+**<span style='color: #ffe5c5'>Link:**  https://cloud.mongodb.com/
+
+if you click in the browser on `New Cluster`, you configure a mongodb cloud cluster, so basically a mongodb server and therefore a mongodb database or multiple databases, running in the server.
+
+Behind the scenes mongodb uses one of these cloud providers but you don't need to be signed up with them:
+- AWS
+- Google Cloud
+- Azure
+
+**<span style='color: #bcdbf9'> Note:**: we will connect to this new created cluster, and which you then can use as your **backend**.  
+**<span style='color: #bcdbf9'> Note:**: all mongodb cli and connections in **Note / Web Development Bootcamp / MongoDB
