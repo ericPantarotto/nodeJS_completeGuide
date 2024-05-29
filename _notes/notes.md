@@ -2085,3 +2085,23 @@ Instruct sequelize when fetching `Orders` to also fetch related `Products` and r
 
 ## Wrap-up
 ![image info](./11_sc5.png)
+
+# Working with NoSQL & Using MongoDB
+## What is MongoDB?
+
+Well just like in the SQL world, we spin up a mongodb server and there we can have multiple databases.
+![image info](./10_sc3.png)
+
+ Mongodb uses json to store data in collections (*bson*)
+ you can have '*embeded documents*'
+
+## Relations in NoSQL
+In NoSQL it would be pretty normal to have copy of data within different documents or embeded documents.
+
+![image info](./12_sc1.png)
+Some user data for the orders and you copy that into the orders and then you have that data right there whenever you fetch all orders without you having to fetch all orders, then look for the fitting users and fetch them too and this is part of what makes NoSQL and especially mongodb so fast and efficient.
+
+you don't have to do a lot of merging and so on but that you can really fetch data in the format you need it without having to combine multiple collections behind the scenes on the server.
+
+![image info](./12_sc2.png)
+![image info](./12_sc3.png)
