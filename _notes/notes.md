@@ -2121,5 +2121,36 @@ Behind the scenes mongodb uses one of these cloud providers but you don't need t
 - Google Cloud
 - Azure
 
-**<span style='color: #bcdbf9'> Note:**: we will connect to this new created cluster, and which you then can use as your **backend**.  
-**<span style='color: #bcdbf9'> Note:**: all mongodb cli and connections in **Note / Web Development Bootcamp / MongoDB
+**<span style='color: #bcdbf9'> Note:** we will connect to this new created cluster, and which you then can use as your **backend**.  
+**<span style='color: #bcdbf9'> Note:** all mongodb cli and connections in **Note / Web Development Bootcamp / MongoDB
+
+## Installing the MongoDB Driver
+**<span style='color: #bcdbf9'> Note:**  mongodb driver which simply is a package we can use to connect to mongodb.
+![image info](./12_sc4.png)
+
+`npm install mongodb --save`  
+`mongodb+srv://ericpython1980:<password>@clusternodejs.ndf98eo.mongodb.net/?retryWrites=true&w=majority&appName=ClusterNodejs`
+
+**<span style='color: #a8c62c'>/util/database.js:**    
+```js
+const mongoConn = cb => {
+  const client = new MongoClient(process.env.MONGO_DB_URL);
+  client
+    .connect()
+    .then(client => {
+      console.log('Connected to mongodb Atlas');
+      cb(client);
+    })
+    .catch(err => console.error(err));
+};
+```
+
+Note: our function that we export (returnning a *mongoDb Client*) takes a call-back as an argument, we pass a lambda function:
+
+**<span style='color: #a8c62c'>/app.js:**    
+```js
+mongoConnect(client => {
+  console.log(client);
+  app.listen(3000);
+});
+```
