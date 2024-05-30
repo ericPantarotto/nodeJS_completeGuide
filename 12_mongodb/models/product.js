@@ -1,4 +1,4 @@
-import { mongoConnect } from './util/database.js';
+import { getDb } from './util/database.js';
 
 class Product {
   constructor(title, price, description, imageUrl) {

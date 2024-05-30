@@ -2158,3 +2158,46 @@ mongoConnect(client => {
 ## Creating the Database Connection
 **<span style='color: #bcdbf9'> Note:** with the current function (taking a callback as argument) we defined:  
 we would have to connect to mongodb for every operation we do and we would not even disconnect thereafter, so this is not really a good way of connecting to mongodb since we will want to connect and interact with it from different places in our app.
+
+## Finishing the Database Connection
+So I still want to have a function which I can call to connect, so our `mongoConneect()` is good
+
+- `_db = client.db();` => it will use the database of the URL you passed as a connection string
+- `_db = client.db('myDb');` => this would overwrite the database of the URL
+
+**<span style='color:   #875c5c'>IMPORTANT:** unlike in SQL we never need to create that database or the tables, the collections ahead of time. 
+It will be created on the fly when we first access it, which is again fitting that flexibility mongoDB gives us
+
+'mongodb+srv://ericpython1980:*password*@clusternodejs.ndf98eo.mongodb.net/***shop***?retryWrites=true&w=majority&appName=ClusterNodejs'
+
+```js
+let _db;
+const mongoConn = cb => {
+  const client = new MongoClient(process.env.MONGO_DB_URL);
+  client
+    .connect()
+    .then(client => {
+      console.log('Connected to mongodb Atlas');
+      _db = client.db();
+      cb();
+    })
+    .catch(err => {
+      console.error(err)
+      throw err;
+    });
+};
+```
+We store the mongoDb connection in a variable and we don't need to return it with our callback function.
+
+we also create a `getDb()` function.
+
+So now I'm exporting 2 methods, 
+- one for connecting and then storing the connection to the database and therefore, this will keep on running 
+- and one method where I return access to that connected database if it exists 
+
+**<span style='color: #bcdbf9'> Note:**  mongodb behind the scenes will even manage this very elegantly with something called connection pooling where mongodb will make sure it provides sufficient connections for multiple simultaneous interactions with the database.
+
+**<span style='color: #a8c62c'>/models/product.js:** 
+```js
+import { getDb } from './util/database.js';
+```
