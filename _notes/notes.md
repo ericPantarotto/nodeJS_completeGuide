@@ -2145,7 +2145,7 @@ const mongoConn = cb => {
 };
 ```
 
-Note: our function that we export (returnning a *mongoDb Client*) takes a call-back as an argument, we pass a lambda function:
+**<span style='color: #bcdbf9'> Note:** our function that we export (returnning a *mongoDb Client*) takes a call-back as an argument, we pass a lambda function:
 
 **<span style='color: #a8c62c'>/app.js:**    
 ```js
@@ -2154,3 +2154,7 @@ mongoConnect(client => {
   app.listen(3000);
 });
 ```
+
+## Creating the Database Connection
+**<span style='color: #bcdbf9'> Note:** with the current function (taking a callback as argument) we defined:  
+we would have to connect to mongodb for every operation we do and we would not even disconnect thereafter, so this is not really a good way of connecting to mongodb since we will want to connect and interact with it from different places in our app.
