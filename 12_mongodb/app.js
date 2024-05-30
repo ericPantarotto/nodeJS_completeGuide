@@ -27,6 +27,7 @@ app.use((req, res, next) => {
   //     next();
   //   })
   //   .catch(err => console.errror(err));
+  next();
 });
 
 app.use('/admin', adminRoutes.routes);

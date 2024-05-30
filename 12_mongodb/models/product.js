@@ -1,4 +1,4 @@
-import { getDb } from './util/database.js';
+import { getDb } from '../util/database.js';
 
 class Product {
   constructor(title, price, description, imageUrl) {
@@ -8,8 +8,13 @@ class Product {
     this.imageUrl = imageUrl;
   }
 
-  save() {}
+  save() {
+    const db = getDb();
+    db.collection('products')
+      .insertOne(this)
+      .then(res => console.log(res))
+      .catch(err => console.error(err));
+  }
 }
-
 
 export default Product;

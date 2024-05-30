@@ -2197,7 +2197,18 @@ So now I'm exporting 2 methods,
 
 **<span style='color: #bcdbf9'> Note:**  mongodb behind the scenes will even manage this very elegantly with something called connection pooling where mongodb will make sure it provides sufficient connections for multiple simultaneous interactions with the database.
 
+## Using the Database Connection
 **<span style='color: #a8c62c'>/models/product.js:** 
 ```js
-import { getDb } from './util/database.js';
+import { getDb } from '../util/database.js';
+```
+**<span style='color: #a8c62c'>/models/product.js:**
+```js
+save() {
+  const db = getDb();
+  db.collection('products')
+    .insertOne(this)
+    .then(res => console.log(res))
+    .catch(err => console.error(err));
+}
 ```
