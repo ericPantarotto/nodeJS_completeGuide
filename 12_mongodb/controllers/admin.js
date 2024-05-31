@@ -69,27 +69,22 @@ function postAddProduct(req, res, next) {
 //   });
 // }
 
-// function getProducts(req, res, next) {
-//   req.user
-//     .getProducts()
-//     .then(products => {
-//       const prodsEditing = products.map(obj => {
-//         return { ...obj['dataValues'], editing: true };
-//       });
-
-//       res.render('admin/products', {
-//         prods: prodsEditing,
-//         pageTitle: 'My Shop',
-//         path: '/admin/products',
-//       });
-//     })
-//     .catch(err => console.log(err));
-// }
+function getProducts(req, res, next) {
+  Product.fetchAll()
+    .then(products => {
+      res.render('admin/products', {
+        prods: products,
+        pageTitle: 'My Shop',
+        path: '/admin/products',
+      });
+    })
+    .catch(err => console.log(err));
+}
 
 export default {
   getAddProduct,
   postAddProduct,
-  // getProducts,
+  getProducts,
   // getEditProduct,
   // postEditProduct,
   // postDeleteProduct,
