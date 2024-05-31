@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 
 import errorController from './controllers/error.js';
 import adminRoutes from './routes/admin.js';
-// import { expRouter as shopRoutes } from './routes/shop.js';
+import { expRouter as shopRoutes } from './routes/shop.js';
 import { mongoConnect } from './util/database.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/admin', adminRoutes.routes);
-// app.use(shopRoutes);
+app.use(shopRoutes);
 
 app.use(errorController.get404);
 

@@ -2212,7 +2212,26 @@ save() {
     .catch(err => console.error(err));
 }
 ```
-
 ## Creating Products
 
 **<span style='color: #bcdbf9'> Note:** **Id** is managed automatically by mongodb because every document needs to have such a `_id`, it is created on the fly.
+
+## Fetching All Products
+`return db.collection('products).find()` doesn't return a promise but a **cursor**.  
+`find()` could of course return millions of documents and you don't want to transfer them over the wire all at once.  
+So instead find gives you a handle which you can use to tell mongodb ok give me the next document, ok give me the next document and so on.  
+**<span style='color:   #875c5c'>IMPORTANT:** if you know that the volume is <100 documents you can use (otherwise we should implement *pagination*):  
+```js
+static fetchAll() {
+  const db = getDb();
+  return db
+    .collection('products')
+    .find()
+    .toArray()
+    .then(products => {
+      console.log(products);
+      return products;
+    })
+    .catch(err => console.error(err));
+}
+```

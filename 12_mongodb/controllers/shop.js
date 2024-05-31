@@ -1,6 +1,6 @@
 import Product from '../models/product.js';
 function getProducts(req, res, next) {
-  Product.findAll()
+  Product.fetchAll()
     .then(products => {
       res.render('shop/product-list', {
         prods: products,
@@ -25,7 +25,7 @@ function getProduct(req, res, next) {
 }
 
 function getIndex(req, res, next) {
-  Product.findAll()
+  Product.fetchAll()
     .then(products => {
       res.render('shop/index', {
         prods: products,
