@@ -49,6 +49,15 @@ class Product {
       })
       .catch(err => console.error(err));
   }
+
+  static deleteById(prodId) {
+    const db = getDb();
+    return db
+      .collection('products')
+      .deleteOne({ _id: ObjectId.createFromHexString(prodId) })
+      .then(res => console.log(res))
+      .catch(err => console.error(err));
+  }
 }
 
 export default Product;

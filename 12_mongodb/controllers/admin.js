@@ -59,13 +59,13 @@ function postEditProduct(req, res, next) {
     .catch(err => console.error(err));
 }
 
-// function postDeleteProduct(req, res, next) {
-//   const prodId = req.body.productId;
-//   Product.destroy({ where: { id: prodId } }).then(result => {
-//     console.log('DESTROYED PRODUCT!');
-//     res.redirect('/admin/products');
-//   });
-// }
+function postDeleteProduct(req, res, next) {
+  const prodId = req.body.productId;
+  Product.deleteById(prodId).then(_ => {
+    console.log('DESTROYED PRODUCT!');
+    res.redirect('/admin/products');
+  });
+}
 
 function getProducts(req, res, next) {
   Product.fetchAll()
@@ -85,5 +85,5 @@ export default {
   getProducts,
   getEditProduct,
   postEditProduct,
-  // postDeleteProduct,
+  postDeleteProduct,
 };
