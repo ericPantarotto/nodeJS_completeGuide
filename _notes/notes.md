@@ -2235,3 +2235,21 @@ static fetchAll() {
     .catch(err => console.error(err));
 }
 ```
+## Fetching a Single Product
+The `_id` in mongodb is actually stored a bit differently, as an `ObjectId`.
+
+```js
+import { ObjectId } from 'mongodb';
+static findById(prodId) {
+  const db = getDb();
+  return db
+    .collection('products')
+    .find({ _id: ObjectId.createFromHexString(prodId) })
+    .next()
+    .then(product => {
+      console.log(product);
+      return product;
+    })
+    .catch(err => console.error(err));
+}
+```

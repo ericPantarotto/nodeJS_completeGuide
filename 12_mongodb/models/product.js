@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { getDb } from '../util/database.js';
 
 class Product {
@@ -26,6 +27,18 @@ class Product {
       .then(products => {
         console.log(products);
         return products;
+      })
+      .catch(err => console.error(err));
+  }
+  static findById(prodId) {
+    const db = getDb();
+    return db
+      .collection('products')
+      .find({ _id: ObjectId.createFromHexString(prodId) })
+      .next()
+      .then(product => {
+        console.log(product);
+        return product;
       })
       .catch(err => console.error(err));
   }
