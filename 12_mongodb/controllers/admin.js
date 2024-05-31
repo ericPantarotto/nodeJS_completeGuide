@@ -44,15 +44,15 @@ function getEditProduct(req, res, next) {
 
 function postEditProduct(req, res, next) {
   const prodId = req.body.productId;
-  Product.findByPk(prodId)
-    .then(product => {
-      (product.title = req.body.title),
-        (product.imageUrl = req.body.imageUrl),
-        (product.description = req.body.description),
-        (product.price = req.body.price);
-      return product.save();
-    })
-    .then(result => {
+  new Product(
+    req.body.title,
+    req.body.price,
+    req.body.description,
+    req.body.imageUrl,
+    prodId
+  )
+    .save()
+    .then(_ => {
       console.log('UPDATED PRODUCT !!!');
       res.redirect('/admin/products');
     })

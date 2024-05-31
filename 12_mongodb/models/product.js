@@ -7,7 +7,7 @@ class Product {
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
-    this._id = id;
+    this._id = ObjectId.createFromHexString(id);
   }
 
   save() {
@@ -18,10 +18,7 @@ class Product {
       // Update the product
       dbOp = db
         .collection('products')
-        .updateOne(
-          { _id: ObjectId.createFromHexString(this._id) },
-          { $set: this }
-        );
+        .updateOne({ _id: this._id }, { $set: this });
     } else {
       dbOp = db.collection('products').insertOne(this);
     }

@@ -2253,3 +2253,69 @@ static findById(prodId) {
     .catch(err => console.error(err));
 }
 ```
+
+## Finishing the Update Product Code
+**<span style='color: #a8c62c'>/models/product.js:** 
+
+in the `save()` method: 
+```js
+dbOp = db
+  .collection('products')
+  .updateOne(
+    { _id: ObjectId.createFromHexString(this._id) },
+    { $set: this }
+  );
+```
+**<span style='color:   #875c5c'>IMPORTANT:** ***errmsg: "Performing an update on the path '_id' would modify the immutable field '_id'"***  
+`{ $set: this }` has to be replaced by:  
+```js
+save() {
+  const db = getDb();
+  let dbOp;
+
+  if (this._id) {
+    // Update the product
+    dbOp = db
+      .collection('products')
+      .updateOne(
+        { _id: ObjectId.createFromHexString(this._id) },
+        {
+          $set: {
+            title: this.title,
+            price: this.price,
+            description: this.description,
+            imageUrl: this.imageUrl,
+          },
+        }
+      );
+  } else {
+    dbOp = db.collection('products').insertOne(this);
+  }
+  return dbOp.then(res => console.log(res)).catch(err => console.error(err));
+}
+```
+**Alternative:** in the constructor, create the objectId there to make sure that this is always correct, whether you update or create a product
+```js
+constructor(title, price, description, imageUrl, id) {
+  this.title = title;
+  this.price = price;
+  this.description = description;
+  this.imageUrl = imageUrl;
+  this._id = ObjectId.createFromHexString(id);
+}
+
+save() {
+  const db = getDb();
+  let dbOp;
+
+  if (this._id) {
+    // Update the product
+    dbOp = db
+      .collection('products')
+      .updateOne({ _id: this._id }, { $set: this });
+  } else {
+    dbOp = db.collection('products').insertOne(this);
+  }
+  return dbOp.then(res => console.log(res)).catch(err => console.error(err));
+}
+```
