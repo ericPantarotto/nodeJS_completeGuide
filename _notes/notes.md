@@ -2301,7 +2301,7 @@ constructor(title, price, description, imageUrl, id) {
   this.price = price;
   this.description = description;
   this.imageUrl = imageUrl;
-  this._id = ObjectId.createFromHexString(id);
+ this._id = id ? ObjectId.createFromHexString(id) : null;
 }
 
 save() {
