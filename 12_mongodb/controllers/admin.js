@@ -9,14 +9,14 @@ function getAddProduct(req, res, next) {
 }
 
 function postAddProduct(req, res, next) {
-  req.user
-    .createProduct({
-      title: req.body.title,
-      price: req.body.price,
-      imageUrl: req.body.imageUrl,
-      description: req.body.description,
-    })
-    .then(result => {
+  new Product(
+    req.body.title,
+    req.body.price,
+    req.body.description,
+    req.body.imageUrl
+  )
+    .save()
+    .then(_ => {
       console.log('CREATED PRODUCT!');
       res.redirect('/admin/products');
     })

@@ -2212,3 +2212,7 @@ save() {
     .catch(err => console.error(err));
 }
 ```
+
+## Creating Products
+
+**<span style='color: #bcdbf9'> Note:** **Id** is managed automatically by mongodb because every document needs to have such a `_id`, it is created on the fly.
