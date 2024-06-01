@@ -8,6 +8,7 @@ import errorController from './controllers/error.js';
 import adminRoutes from './routes/admin.js';
 import { expRouter as shopRoutes } from './routes/shop.js';
 import { mongoConnect } from './util/database.js';
+import User from "./models/user.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,12 +22,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-  // User.findByPk(1)
-  //   .then(user => {
-  //     req.user = user;
-  //     next();
-  //   })
-  //   .catch(err => console.errror(err));
+  User.findByPk('665aef8738b6fbe69fad3d3e')
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.errror(err));
   next();
 });
 

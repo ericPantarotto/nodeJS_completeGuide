@@ -1,21 +1,27 @@
-import Sequelize from 'sequelize';
-import { expPool as sequilize } from '../util/database.js';
+import { ObjectId } from 'mongodb';
+import { getDb } from '../util/database.js';
+class User {
+  constructor(userName, email) {
+    this.userName = userName;
+    this.email = email;
+  }
 
-const User = sequilize.define('user', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true,
-  },
-  name: Sequelize.STRING,
-  email: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      isEmail: true,
-    },
-  },
-});
+  save() {
+    const db = getDb();
+    return db.collection('users').insertOne(this);
+  }
+
+  static findById(userId) {
+    const db = getDb();
+    return db
+      .collection('users')
+      .findOne({ _id: ObjectId.createFromHexString(userId) })
+      .then(user => {
+        console.log(user);
+        return user;
+      })
+      .catch(err => console.error(err));
+  }
+}
 
 export default User;
