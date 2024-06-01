@@ -2364,3 +2364,21 @@ class Product {
     this.userId = userId;
 }
 ```
+
+## Working on Cart Items & Orders
+For every user we have, we want to store a cart  and that user will have a cart and that cart will then hold the products.  
+So actually with mongodb, this is a great place for embedded documents because we have a strict one-to-one relation between a user and a cart and therefore there is no need to manage this with a reference.  
+**<span style='color: #bcdbf9'> Note:** that's why we can get rid of the `cart-item.js` and my cart model.  
+It's on the user model, that we will store cart items. so we need to modify our `User.js` model to accept a cart.
+
+**<span style='color: #a8c62c'>/models/user.js:**  
+```js
+class User {
+  constructor(userName, email, cart) {
+    this.userName = userName;
+    this.email = email;
+    this.cart = cart
+}
+```
+
+
