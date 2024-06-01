@@ -13,7 +13,9 @@ function postAddProduct(req, res, next) {
     req.body.title,
     req.body.price,
     req.body.description,
-    req.body.imageUrl
+    req.body.imageUrl,
+    null,
+    req.user._id
   )
     .save()
     .then(_ => {

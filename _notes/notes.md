@@ -2319,3 +2319,48 @@ save() {
   return dbOp.then(res => console.log(res)).catch(err => console.error(err));
 }
 ```
+## Storing the User in our Database
+
+The question is where do I want to use my user object? Well I want to use that user object when creating a new product,
+
+When saving a product, I want to 
+- store a reference to a user here 
+- or embed the entire user data
+
+**if the username changes, you need to update it everywhere. The alternative to this is that you just store the ID.**
+
+However for products in users, you could actually find arguments for both approaches here, you certainly don't want to enclose all the user data in an embedded document because that would mean that if the user data changes, you need to change that data in all products.
+
+But if you do include something which is unlikely to change very often, like the username for example, well then you could certainly go ahead and embed that together with the ID so that you always have that ID to fetch more data about the user if you need to.
+
+When I fetch the product, I don't really need the user data, we're not displaying the user name anywhere in our app, so I actually just want to store the user id.
+
+**<span style='color:   #875c5c'>IMPORTANT:** **Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client**
+
+**<span style='color: #a8c62c'>/app.js:**  
+We are calling twice `next()`, so sending twice the headers...
+```js
+app.use((req, res, next) => {
+  User.findById('665aef8738b6fbe69fad3d3e')
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.errror(err));
+  next();
+});
+```
+**<span style='color: #bcdbf9'> Note:** we are only storing the userId, we are not embeding the whole document as we did with *MySQL*
+**<span style='color: #a8c62c'>/models/product.js:**  
+
+```js
+class Product {
+  constructor(title, price, description, imageUrl, id, userId) {
+    this.title = title;
+    this.price = price;
+    this.description = description;
+    this.imageUrl = imageUrl;
+    this._id = id ? ObjectId.createFromHexString(id) : null;
+    this.userId = userId;
+}
+```
