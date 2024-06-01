@@ -2381,4 +2381,37 @@ class User {
 }
 ```
 
+## Adding the AddToCart Functionality
+**<span style='color: #a8c62c'>/app.js:**  
+```js
+app.use((req, res, next) => {
+  User.findById('665aef8738b6fbe69fad3d3e')
+    .then(user => {
+      req.user = user;
+      next();
+    })
+});
+```
+**<span style='color: #bcdbf9'> Note:** it's important to understand that the user as I'm storing here will just be an object with the properties, so the data we have in the database.  
+All the methods of our user model will not be in there because the user I'm getting here is data I'm getting out of the database and the methods aren't stored there.  
+So to have a real user object with which we can interact, I should actually create a `new User()`  and then simply pass:  
+- username
+- email 
+- cart 
+- user_id,
 
+```js
+.then(user => {
+  req.user = new User(user.name, user.email, user.cart, user._id);
+  next();
+})
+```
+**<span style='color:   #875c5c'>IMPORTANT:** this enables me to really work with the whole user model, and call all the methods.
+
+**<span style='color:   #875c5c'>IMPORTANT:** The important thing for us here simply is that we now store a whole product which we do also store in a separate collection as part of an embedded document in our user, so we clearly have duplicate data here.  
+We have the same product here as an embedded document and we have it in products.  
+So this is maybe something which we should change because if we change the product right now, if we change the title or the price, this will not be reflected in the cart.
+```js
+ // const updatedCart = { items: [{ ...product, quantity: 1 }] };
+const updatedCart = { items: [{ productId: product._id, quantity: 1 }] };
+```

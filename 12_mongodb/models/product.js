@@ -23,7 +23,7 @@ class Product {
     } else {
       dbOp = db.collection('products').insertOne(this);
     }
-    return dbOp.then(res => console.log(res)).catch(err => console.error(err));
+    return dbOp.catch(err => console.error(err));
   }
 
   static fetchAll() {
@@ -32,10 +32,7 @@ class Product {
       .collection('products')
       .find()
       .toArray()
-      .then(products => {
-        console.log(products);
-        return products;
-      })
+      .then(products => products)
       .catch(err => console.error(err));
   }
   static findById(prodId) {
@@ -44,10 +41,7 @@ class Product {
       .collection('products')
       .find({ _id: ObjectId.createFromHexString(prodId) })
       .next()
-      .then(product => {
-        console.log(product);
-        return product;
-      })
+      .then(product => product)
       .catch(err => console.error(err));
   }
 
@@ -56,7 +50,6 @@ class Product {
     return db
       .collection('products')
       .deleteOne({ _id: ObjectId.createFromHexString(prodId) })
-      .then(res => console.log(res))
       .catch(err => console.error(err));
   }
 }

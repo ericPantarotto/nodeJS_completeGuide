@@ -52,30 +52,33 @@ function getCart(req, res, next) {
 
 function postCart(req, res, next) {
   const prodId = req.body.productId;
-  let fetchedCart;
-  let newQuantity = 1;
-  req.user
-    .getCart()
-    .then(cart => {
-      fetchedCart = cart;
-      return cart.getProducts({ where: { id: prodId } });
-    })
-    .then(products => {
-      const product = products[0];
-      if (product) {
-        newQuantity++;
-        return product;
-      }
+  Product.findById(prodId).then(product => req.user.addToCart(product));
 
-      return Product.findByPk(prodId);
-    })
-    .then(product =>
-      fetchedCart.addProduct(product, {
-        through: { quantity: newQuantity },
-      })
-    )
-    .then(_ => res.redirect('/cart'))
-    .catch(err => console.error(err));
+  // let fetchedCart;
+  // let newQuantity = 1;
+
+  // req.user
+  //   .getCart()
+  //   .then(cart => {
+  //     fetchedCart = cart;
+  //     return cart.getProducts({ where: { id: prodId } });
+  //   })
+  //   .then(products => {
+  //     const product = products[0];
+  //     if (product) {
+  //       newQuantity++;
+  //       return product;
+  //     }
+
+  //     return Product.findByPk(prodId);
+  //   })
+  //   .then(product =>
+  //     fetchedCart.addProduct(product, {
+  //       through: { quantity: newQuantity },
+  //     })
+  //   )
+  //   .then(_ => res.redirect('/cart'))
+  //   .catch(err => console.error(err));
 }
 
 function postCartDeleteProduct(req, res, next) {

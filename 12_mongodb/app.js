@@ -5,10 +5,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import errorController from './controllers/error.js';
+import User from './models/user.js';
 import adminRoutes from './routes/admin.js';
 import { expRouter as shopRoutes } from './routes/shop.js';
 import { mongoConnect } from './util/database.js';
-import User from "./models/user.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   User.findById('665aef8738b6fbe69fad3d3e')
     .then(user => {
-      req.user = user;
+      req.user = new User(user.name, user.email, user.cart, user._id);
       next();
     })
     .catch(err => console.errror(err));
