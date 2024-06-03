@@ -2415,3 +2415,27 @@ So this is maybe something which we should change because if we change the produ
  // const updatedCart = { items: [{ ...product, quantity: 1 }] };
 const updatedCart = { items: [{ productId: product._id, quantity: 1 }] };
 ```
+
+## Displaying the Cart items
+**<span style='color: #a8c62c'>/models/user.js:**  
+
+`.find({ _id: { $in: productsId } })`; here we use a special mongodb query syntax, passing an array with the query operator `$in`
+
+```js
+  const db = getDb();
+    const productsId = this.cart.items.map(item => item.productId);
+    return db
+      .collection('products')
+      .find({ _id: { $in: productsId } })
+      .toArray()
+      .then(products => {
+        return products.map(product => {
+          return {
+            ...product,
+            quantity: this.cart.items.find(i => {
+              return i.productId.toString() === product._id.toString();
+            }).quantity,
+          };
+        });
+      });
+```

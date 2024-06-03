@@ -39,7 +39,6 @@ function getIndex(req, res, next) {
 function getCart(req, res, next) {
   req.user
     .getCart()
-    .then(cart => cart.getProducts())
     .then(products => {
       res.render('shop/cart', {
         pageTitle: 'Your Cart',
