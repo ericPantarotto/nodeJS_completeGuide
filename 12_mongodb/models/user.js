@@ -46,14 +46,30 @@ class User {
       .collection('products')
       .find({ _id: { $in: productsId } })
       .toArray()
-      .then(products =>
-        products.map(product => ({
+      .then(products => {
+        //INFO: cleaning the db cart if a product has been deleting after having been added in the cart
+        if (this.cart.items.length !== products.length) {
+          console.log('MISMATCH!!!');
+          const updatedCartItems = products.map(product => ({
+            productId: product._id,
+            quantity: this.cart.items.find(i => {
+              return i.productId.toString() === product._id.toString();
+            }).quantity,
+          }));
+          
+           db.collection('users').updateOne(
+             { _id: this._id },
+             { $set: { 'cart.items': updatedCartItems } }
+           );
+        }
+        
+        return products.map(product => ({
           ...product,
           quantity: this.cart.items.find(i => {
             return i.productId.toString() === product._id.toString();
           }).quantity,
-        }))
-      );
+        }));
+      });
   }
 
   deleteItemFromCart(productId) {
