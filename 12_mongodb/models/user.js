@@ -46,16 +46,14 @@ class User {
       .collection('products')
       .find({ _id: { $in: productsId } })
       .toArray()
-      .then(products => {
-        return products.map(product => {
-          return {
-            ...product,
-            quantity: this.cart.items.find(i => {
-              return i.productId.toString() === product._id.toString();
-            }).quantity,
-          };
-        });
-      });
+      .then(products =>
+        products.map(product => ({
+          ...product,
+          quantity: this.cart.items.find(i => {
+            return i.productId.toString() === product._id.toString();
+          }).quantity,
+        }))
+      );
   }
 
   deleteItemFromCart(productId) {
@@ -69,6 +67,22 @@ class User {
       },
       { $set: { cart: { items: updatedCartItems } } }
     );
+  }
+
+  addOrder() {
+    const db = getDb();
+    return db
+      .collection('orders')
+      .insertOne(this.cart)
+      .then(_ => {
+        this.cart = { items: [] };
+        return db.collection('users').updateOne(
+          {
+            _id: this._id,
+          },
+          { $set: { cart: { items: [] } } }
+        );
+      });
   }
 
   static findById(userId) {
