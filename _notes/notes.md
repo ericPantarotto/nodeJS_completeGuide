@@ -2439,3 +2439,5 @@ const updatedCart = { items: [{ productId: product._id, quantity: 1 }] };
         });
       });
 ```
+## Wrap-up
+![image info](./12_sc5.png)
