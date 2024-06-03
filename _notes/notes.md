@@ -2457,3 +2457,6 @@ The core concepts are that:
 - we work with schemas and models where we define how our data should look like
 - and then we have so-called instances where we instantiate our models, so where we create real javascript objects we can work with that are based on our blueprints
 - and once we get that setup, we can run queries and there we again use our objects, we use our models and we can then query the database but through mongoose with various helpers we get, some syntactical sugar
+
+## Connecting to the MongoDB Server with Mongoose
+**<span style='color: #ffe5c5'>Link:** https://mongoosejs.com/

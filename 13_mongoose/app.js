@@ -1,14 +1,14 @@
 import bodyParser from 'body-parser';
 import 'dotenv/config';
 import express from 'express';
+import { connect } from 'mongoose';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 import errorController from './controllers/error.js';
-import User from './models/user.js';
-import adminRoutes from './routes/admin.js';
-import { expRouter as shopRoutes } from './routes/shop.js';
-import { mongoConnect } from './util/database.js';
+// import User from './models/user.js';
+// import adminRoutes from './routes/admin.js';
+// import { expRouter as shopRoutes } from './routes/shop.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,17 +22,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-  User.findById('665aef8738b6fbe69fad3d3e')
-    .then(user => {
-      req.user = new User(user.name, user.email, user.cart, user._id);
-      next();
-    })
-    .catch(err => console.errror(err));
+  // User.findById('665aef8738b6fbe69fad3d3e')
+  //   .then(user => {
+  //     req.user = new User(user.name, user.email, user.cart, user._id);
+  //     next();
+  //   })
+  //   .catch(err => console.errror(err));
 });
 
-app.use('/admin', adminRoutes.routes);
-app.use(shopRoutes);
+// app.use('/admin', adminRoutes.routes);
+// app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect(_ => app.listen(3000));
+// mongoConnect(_ => app.listen(3000));
+console.log(process.env.MONGO_DB_URL);
+connect(process.env.MONGO_DB_URL)
+  .then(_ => app.listen(3000))
+  .catch(err => console.error(err));
