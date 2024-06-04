@@ -2502,3 +2502,31 @@ app.use((req, res, next) => {
     .catch(err => console.errror(err));
 });
 ```
+## Using Relations in Mongoose
+**<span style='color: #bcdbf9'> Note:** in our product schema, we specify a `userId` of  `type: Schema.Types.ObjectId`, then in our controller we can:
+- either ` userId: req.user._id`
+- or ` userId: req.user`, mongoose will understand that he just need to pick the `_id` property
+
+**<span style='color: #a8c62c'>/controllers/admin.js:**  
+```js
+function postAddProduct(req, res, next) {
+  new Product({
+    title: req.body.title,
+    price: req.body.price,
+    description: req.body.description,
+    imageUrl: req.body.imageUrl,
+    userId: req.user
+  })
+  //...
+}
+```
+**<span style='color: #a8c62c'>/models/product.js:**  
+```js
+const productSchema = new Schema({
+  title: { type: String, required: true },
+  price: { type: Number, required: true },
+  description: { type: String, required: true },
+  imageUrl: { type: String, required: true },
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+});
+```

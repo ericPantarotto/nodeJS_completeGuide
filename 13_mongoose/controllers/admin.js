@@ -14,6 +14,7 @@ function postAddProduct(req, res, next) {
     price: req.body.price,
     description: req.body.description,
     imageUrl: req.body.imageUrl,
+    userId: req.user
   })
     .save()
     .then(_ => {
