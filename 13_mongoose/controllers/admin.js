@@ -45,12 +45,12 @@ function getEditProduct(req, res, next) {
 function postEditProduct(req, res, next) {
   const prodId = req.body.productId;
 
-  Product.find(prodId)
+  Product.findById(prodId)
     .then(product => {
       product.title = req.body.title;
       product.price = req.body.price;
       product.description = req.body.description;
-      product.iamgeUrl = req.body.imageUrl;
+      product.imageUrl = req.body.imageUrl;
       return product.save();
     })
     .then(_ => {
@@ -62,7 +62,7 @@ function postEditProduct(req, res, next) {
 
 function postDeleteProduct(req, res, next) {
   const prodId = req.body.productId;
-  Product.deleteById(prodId).then(_ => {
+  Product.findByIdAndDelete(prodId).then(_ => {
     console.log('DESTROYED PRODUCT!');
     res.redirect('/admin/products');
   });
@@ -72,7 +72,7 @@ function getProducts(req, res, next) {
   Product.find()
     .then(products => {
       res.render('admin/products', {
-        prods: products.map(obj => ({ ...obj, editing: true })),
+        prods: products.map(obj => ({ ...obj._doc, editing: true })),
         pageTitle: 'My Shop',
         path: '/admin/products',
       });

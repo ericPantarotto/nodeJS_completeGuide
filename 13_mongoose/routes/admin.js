@@ -14,19 +14,8 @@ router.get('/edit-product/:productId', adminController.getEditProduct);
 
 router.post('/edit-product', adminController.postEditProduct);
 
-// router.post('/delete-product', adminController.postDeleteProduct);
+router.post('/delete-product', adminController.postDeleteProduct);
 
 export default {
   routes: router,
 };
-
-// export default {
-//   routes: router,
-//   products: products,
-// };
-
-// export default router;
-// export const expRouter = router;
-// export const expProducts = products;
-
-// res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
