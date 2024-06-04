@@ -1,3 +1,19 @@
+import { Schema, model } from 'mongoose';
+const userSchema = new Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  cart: {
+    items: [
+      {
+        productId: { type: Schema.Types.ObjectId, required: true },
+        quantity: { type: Number, required: true },
+      },
+    ],
+  },
+});
+
+export default model('User', userSchema);
+
 // import { ObjectId } from 'mongodb';
 // import { getDb } from '../util/database.js';
 // class User {
@@ -56,13 +72,13 @@
 //               return i.productId.toString() === product._id.toString();
 //             }).quantity,
 //           }));
-          
+
 //            db.collection('users').updateOne(
 //              { _id: this._id },
 //              { $set: { 'cart.items': updatedCartItems } }
 //            );
 //         }
-        
+
 //         return products.map(product => ({
 //           ...product,
 //           quantity: this.cart.items.find(i => {

@@ -2487,3 +2487,18 @@ new Product({
 **<span style='color:   #875c5c'>IMPORTANT:** if you know that you will query large amount of data you should combine `find()` with `cursor(O)` and then:
 - `next()`
 - `eachAsync()`
+
+## Adding and Using a User Model
+**<span style='color: #a8c62c'>/app.js:**  
+
+**<span style='color: #bcdbf9'> Note:** this will attach to every request a full mongoose model, so we can call any mongoose methods on a mongoose model
+```js
+app.use((req, res, next) => {
+  User.findById('665f1562379843dac5393aa7')
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.errror(err));
+});
+```
