@@ -2460,3 +2460,13 @@ The core concepts are that:
 
 ## Connecting to the MongoDB Server with Mongoose
 **<span style='color: #ffe5c5'>Link:** https://mongoosejs.com/
+
+## Creating the Product Schema
+I mention that mongodb is schemaless so why do we now start to create schemas? Well the idea simply is that whilst we have the flexibility of not being restricted to a specific schema, we often will have a certain structure in the data we work with and therefore mongoose wants to give you the advantage of focusing on just your data.  
+But for that, it needs to know how your data looks like and therefore we define such a schema for the structure our data will have.
+
+**<span style='color: #a8c62c'>/models/product.js:**  we accept to loose that flexibility below, but will benefit from *mongoose*, that takes some structure  
+```js
+const productSchema = new Schema({ title: { type: String, required: true } });
+```
+**<span style='color: #bcdbf9'> Note:** `_id` will be created automatically by mongoose
