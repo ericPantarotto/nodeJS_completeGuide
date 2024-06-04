@@ -2530,3 +2530,27 @@ const productSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 });
 ```
+## Important Note about Fetching relations
+**<span style='color:   #875c5c'>IMPORTANT:** you can very easily populate an entire related model, using `populate()`, you can then fetch all data in one go, instead of writing nested queries on your own.
+
+**<span style='color: #a8c62c'>/controllers/admn.js:**  
+```js
+function getProducts(req, res, next) {
+  Product.find()
+    .populate('userId')
+    .then(products => {
+      console.log(products);
+      res.render('admin/products', {
+//...
+      }
+}
+```  
+
+also if the `Product` we fetch we only wanted the `title` and `price`, but exclude the `id`. And the same can be done on `populate()`, passing a 2nd argument (here we just want the name):  
+**<span style='color: #bcdbf9'> Note:** `_id` is always retreived, except if you explicitely exclude it.
+```js
+function getProducts(req, res, next) {
+  Product.find()
+    .select('title price -_id')
+    .populate('userId', 'name')
+```

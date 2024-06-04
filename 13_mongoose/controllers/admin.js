@@ -14,7 +14,7 @@ function postAddProduct(req, res, next) {
     price: req.body.price,
     description: req.body.description,
     imageUrl: req.body.imageUrl,
-    userId: req.user
+    userId: req.user,
   })
     .save()
     .then(_ => {
@@ -71,7 +71,9 @@ function postDeleteProduct(req, res, next) {
 
 function getProducts(req, res, next) {
   Product.find()
+    .populate('userId')
     .then(products => {
+      console.log(products);
       res.render('admin/products', {
         prods: products.map(obj => ({ ...obj._doc, editing: true })),
         pageTitle: 'My Shop',
