@@ -5,12 +5,36 @@ const userSchema = new Schema({
   cart: {
     items: [
       {
-        productId: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: 'Product',
+          required: true,
+        },
         quantity: { type: Number, required: true },
       },
     ],
   },
 });
+
+userSchema.methods.addToCart = function (product) {
+  const updatedItems = [...(this.cart?.items || [])];
+  const existingProductIndex = this.cart?.items.findIndex(
+    cp => cp.productId.toString() === product._id.toString()
+  );
+
+  if (existingProductIndex >= 0) {
+    updatedItems[existingProductIndex].quantity = ++this.cart.items[
+      existingProductIndex
+    ].quantity;
+  } else {
+    updatedItems.push({
+      productId: product._id,
+      quantity: 1,
+    });
+  }
+  this.cart.items = updatedItems;
+  return this.save();
+};
 
 export default model('User', userSchema);
 

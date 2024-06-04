@@ -2554,3 +2554,13 @@ function getProducts(req, res, next) {
     .select('title price -_id')
     .populate('userId', 'name')
 ```
+
+## Working on the shopping cart
+in our `User` model (commented out), I had utility methods like `addToCart()` to add
+products to the cart of that user.  
+And actually it was really useful to have these because that allowed us to move logic from our controller into the model which is typically where your data related logic should live.  
+Mongoose makes this really simple,  
+
+```js
+userSchema.methods.addToCart = function (product) { }
+```

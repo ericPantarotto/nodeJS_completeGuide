@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-  User.findById('665f1562379843dac5393aa7')
+  User.findById('665f45963e2f4f0276b45e79')
     .then(user => {
       req.user = user;
       next();
@@ -39,9 +39,3 @@ app.use(errorController.get404);
 connect(process.env.MONGO_DB_URL)
   .then(_ => app.listen(3000))
   .catch(err => console.error(err));
-
-//  new User({
-//    name: 'Eric',
-//    email: 'ecr@gmail.com',
-//    cart: { items: [] },
-//  }).save();

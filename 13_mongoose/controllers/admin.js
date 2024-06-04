@@ -71,9 +71,8 @@ function postDeleteProduct(req, res, next) {
 
 function getProducts(req, res, next) {
   Product.find()
-    .populate('userId')
+    // .populate('userId')
     .then(products => {
-      console.log(products);
       res.render('admin/products', {
         prods: products.map(obj => ({ ...obj._doc, editing: true })),
         pageTitle: 'My Shop',
