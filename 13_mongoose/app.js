@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 import errorController from './controllers/error.js';
 // import User from './models/user.js';
 import adminRoutes from './routes/admin.js';
-// import { expRouter as shopRoutes } from './routes/shop.js';
+import { expRouter as shopRoutes } from './routes/shop.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // });
 
 app.use('/admin', adminRoutes.routes);
-// app.use(shopRoutes);
+app.use(shopRoutes);
 
 app.use(errorController.get404);
 

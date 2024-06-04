@@ -2482,3 +2482,8 @@ new Product({
 }).save()
 ```
 **<span style='color: #bcdbf9'> Note:** this `save()` method is provided by Mongoose, and we pass a *javascript object* to our schema
+
+## Fetching All Products
+**<span style='color:   #875c5c'>IMPORTANT:** if you know that you will query large amount of data you should combine `find()` with `cursor(O)` and then:
+- `next()`
+- `eachAsync()`
