@@ -2470,3 +2470,15 @@ But for that, it needs to know how your data looks like and therefore we define 
 const productSchema = new Schema({ title: { type: String, required: true } });
 ```
 **<span style='color: #bcdbf9'> Note:** `_id` will be created automatically by mongoose
+
+## Saving Data Through Mongoose
+**<span style='color: #a8c62c'>/models/product.js:**
+```js
+new Product({
+  title: req.body.title,
+  price: req.body.price,
+  description: req.body.description,
+  imageUrl: req.body.imageUrl,
+}).save()
+```
+**<span style='color: #bcdbf9'> Note:** this `save()` method is provided by Mongoose, and we pass a *javascript object* to our schema

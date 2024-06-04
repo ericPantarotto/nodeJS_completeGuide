@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const productSchema = new Schema({
   title: { type: String, required: true },
@@ -6,6 +6,8 @@ const productSchema = new Schema({
   description: { type: String, required: true },
   imageUrl: { type: String, required: true },
 });
+
+export default model('Product', productSchema);
 
 // import { ObjectId } from 'mongodb';
 // import { getDb } from '../util/database.js';
