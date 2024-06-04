@@ -44,14 +44,15 @@ function getEditProduct(req, res, next) {
 
 function postEditProduct(req, res, next) {
   const prodId = req.body.productId;
-  new Product(
-    req.body.title,
-    req.body.price,
-    req.body.description,
-    req.body.imageUrl,
-    prodId
-  )
-    .save()
+
+  Product.find(prodId)
+    .then(product => {
+      product.title = req.body.title;
+      product.price = req.body.price;
+      product.description = req.body.description;
+      product.iamgeUrl = req.body.imageUrl;
+      return product.save();
+    })
     .then(_ => {
       console.log('UPDATED PRODUCT !!!');
       res.redirect('/admin/products');
@@ -68,7 +69,7 @@ function postDeleteProduct(req, res, next) {
 }
 
 function getProducts(req, res, next) {
-  Product.fetchAll()
+  Product.find()
     .then(products => {
       res.render('admin/products', {
         prods: products.map(obj => ({ ...obj, editing: true })),
