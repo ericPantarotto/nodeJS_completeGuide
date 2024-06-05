@@ -38,12 +38,12 @@ function getIndex(req, res, next) {
 
 function getCart(req, res, next) {
   req.user
-    .getCart()
-    .then(products => {
+    .populate('cart.items.productId')
+    .then(user => {
       res.render('shop/cart', {
         pageTitle: 'Your Cart',
         path: '/cart',
-        products: products,
+        products: user.cart.items,
       });
     })
     .catch(err => console.error(err));
