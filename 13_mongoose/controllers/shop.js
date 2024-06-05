@@ -1,4 +1,6 @@
+import Order from '../models/order.js';
 import Product from '../models/product.js';
+
 function getProducts(req, res, next) {
   Product.find()
     .then(products => {
@@ -84,7 +86,18 @@ function getCheckout(req, res, next) {
 
 function postOrder(req, res, next) {
   req.user
-    .addOrder()
+    .populate('cart.items.productId')
+    .then(user => {
+      const products = user.cart.items.map(i => ({
+        quantity: i.quantity,
+        product: i.productId,
+      }));
+      const order = new Order({
+        user: { name: req.user.name, userId: req.user._id },
+        products: products,
+      });
+      return order.save();
+    })
     .then(_ => res.redirect('/orders'))
     .catch(err => console.error(err));
 }

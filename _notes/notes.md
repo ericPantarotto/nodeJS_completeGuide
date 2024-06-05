@@ -2564,3 +2564,33 @@ Mongoose makes this really simple,
 ```js
 userSchema.methods.addToCart = function (product) { }
 ```
+## Creating and Getting Orders
+**<span style='color: #a8c62c'>/models/order.js:**  
+**<span style='color: #bcdbf9'> Note:**  `product: { type: Object, required: true },` didn't work , instead I followed the mongoose documents on subdocuments https://mongoosejs.com/docs/subdocs.html (which was what was applied in the `User` model for products)  
+**<span style='color:   #875c5c'>IMPORTANT:** when populating you have to reference correctly the subdocument, in our case `products.product`
+
+```js
+Order.findOne()
+  .populate('products.product')
+  .then(res => console.log(res.products));
+```
+
+```js
+const orderSchema = new Schema({
+  products: [
+    {
+      // product: { type: Object, required: true },
+      product: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Product',
+        required: true,
+      },
+      quantity: { type: Number, required: true },
+    },
+  ],
+  user: {
+    name: { type: String, required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  },
+});
+```
