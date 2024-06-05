@@ -9,6 +9,7 @@ import errorController from './controllers/error.js';
 import User from './models/user.js';
 import adminRoutes from './routes/admin.js';
 import { expRouter as shopRoutes } from './routes/shop.js';
+import { expRouter as authRoutes } from './routes/auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 
 app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
+app.use(authRoutes);
 
 app.use(errorController.get404);
 
