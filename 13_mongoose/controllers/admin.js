@@ -63,10 +63,14 @@ function postEditProduct(req, res, next) {
 
 function postDeleteProduct(req, res, next) {
   const prodId = req.body.productId;
-  Product.findByIdAndDelete(prodId).then(_ => {
-    console.log('DESTROYED PRODUCT!');
-    res.redirect('/admin/products');
-  });
+  Product.findByIdAndDelete(prodId)
+    .then(_ => {
+      console.log('DESTROYED PRODUCT in Products Collection!');
+      req.user.removeFromCart(prodId);
+      console.log('DESTROYED PRODUCT in User Collection (cart.items)!');
+    })
+    .then(_ => res.redirect('/admin/products'))
+    .catch(err => console.error(err));
 }
 
 function getProducts(req, res, next) {
