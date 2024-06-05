@@ -1,14 +1,9 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const orderSchema = new Schema({
   products: [
     {
-      // product: { type: Object, required: true },
-      product: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Product',
-        required: true,
-      },
+      product: { type: Object, required: true },
       quantity: { type: Number, required: true },
     },
   ],

@@ -2565,8 +2565,10 @@ Mongoose makes this really simple,
 userSchema.methods.addToCart = function (product) { }
 ```
 ## Creating and Getting Orders
-**<span style='color: #a8c62c'>/models/order.js:**  
+**<span style='color: #a8c62c'>/models/order.js:**
+
 **<span style='color: #bcdbf9'> Note:**  `product: { type: Object, required: true },` didn't work , instead I followed the mongoose documents on subdocuments https://mongoosejs.com/docs/subdocs.html (which was what was applied in the `User` model for products)  
+
 **<span style='color:   #875c5c'>IMPORTANT:** when populating you have to reference correctly the subdocument, in our case `products.product`
 
 ```js
@@ -2593,4 +2595,24 @@ const orderSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   },
 });
+```
+## Storing All Order Related Data
+**<span style='color: #bcdbf9'> Note:** Alternative to get all product information stored:  
+
+**<span style='color: #a8c62c'>/models/order.js:**
+```js
+const orderSchema = new Schema({
+  products: [
+    {
+      product: { type: Object, required: true },
+      //...
+    }
+  ]
+});
+```
+**<span style='color: #a8c62c'>/controllers/shop.js:**
+
+Instead of storing directly the `productId`, we use a special field mongoose gives:  `_doc`. This will exclude all a lot of metadata attached to a mongoose object, that we can't directly see that when console logging but with `._doc` we get really access to just the data that's in there.
+```js
+product: {...i.productId._doc} ,
 ```
