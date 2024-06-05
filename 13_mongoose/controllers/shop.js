@@ -68,7 +68,7 @@ function postCartDeleteProduct(req, res, next) {
 }
 
 function getOrders(req, res, next) {
-  req.user.getOrders().then(orders =>
+  Order.find({ 'user.userId': req.user._id }).then(orders =>
     res.render('shop/orders', {
       pageTitle: 'Your Orders',
       path: '/orders',
