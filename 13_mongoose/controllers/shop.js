@@ -90,7 +90,7 @@ function postOrder(req, res, next) {
     .then(user => {
       const products = user.cart.items.map(i => ({
         quantity: i.quantity,
-        product: {...i.productId._doc} ,
+        product: { ...i.productId._doc },
       }));
       const order = new Order({
         user: { name: req.user.name, userId: req.user._id },
@@ -98,6 +98,7 @@ function postOrder(req, res, next) {
       });
       return order.save();
     })
+    .then(_ => req.user.clearCart())
     .then(_ => res.redirect('/orders'))
     .catch(err => console.error(err));
 }
