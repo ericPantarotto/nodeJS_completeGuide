@@ -2979,3 +2979,15 @@ So the issue here is we can manipulate that from inside the browser and obviousl
 
 **<span style='color:   #875c5c'>IMPORTANT:** So whilst it is certainly interesting to store some data in the client side, especially things that are related to tracking users, advertisements tracking and so on.  
 Sensitive data should not be stored in the browser because users can edit them as you see.
+
+## Configuring Cookie
+
+The cookies don't only have to relate to your page. A cookie can also be sent to another page and that is a common instrument in tracking.
+
+You can set:
+- the expiration date: `Expires= ...` || `Max-Age= ...`
+- `Domain= ...`
+- `Secure`, the cookie will only be set if the page is served via https 
+- `HttpOnly`, we can't access the cookie through client-side javascript, so scripts running in the browser. This can be an important security mechanism, protecting against cross-site scripting attacks
+
+**<span style='color: #bcdbf9'> Note:**  often you will not directly set your cookies because you rather use some packages like for example for authentication that will manage setting the cookie for you.
