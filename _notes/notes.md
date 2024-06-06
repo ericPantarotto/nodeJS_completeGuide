@@ -2928,3 +2928,22 @@ product: {...i.productId._doc} ,
 Cookies are stored on the client side.
 ![image info](./14_sc1.png)
 
+## Adding the Request Driven Login Solution
+
+**<span style='color: #a8c62c'>/controllers/auth.js:**
+
+```js
+function postLogin(req, res, next) {
+  req.isLoggedIn = true;
+  res.redirect('/');
+}
+```
+**<span style='color: #bcdbf9'> Note:** in `postLogin`, we have set `isLoggedIn = true`.  
+But our request is dead, it's done. We send a response by redirecting, and with a response, we basically finished a request, we got a request and we sent a response, we're done.  
+This data does not stick around, this data is lost after the request or after we send the response.
+
+So whenever we visit a different page, like here where we do get redirected, this is a brand new request, the redirection creates a brand new request and this is super important to understand. We're working with totally separate requests and that is important because your application, your page will have hundreds of users and obviously the requests of all these users are not related to each other. 
+
+So requests made from the same IP address are treated as totally independent requests.
+
+On the opposite, we can use our user in all our action controllers because the middleware (where we set the user) runs on every incoming request before our routes handle it.
