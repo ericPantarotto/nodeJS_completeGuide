@@ -2970,3 +2970,12 @@ function postLogin(req, res, next) {
 **<span style='color:   #875c5c'>IMPORTANT:** So this cookie is now set and now this cookie is not only set but the browser by default sends it to the server with every request we make.
 
 **<span style='color: #bcdbf9'> Note:** *Chrome / Application / Cookies*, some cookies are set by third-party plugins, Chrome extensions, ...
+
+## Manipulating Cookie
+
+Our approach has a major flaw. Since I can access my cookies that easily in the developer tools, I can easily change them, I can manipulate the value.
+
+So the issue here is we can manipulate that from inside the browser and obviously you don't want to allow the users of your website to login by simply manipulating some cookie value.
+
+**<span style='color:   #875c5c'>IMPORTANT:** So whilst it is certainly interesting to store some data in the client side, especially things that are related to tracking users, advertisements tracking and so on.  
+Sensitive data should not be stored in the browser because users can edit them as you see.
