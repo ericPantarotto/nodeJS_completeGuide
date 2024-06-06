@@ -2947,3 +2947,26 @@ So whenever we visit a different page, like here where we do get redirected, thi
 So requests made from the same IP address are treated as totally independent requests.
 
 On the opposite, we can use our user in all our action controllers because the middleware (where we set the user) runs on every incoming request before our routes handle it.
+
+## Setting a Cookie
+
+So we found out that using a request for storing this is not ideal because the request is dead after sending a response, which alternatives do we have?
+
+Well one alternative would be some kind of global variable. You could use a global variable which you store in an extra file and which you export from that file and which you then change and that variable would actually survive your request cycles but since that variable would be shared across all requests, it would also be shared across all users.
+
+And that is exactly where cookies can help us.
+
+With cookies we can store data in the browser of a single user and store data in that browser which is customized to that user which does not affect all the other users but can be sent with requests.  
+**<span style='color: #bcdbf9'> Note:** you can check in *Network / Headers  / Cookie*
+
+**<span style='color: #a8c62c'>/controllers/auth.js:**  
+```js
+function postLogin(req, res, next) {
+  res.setHeader('Set-Cookie', 'loggedIn=true')
+  res.redirect('/');
+}
+```
+
+**<span style='color:   #875c5c'>IMPORTANT:** So this cookie is now set and now this cookie is not only set but the browser by default sends it to the server with every request we make.
+
+**<span style='color: #bcdbf9'> Note:** *Chrome / Application / Cookies*, some cookies are set by third-party plugins, Chrome extensions, ...
