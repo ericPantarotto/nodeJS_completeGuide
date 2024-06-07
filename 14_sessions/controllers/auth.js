@@ -11,9 +11,9 @@ function postLogin(req, res, next) {
   User.findById('6662e88628d20caf2d6dc633')
     .then(user => {
       req.session.isLoggedIn = true;
-      req.session.user = user;
-      res.redirect('/');
+      return (req.session.user = user);
     })
+    .then(_ => res.redirect('/'))
     .catch(err => console.error(err));
 }
 
