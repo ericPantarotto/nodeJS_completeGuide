@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser';
 import 'dotenv/config';
 import express from 'express';
+import session from 'express-session';
 import { connect } from 'mongoose';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -8,8 +9,8 @@ import { fileURLToPath } from 'url';
 import errorController from './controllers/error.js';
 import User from './models/user.js';
 import adminRoutes from './routes/admin.js';
-import { expRouter as shopRoutes } from './routes/shop.js';
 import { expRouter as authRoutes } from './routes/auth.js';
+import { expRouter as shopRoutes } from './routes/shop.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +22,13 @@ app.set('views', './views');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use((req, res, next) => {
   User.findById('665f45963e2f4f0276b45e79')
