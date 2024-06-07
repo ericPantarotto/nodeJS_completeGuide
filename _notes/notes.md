@@ -3089,3 +3089,25 @@ This is how it should be stored in production, using a real session store, memor
 
 The session cookie is set-up by express-session middleware, so in practise it's actually quite rare to manage cookies on your own.  
 server-side session cookies (for authentication, and any user-related data) are the most common use-case for cookies, together with advertisement cookies, which are generally handled by third-party tools like *Google*.
+
+## Assignement 5: Sessions & Cookies
+
+**<span style='color:   #875c5c'>IMPORTANT:** By storing our user on the session, it is shared across request and not valid for a single request!
+
+**<span style='color: #a8c62c'>/controllers/auth.js:**
+
+```js
+function postLogin(req, res, next) {
+  User.findById('665f45963e2f4f0276b45e79')
+    .then(user => {
+      req.session.isLoggedIn = true;
+      req.session.user = user;
+      res.redirect('/');
+    })
+    .catch(err => console.error(err));
+}
+```
+
+**<span style='color: #bcdbf9'> Note:** that the session cookie can be found in the browser under `Storage/Cookies` (*Firefox*), and will be refreshed eachtime the controller method `postLogin()` is executed.
+
+in all `render()`, instead of checking `isLoggedIn`, we could as well `isAuthenticated: req.session.user`, as an object would be considered as `true` in an if condition

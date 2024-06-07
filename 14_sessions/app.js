@@ -8,7 +8,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import errorController from './controllers/error.js';
-import User from './models/user.js';
+// import User from './models/user.js';
 import adminRoutes from './routes/admin.js';
 import { expRouter as authRoutes } from './routes/auth.js';
 import { expRouter as shopRoutes } from './routes/shop.js';
@@ -37,14 +37,17 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  User.findById('665f45963e2f4f0276b45e79')
-    .then(user => {
-      req.user = user;
-      next();
-    })
-    .catch(err => console.error(err));
-});
+// HACK: this will be solving all mongoose model related issue in section 246
+// app.use((req, res, next) => {
+//   console.log(req.session.user);
+//   User.findById(req.session.user._id)
+//     .then(user => {
+//       console.log(user);
+//       req.user = user;
+//       next();
+//     })
+//     .catch(err => console.error(err));
+// });
 
 app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
