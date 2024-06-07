@@ -2991,3 +2991,23 @@ You can set:
 - `HttpOnly`, we can't access the cookie through client-side javascript, so scripts running in the browser. This can be an important security mechanism, protecting against cross-site scripting attacks
 
 **<span style='color: #bcdbf9'> Note:**  often you will not directly set your cookies because you rather use some packages like for example for authentication that will manage setting the cookie for you.
+
+## What is a Session?
+
+So now instead of storing the information that the user is authenticated in the frontend which was a bad place as we learned, we'll store it in the backend with a so-called session.
+
+we won't store it:
+- in the request
+- we also won't store it in some variable in our express app because that would be shared across all users and all requests
+
+We only want to share the information across all requests of the same user and that's really important.  
+So that other users can't see any other user's data.  
+Now for that, we need to store it on the server,  
+we'll start by storing it in memory which is then pretty similar to storing in that variable but eventually we'll move to a different session storage with a database.
+
+**<span style='color: #bcdbf9'> Note:**  A client needs to tell the server to which session he belongs because the session will in the end just be an entry stored in memory or stored in a database.
+Now we're not matching this by IP address or anything like that because that is a bit hard to maintain and can be faked.
+instead we'll use a cookie where we will store the ID of the session.
+Now obviously you can still change that and assume a different ID if you want to but that will not work
+
+like this because actually the value we store will not be the ID but the hashed ID, hashed with a certain algorithm where only the server can confirm that it has not been fiddled with.
