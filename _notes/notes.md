@@ -3111,3 +3111,15 @@ function postLogin(req, res, next) {
 **<span style='color: #bcdbf9'> Note:** that the session cookie can be found in the browser under `Storage/Cookies` (*Firefox*), and will be refreshed eachtime the controller method `postLogin()` is executed.
 
 in all `render()`, instead of checking `isLoggedIn`, we could as well `isAuthenticated: req.session.user`, as an object would be considered as `true` in an if condition
+
+## Deleting a Cookie
+
+**<span style='color: #a8c62c'>/controllers/auth.js:**
+
+```js
+function postLogout(req, res, next) {
+  req.session.destroy(_ => res.redirect('/'));
+}
+```
+
+**<span style='color: #bcdbf9'> Note:** This will not remove the *session cookie*, but will delete the document in the `sessions` collection. The *session cookie* will be overwritten once we login again, and when we close the browser, it will be deleted (it's not a permanent cookie)

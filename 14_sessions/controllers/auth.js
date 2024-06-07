@@ -17,7 +17,12 @@ function postLogin(req, res, next) {
     .catch(err => console.error(err));
 }
 
+function postLogout(req, res, next) {
+  req.session.destroy(_ => res.redirect('/'));
+}
+
 export default {
   getLogin,
   postLogin,
+  postLogout,
 };
