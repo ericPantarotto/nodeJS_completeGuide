@@ -3085,4 +3085,7 @@ This is how it should be stored in production, using a real session store, memor
 
 **<span style='color: #bcdbf9'> Note:** we could use also the session for the shopping cart, rather than directly in the user collection (it would then be in the session collection). Session is used for authentication, but any related user data can be saved in the session.
 
+## Session & Cookies: a short Summary
 
+The session cookie is set-up by express-session middleware, so in practise it's actually quite rare to manage cookies on your own.  
+server-side session cookies (for authentication, and any user-related data) are the most common use-case for cookies, together with advertisement cookies, which are generally handled by third-party tools like *Google*.
