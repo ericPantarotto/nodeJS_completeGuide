@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser';
+import connectMongoDBSession from 'connect-mongodb-session';
 import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
@@ -16,6 +17,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+const MongoDBStore = connectMongoDBSession(session);
+const store = new MongoDBStore({
+  uri: process.env.MONGO_DB_URL,
+  collection: 'sessions',
+});
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -27,6 +33,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: store,
   })
 );
 

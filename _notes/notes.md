@@ -2938,11 +2938,12 @@ function postLogin(req, res, next) {
   res.redirect('/');
 }
 ```
+
 **<span style='color: #bcdbf9'> Note:** in `postLogin`, we have set `isLoggedIn = true`.  
 But our request is dead, it's done. We send a response by redirecting, and with a response, we basically finished a request, we got a request and we sent a response, we're done.  
 This data does not stick around, this data is lost after the request or after we send the response.
 
-So whenever we visit a different page, like here where we do get redirected, this is a brand new request, the redirection creates a brand new request and this is super important to understand. We're working with totally separate requests and that is important because your application, your page will have hundreds of users and obviously the requests of all these users are not related to each other. 
+So whenever we visit a different page, like here where we do get redirected, this is a brand new request, the redirection creates a brand new request and this is super important to understand. We're working with totally separate requests and that is important because your application, your page will have hundreds of users and obviously the requests of all these users are not related to each other.
 
 So requests made from the same IP address are treated as totally independent requests.
 
@@ -2960,6 +2961,7 @@ With cookies we can store data in the browser of a single user and store data in
 **<span style='color: #bcdbf9'> Note:** you can check in *Network / Headers  / Cookie*
 
 **<span style='color: #a8c62c'>/controllers/auth.js:**  
+
 ```js
 function postLogin(req, res, next) {
   res.setHeader('Set-Cookie', 'loggedIn=true')
@@ -2985,9 +2987,10 @@ Sensitive data should not be stored in the browser because users can edit them a
 The cookies don't only have to relate to your page. A cookie can also be sent to another page and that is a common instrument in tracking.
 
 You can set:
+
 - the expiration date: `Expires= ...` || `Max-Age= ...`
 - `Domain= ...`
-- `Secure`, the cookie will only be set if the page is served via https 
+- `Secure`, the cookie will only be set if the page is served via https
 - `HttpOnly`, we can't access the cookie through client-side javascript, so scripts running in the browser. This can be an important security mechanism, protecting against cross-site scripting attacks
 
 **<span style='color: #bcdbf9'> Note:**  often you will not directly set your cookies because you rather use some packages like for example for authentication that will manage setting the cookie for you.
@@ -2997,6 +3000,7 @@ You can set:
 So now instead of storing the information that the user is authenticated in the frontend which was a bad place as we learned, we'll store it in the backend with a so-called session.
 
 we won't store it:
+
 - in the request
 - we also won't store it in some variable in our express app because that would be shared across all users and all requests
 
@@ -3017,6 +3021,7 @@ like this because actually the value we store will not be the ID but the hashed 
 `npm i --save express-session`
 
 **<span style='color: #a8c62c'>/app.js:**  
+
 ```js
 app.use(
   session({
@@ -3036,7 +3041,7 @@ app.use(
 we can reach out to request and then the `session` object, which is added by the **session middleware**, and we can add any key we want.  
 `req.session.isLoggedIn = true;`
 
-This is a session cookie, encrypted value, that will expire when we close the browser. 
+This is a session cookie, encrypted value, that will expire when we close the browser.
 This session cookie will identify your user, your running instance of this website to the node.js server
 
 Our defined key:value pairs will be saved across requests but not across users, this is how we can store data for each user that persists across their requests.
@@ -3044,3 +3049,40 @@ Our defined key:value pairs will be saved across requests but not across users, 
 **<span style='color: #bcdbf9'> Note:**  It still needs a cookie to identify the user but the sensitive information is stored on the server, users can't modify them.
 
 There are other techniques too, for example when building a rest API
+
+## Using MongoDB to Store Sessions
+
+with our current set-up, sessions are stored in memory, which is not an infinite ressource.
+**<span style='color:   #875c5c'>IMPORTANT:** for production server, this would be a terrible solution, if you had thousands of users, your memory would overflow with all these information in memory.
+
+You can find below the list of session stores we can use with *express-session*:  
+**<span style='color: #ffe5c5'>Link:**  [http://expressjs.com/en/resources/middleware/session.html](http://expressjs.com/en/resources/middleware/session.html)
+
+we will use *MongoDB*: [https://www.npmjs.com/package/connect-mongodb-session](https://www.npmjs.com/package/connect-mongodb-session)
+
+**<span style='color: #a8c62c'>/app.js:**  
+
+```js
+import connectMongoDBSession from 'connect-mongodb-session';
+const MongoDBStore = connectMongoDBSession(session);
+const store = new MongoDBStore({
+  uri: process.env.MONGO_DB_URL,
+  collection: 'sessions',
+});
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
+);
+```
+
+the session cookie won't be saved anymore as a session cookie in our browser, but in *MongoDB*!  
+This is how it should be stored in production, using a real session store, memory store is less secure and will reach limit.
+
+**<span style='color: #bcdbf9'> Note:** we could use also the session for the shopping cart, rather than directly in the user collection (it would then be in the session collection). Session is used for authentication, but any related user data can be saved in the session.
+
+
