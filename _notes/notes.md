@@ -3011,3 +3011,36 @@ instead we'll use a cookie where we will store the ID of the session.
 Now obviously you can still change that and assume a different ID if you want to but that will not work
 
 like this because actually the value we store will not be the ID but the hashed ID, hashed with a certain algorithm where only the server can confirm that it has not been fiddled with.
+
+## Initializing the Session Middleware
+
+`npm i --save express-session`
+
+**<span style='color: #a8c62c'>/app.js:**  
+```js
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+```
+
+**<span style='color: #bcdbf9'> Note:**  we could also add a cookie property to customize the expiry date instead of the default values provided by *express-session*.
+
+## Using the Session Middleware
+
+**<span style='color: #a8c62c'>/controllers/auth.js:**  
+
+we can reach out to request and then the `session` object, which is added by the **session middleware**, and we can add any key we want.  
+`req.session.isLoggedIn = true;`
+
+This is a session cookie, encrypted value, that will expire when we close the browser. 
+This session cookie will identify your user, your running instance of this website to the node.js server
+
+Our defined key:value pairs will be saved across requests but not across users, this is how we can store data for each user that persists across their requests.
+
+**<span style='color: #bcdbf9'> Note:**  It still needs a cookie to identify the user but the sensitive information is stored on the server, users can't modify them.
+
+There are other techniques too, for example when building a rest API
