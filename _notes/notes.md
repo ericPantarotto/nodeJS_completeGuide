@@ -3131,6 +3131,8 @@ Somehow our program now fails to executefunctions that normally are available on
 
 Before for each request, we were fetching a user for each request action, via the middleware, and *mongoose* was giving us a full user model object with all the methods, not just the data in the database, and that user model was stored in the request
 
+**<span style='color: #a8c62c'>/app.js:**
+
 ```js
 app.use((req, res, next) => {
   User.findById('665f45963e2f4f0276b45e79')
@@ -3162,3 +3164,33 @@ app.use((req, res, next) => {
 ```
 
 and then in all our *controllers*, we replace `req.session.user` by `req.user` !
+
+## Two Improvements
+
+Writing the `session` to *mongoDB* can take couple of milliseconds and you could be redirected too early, for that reason it's important to use a `then()` clause to redirect, which otherwise might be fired independently.  
+You normally don't need to call `.save()` method, except if you need that guarantee that the session has been written to the database, and only move to the next action.
+
+
+**<span style='color: #a8c62c'>/controllers/auth.js:**
+
+```js
+function postLogin(req, res, next) {
+  User.findById('6662e88628d20caf2d6dc633')
+    .then(user => {
+      req.session.isLoggedIn = true;
+      return (req.session.user = user);
+    })
+    .then(_ => res.redirect('/'))
+    .catch(err => console.error(err));
+}
+```
+
+**alternative**  
+```js
+req.session.user = user; 
+req.session.save(err => {
+  console.log(er);
+  res.redirect('/');
+});
+```
+
