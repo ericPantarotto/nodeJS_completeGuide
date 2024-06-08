@@ -3170,7 +3170,6 @@ and then in all our *controllers*, we replace `req.session.user` by `req.user` !
 Writing the `session` to *mongoDB* can take couple of milliseconds and you could be redirected too early, for that reason it's important to use a `then()` clause to redirect, which otherwise might be fired independently.  
 You normally don't need to call `.save()` method, except if you need that guarantee that the session has been written to the database, and only move to the next action.
 
-
 **<span style='color: #a8c62c'>/controllers/auth.js:**
 
 ```js
@@ -3186,6 +3185,7 @@ function postLogin(req, res, next) {
 ```
 
 **alternative**  
+
 ```js
 req.session.user = user; 
 req.session.save(err => {
@@ -3194,3 +3194,6 @@ req.session.save(err => {
 });
 ```
 
+## Wrap-up
+
+![image info](./14_sc2.png)
