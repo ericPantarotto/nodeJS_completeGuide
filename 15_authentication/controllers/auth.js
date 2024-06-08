@@ -21,8 +21,20 @@ function postLogout(req, res, next) {
   req.session.destroy(_ => res.redirect('/'));
 }
 
+function getSignup(req, res, next) {
+  res.render('auth/signup', {
+    path: '/signup',
+    pageTitle: 'Signup',
+    isAuthenticated: false,
+  });
+}
+
+function postSignup(req, res, next) {}
+
 export default {
   getLogin,
   postLogin,
   postLogout,
+  getSignup,
+  postSignup,
 };
