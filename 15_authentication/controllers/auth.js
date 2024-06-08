@@ -29,7 +29,22 @@ function getSignup(req, res, next) {
   });
 }
 
-function postSignup(req, res, next) {}
+function postSignup(req, res, next) {
+  const email = req.body.email;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPasswordpassword;
+
+  User.findOne({ email: email })
+    .then(userDoc => {
+      return (
+        (userDoc && res.redirect('/signup')) ||
+        new User({ email: email, password: password, cart: { items: [] } })
+          .save()
+          .then(result => res.redirect('/login'))
+      );
+    })
+    .catch(err => console.error(err));
+}
 
 export default {
   getLogin,

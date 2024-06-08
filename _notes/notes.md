@@ -3212,3 +3212,7 @@ req.session.save(err => {
 - and if the user is signed in, we can grant access to certain resources,
 
 ![image info](./15_sc1.png)
+
+## Implementing an Authentication Flow
+
+**<span style='color: #bcdbf9'> Note:**  One way of checking if a user doesn't already exist with a given email to avoid duplicate would be to create an index on the email property in *mongDB*.
