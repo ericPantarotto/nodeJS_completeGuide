@@ -68,7 +68,7 @@ function postDeleteProduct(req, res, next) {
   Product.findByIdAndDelete(prodId)
     .then(_ => {
       console.log('DESTROYED PRODUCT in Products Collection!');
-      req.session.user.removeFromCart(prodId);
+      req.user.removeFromCart(prodId);
       console.log('DESTROYED PRODUCT in User Collection (cart.items)!');
     })
     .then(_ => res.redirect('/admin/products'))

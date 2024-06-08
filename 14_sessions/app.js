@@ -8,7 +8,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import errorController from './controllers/error.js';
-// import User from './models/user.js';
+import User from './models/user.js';
 import adminRoutes from './routes/admin.js';
 import { expRouter as authRoutes } from './routes/auth.js';
 import { expRouter as shopRoutes } from './routes/shop.js';
@@ -37,17 +37,15 @@ app.use(
   })
 );
 
-// HACK: this will be solving all mongoose model related issue in section 246
-// app.use((req, res, next) => {
-//   console.log(req.session.user);
-//   User.findById(req.session.user._id)
-//     .then(user => {
-//       console.log(user);
-//       req.user = user;
-//       next();
-//     })
-//     .catch(err => console.error(err));
-// });
+// HACK: this will be solving all mongoose model related issue, as session middleware doesn't fetch a full mongoose user object with all functions
+app.use((req, res, next) => {
+  User.findById(req.session.user?._id)
+    .then(user => {
+      user && (req.user = user);
+      next();
+    })
+    .catch(err => console.error(err));
+});
 
 app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);

@@ -3123,3 +3123,42 @@ function postLogout(req, res, next) {
 ```
 
 **<span style='color: #bcdbf9'> Note:** This will not remove the *session cookie*, but will delete the document in the `sessions` collection. The *session cookie* will be overwritten once we login again, and when we close the browser, it will be deleted (it's not a permanent cookie)
+
+## Fixing Main Issue with Session
+
+**Error:** *req.session.user,addToCart* is not a function
+Somehow our program now fails to executefunctions that normally are available on our objects.
+
+Before for each request, we were fetching a user for each request action, via the middleware, and *mongoose* was giving us a full user model object with all the methods, not just the data in the database, and that user model was stored in the request
+
+```js
+app.use((req, res, next) => {
+  User.findById('665f45963e2f4f0276b45e79')
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.error(err));
+});
+```
+
+With `session`, we are not fetching the full model per request, instead we store the user in our session upon login-in, it gets stored in the database, in the `sessions` collection, and this now just the data.
+
+Now for every new request, the session middleware does not go ahead and fetch the user with the help of *mongoose*, it fetches the session data from *mongodb*, it uses the `mongodbStore` and the *mongodb store* does not know about our *mongoose models.*
+
+**<span style='color:   #875c5c'>IMPORTANT:** the `session` middleware does not fetch an object with all the methods provided by *mongoose*.
+
+*Solution:* we introduce again our previous middleware that will serve each request with a full `user` mongoose model
+
+```js
+app.use((req, res, next) => {
+  User.findById(req.session.user?._id)
+    .then(user => {
+      user && req.user = user;
+      next();
+    })
+    .catch(err => console.error(err));
+});
+```
+
+and then in all our *controllers*, we replace `req.session.user` by `req.user` !
