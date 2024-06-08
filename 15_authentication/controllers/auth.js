@@ -1,5 +1,5 @@
+import bcrypt from 'bcryptjs';
 import User from '../models/user.js';
-
 function getLogin(req, res, next) {
   res.render('auth/login', {
     path: '/login',
@@ -10,8 +10,13 @@ function getLogin(req, res, next) {
 function postLogin(req, res, next) {
   User.findById('6662e88628d20caf2d6dc633')
     .then(user => {
-      req.session.isLoggedIn = true;
-      return (req.session.user = user);
+      if (user) {
+        console.log('user found !!!!!');
+        req.session.isLoggedIn = true;
+        return (req.session.user = user);
+      } else {
+        console.log('user NOT found !!!');
+      }
     })
     .then(_ => res.redirect('/'))
     .catch(err => console.error(err));
@@ -38,9 +43,16 @@ function postSignup(req, res, next) {
     .then(userDoc => {
       return (
         (userDoc && res.redirect('/signup')) ||
-        new User({ email: email, password: password, cart: { items: [] } })
-          .save()
-          .then(result => res.redirect('/login'))
+        bcrypt
+          .hash(password, 12)
+          .then(hashedPassword =>
+            new User({
+              email: email,
+              password: hashedPassword,
+              cart: { items: [] },
+            }).save()
+          )
+          .then(_ => res.redirect('/login'))
       );
     })
     .catch(err => console.error(err));
