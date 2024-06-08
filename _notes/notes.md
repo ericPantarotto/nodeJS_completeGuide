@@ -3197,3 +3197,18 @@ req.session.save(err => {
 ## Wrap-up
 
 ![image info](./14_sc2.png)
+
+# Adding Authentication
+
+## How is Authentication implemented?
+
+- Check whether we have a user with that e-mail and that password in our database.
+- If that is the case, we create a session for this user and you learned how this works in the last module and this session then identifies this user.
+
+**<span style='color: #bcdbf9'> Note:** This is required because otherwise without a session, even if we find out that the credentials are valid, for the very next request the user would be logged out again because remember, requests interact separated from each other.
+
+- send a success response and we obviously also store the cookie belonging to that session on the client we return that with that response so that we really established a session.
+- the user is able to visit our restricted routes because now this cookie is sent with every request, on the server we can connect this cookie to a session and in the session we have the information whether that user is signed in or not.
+- and if the user is signed in, we can grant access to certain resources,
+
+![image info](./15_sc1.png)
