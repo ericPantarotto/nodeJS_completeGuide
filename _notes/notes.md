@@ -3216,3 +3216,16 @@ req.session.save(err => {
 ## Implementing an Authentication Flow
 
 **<span style='color: #bcdbf9'> Note:**  One way of checking if a user doesn't already exist with a given email to avoid duplicate would be to create an index on the email property in *mongDB*.
+
+## Route Protection
+
+**<span style='color:   #875c5c'>IMPORTANT:** Even we log out, and our `session` is destroyed, we can still access URL by typing them directly.
+
+Before we render a page, we want to check if a user is logged in. And adding a guard clause.
+
+
+```js
+function getAddProduct(req, res, next) {
+  if (!req.session.isLoggedIn) return res.redirect('/login');
+  return res.render('admin/edit-product', {
+```
