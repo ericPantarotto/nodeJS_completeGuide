@@ -3252,3 +3252,10 @@ router.get(
 
 **<span style='color: #bcdbf9'> Note:** the router funneled the request from left to right, so inside our new `middleware is-auth`, if the user is not logged-in, then it will redirect to `/login`, and the `next()` block will never be reached nor the controller .
 
+## Cross-Site Request Forgery (CSRF)
+
+**<span style='color:   #875c5c'>IMPORTANT:** external party can abuse your session and execute malicious code.
+
+![image info](./15_sc2.png)
+
+To protect against such attack pattern, we want ensure that your session can only be used with views rendered by the node.js application, session would not be available on fake pages that may look like the views of the app.
