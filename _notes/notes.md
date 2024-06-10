@@ -3284,3 +3284,7 @@ app.use((req, res, next) => {
 });
 
 ```
+
+## Providing user Feedback
+
+With `connect-flash`, once a message that was stored and then retrieved, this information is removed from the *session*.

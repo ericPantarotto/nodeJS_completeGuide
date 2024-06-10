@@ -4,29 +4,42 @@ function getLogin(req, res, next) {
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
-    isAuthenticated: false,
+    errorMessage: req.flash('errorLogin'),
   });
 }
 function postLogin(req, res, next) {
   const email = req.body.email;
   const password = req.body.password;
 
-  User.findOne({ email: email }).then(user => {
-    if (!user) return res.redirect('/login');
-    bcrypt
-      .compare(password, user.password)
-      .then(doMatch => {
-        if (!doMatch) return res.redirect('/login');
-        req.session.isLoggedIn = true;
-        return Promise.resolve((req.session.user = user)).then(_ =>
-          res.redirect('/')
-        );
-      })
-      .catch(err => {
-        console.error(err);
-        res.redirect('/login');
-      });
-  });
+  User.findOne({ email: email })
+    .then(user => {
+      if (!user) {
+        return Promise.resolve(
+          req.flash('errorLogin', 'Invalid email or password.')
+        ).then(_ => res.redirect('/login'));
+      }
+      bcrypt
+        .compare(password, user.password)
+        .then(doMatch => {
+          if (doMatch) {
+            req.session.isLoggedIn = true;
+            req.session.user = user;
+            return req.session.save(err => {
+              console.log(err);
+              res.redirect('/');
+            });
+          }
+          
+          Promise.resolve(
+            req.flash('errorLogin', 'Invalid email or password.')
+          ).then(_ => res.redirect('/login'));
+        })
+        .catch(err => {
+          console.log(err);
+          res.redirect('/login');
+        });
+    })
+    .catch(err => console.log(err));
 }
 
 function postLogout(req, res, next) {
@@ -37,7 +50,6 @@ function getSignup(req, res, next) {
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup',
-    isAuthenticated: false,
   });
 }
 

@@ -56,6 +56,16 @@
         "restart": true,
         "runtimeExecutable": "nodemon",
         "console": "integratedTerminal"
-      }
+      },
+       {
+         "type": "node",
+         "request": "launch",
+         "name": "15_authentication",
+         "program": "${workspaceFolder}/15_authentication/app.js",
+         "cwd": "${workspaceFolder}/15_authentication",
+         "restart": true,
+         "runtimeExecutable": "nodemon",
+         "console": "integratedTerminal"
+       }
   ]
 }
