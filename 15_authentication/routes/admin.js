@@ -1,20 +1,44 @@
 import { Router } from 'express';
 
 import adminController from '../controllers/admin.js';
-
+import authMiddleware from '../middlewares/is-auth.js';
 const router = Router();
 
-router.get('/add-product', adminController.getAddProduct);
+router.get(
+  '/add-product',
+  authMiddleware.isAuthenticated,
+  adminController.getAddProduct
+);
 
-router.post('/add-product', adminController.postAddProduct);
+router.post(
+  '/add-product',
+  authMiddleware.isAuthenticated,
+  adminController.postAddProduct
+);
 
-router.get('/products', adminController.getProducts);
+router.get(
+  '/products',
+  authMiddleware.isAuthenticated,
+  adminController.getProducts
+);
 
-router.get('/edit-product/:productId', adminController.getEditProduct);
+router.get(
+  '/edit-product/:productId',
+  authMiddleware.isAuthenticated,
+  adminController.getEditProduct
+);
 
-router.post('/edit-product', adminController.postEditProduct);
+router.post(
+  '/edit-product',
+  authMiddleware.isAuthenticated,
+  adminController.postEditProduct
+);
 
-router.post('/delete-product', adminController.postDeleteProduct);
+router.post(
+  '/delete-product',
+  authMiddleware.isAuthenticated,
+  adminController.postDeleteProduct
+);
 
 export default {
   routes: router,

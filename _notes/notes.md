@@ -3229,3 +3229,26 @@ function getAddProduct(req, res, next) {
   if (!req.session.isLoggedIn) return res.redirect('/login');
   return res.render('admin/edit-product', {
 ```
+
+## Using Middleware to Protect Routes
+
+**<span style='color: #a8c62c'>/middlewares/is-auth.js:**
+
+```js
+function isAuthenticated(req, res, next) {
+  if (!req.session.isLoggedIn) return res.redirect('/login');
+  next();
+}
+```
+
+**<span style='color: #a8c62c'>/controllers/admin.js:**
+```js
+router.get(
+  '/add-product',
+  authMiddleware.isAuthenticated,
+  adminController.getAddProduct
+);
+```
+
+**<span style='color: #bcdbf9'> Note:** the router funneled the request from left to right, so inside our new `middleware is-auth`, if the user is not logged-in, then it will redirect to `/login`, and the `next()` block will never be reached nor the controller .
+
