@@ -1338,7 +1338,7 @@ To make sure that the edit page can be reached, we have to pass the `edit=true` 
  <a href="/admin/edit-product/<%= product.id %>?edit=true" class="btn">Edit</a>
 ```
 
-- soltution 2: passing an `editing` property
+- solution 2: passing an `editing` property
 
 ```html
  <a href="/admin/edit-product/<%= product.id %>?edit=<%= product.editing %>" class="btn">Edit</a>
@@ -3288,3 +3288,7 @@ app.use((req, res, next) => {
 ## Providing user Feedback
 
 With `connect-flash`, once a message that was stored and then retrieved, this information is removed from the *session*.
+
+## Wrap-up
+
+![image info](./15_sc3.png)
