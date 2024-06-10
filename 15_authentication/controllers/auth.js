@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/user.js';
+
 function getLogin(req, res, next) {
   const message = req.flash('errorLogin');
 
@@ -49,9 +50,12 @@ function postLogout(req, res, next) {
 }
 
 function getSignup(req, res, next) {
+  const message = req.flash('errorSignup');
+
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup',
+    errorMessage: message.length > 0 ? message[0] : null,
   });
 }
 
@@ -60,19 +64,26 @@ function postSignup(req, res, next) {
   const password = req.body.password;
   const confirmPassword = req.body.confirmPasswordpassword;
 
-  User.findOne({ email: email }).then(userDoc => {
-    return userDoc
-      ? res.redirect('/signup')
-      : bcrypt.hash(password, 12).then(hashedPassword =>
-          new User({
-            email: email,
-            password: hashedPassword,
-            cart: { items: [] },
-          })
-            .save()
-            .then(_ => res.redirect('/login'))
+  User.findOne({ email: email })
+    .then(async userDoc => {
+      if (userDoc) {
+        const _ = await Promise.resolve(
+          req.flash('errorSignup', 'Email exists already ...')
         );
-  });
+        return res.redirect('/signup');
+      }
+
+      const hashedPassword = await bcrypt
+        .hash(password, 12);
+      const user = new User({
+        email: email,
+        password: hashedPassword,
+        cart: { items: [] },
+      });
+      const __1 = await user.save();
+      return res.redirect('/login');
+    })
+    .catch(err => console.error(err));
 }
 
 export default {
@@ -88,21 +99,17 @@ export default {
 //   const password = req.body.password;
 //   const confirmPassword = req.body.confirmPasswordpassword;
 
-//   User.findOne({ email: email })
-//     .then(userDoc => {
-//       if (userDoc) return res.redirect('/signup');
-
-//       return bcrypt
-//         .hash(password, 12)
-//         .then(hashedPassword => {
-//           const user = new User({
-//             email: email,
-//             password: hashedPassword,
-//             cart: { items: [] },
-//           });
-//           return user.save();
+// User.findOne({ email: email }).then(userDoc => {
+//   return userDoc
+//     ? res.redirect('/signup')
+//     : bcrypt.hash(password, 12).then(hashedPassword =>
+//         new User({
+//           email: email,
+//           password: hashedPassword,
+//           cart: { items: [] },
 //         })
-//         .then(_ => res.redirect('/login'));
-//     })
-//     .catch(err => console.error(err));
+//           .save()
+//           .then(_ => res.redirect('/login'))
+//       );
+// });
 // }
