@@ -1,10 +1,12 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/user.js';
 function getLogin(req, res, next) {
+  const message = req.flash('errorLogin');
+
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
-    errorMessage: req.flash('errorLogin'),
+    errorMessage: message.length > 0 ? message[0] : null,
   });
 }
 function postLogin(req, res, next) {
@@ -29,7 +31,7 @@ function postLogin(req, res, next) {
               res.redirect('/');
             });
           }
-          
+
           Promise.resolve(
             req.flash('errorLogin', 'Invalid email or password.')
           ).then(_ => res.redirect('/login'));
