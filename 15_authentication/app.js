@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import connectMongoDBSession from 'connect-mongodb-session';
+import csrf from 'csurf';
 import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
@@ -23,6 +24,8 @@ const store = new MongoDBStore({
   collection: 'sessions',
 });
 
+const csrfProtection = csrf();
+
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
@@ -37,6 +40,8 @@ app.use(
   })
 );
 
+app.use(csrfProtection);
+
 // HACK: this will be solving all mongoose model related issue, as session middleware doesn't fetch a full mongoose user object with all functions
 app.use((req, res, next) => {
   User.findById(req.session.user?._id)
@@ -45,6 +50,12 @@ app.use((req, res, next) => {
       next();
     })
     .catch(err => console.error(err));
+});
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
 });
 
 app.use('/admin', adminRoutes.routes);

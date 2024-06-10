@@ -98,7 +98,7 @@ function postOrder(req, res, next) {
         product: { ...i.productId._doc },
       }));
       const order = new Order({
-        user: { name: req.user.name, userId: req.user._id },
+        user: { email: req.user.email, userId: req.user._id },
         products: products,
       });
       return order.save();

@@ -3259,3 +3259,28 @@ router.get(
 ![image info](./15_sc2.png)
 
 To protect against such attack pattern, we want ensure that your session can only be used with views rendered by the node.js application, session would not be available on fake pages that may look like the views of the app.
+
+## Using a CSRF Token / Adding CSRF Token
+
+For any `POST` request (changing data), the package will look for the existence of CSRF token in our views, in the **request body.**
+
+we hide the CSRF token in an `input` of the form `logout` of our **<span style='color: #a8c62c'>/views/includes/navigation.ejs:**
+
+`<input type="hidden" name="_csrf" value="<%= csrfToken %>">`
+
+Instead of having to add isLoggedIn and csrfToken in all our controllers, we make use of the locals provided by `Express.js`!
+
+**<span style='color: #a8c62c'>/app.js:**
+
+```js
+import csrf from 'csurf';
+const csrfProtection = csrf();
+app.use(csrfProtection);
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
+```
