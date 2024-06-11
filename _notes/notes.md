@@ -3223,7 +3223,6 @@ req.session.save(err => {
 
 Before we render a page, we want to check if a user is logged in. And adding a guard clause.
 
-
 ```js
 function getAddProduct(req, res, next) {
   if (!req.session.isLoggedIn) return res.redirect('/login');
@@ -3242,6 +3241,7 @@ function isAuthenticated(req, res, next) {
 ```
 
 **<span style='color: #a8c62c'>/controllers/admin.js:**
+
 ```js
 router.get(
   '/add-product',
@@ -3292,3 +3292,10 @@ With `connect-flash`, once a message that was stored and then retrieved, this in
 ## Wrap-up
 
 ![image info](./15_sc3.png)
+
+# Sending Emails
+
+**<span style='color: #ffe5c5'>Link:** [https://support.google.com/accounts/answer/185833?hl=en](https://support.google.com/accounts/answer/185833?hl=en)
+
+*alternative:* if Sendgrid works again:  
+**<span style='color: #ffe5c5'>Link:** [https://www.npmjs.com/package/@sendgrid/mail](https://www.npmjs.com/package/@sendgrid/mail)

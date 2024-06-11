@@ -1,9 +1,17 @@
 import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer';
 import User from '../models/user.js';
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'ericpython1980@gmail.com',
+    pass: process.env.GMAIL_APP,
+  },
+});
 
 function getLogin(req, res, next) {
   const message = req.flash('errorLogin');
-
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
@@ -62,7 +70,7 @@ function getSignup(req, res, next) {
 function postSignup(req, res, next) {
   const email = req.body.email;
   const password = req.body.password;
-  const confirmPassword = req.body.confirmPasswordpassword;
+  const confirmPassword = req.body.confirmPassword;
 
   User.findOne({ email: email })
     .then(async userDoc => {
@@ -73,14 +81,25 @@ function postSignup(req, res, next) {
         return res.redirect('/signup');
       }
 
-      const hashedPassword = await bcrypt
-        .hash(password, 12);
+      const hashedPassword = await bcrypt.hash(password, 12);
       const user = new User({
         email: email,
         password: hashedPassword,
         cart: { items: [] },
       });
-      const __1 = await user.save();
+      await user.save();
+
+      transporter
+        .sendMail({
+          to: email,
+          from: 'ericpython1980@gmail.com',
+          subject: 'Signup succeeded',
+          html: '<h1>You successfully signed up!</h1>',
+        })
+        .catch(error => {
+          console.log('error = ', error, '\n');
+        });
+
       return res.redirect('/login');
     })
     .catch(err => console.error(err));
