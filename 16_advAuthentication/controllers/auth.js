@@ -1,4 +1,6 @@
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
+
 import nodemailer from 'nodemailer';
 import User from '../models/user.js';
 
@@ -105,12 +107,60 @@ function postSignup(req, res, next) {
     .catch(err => console.error(err));
 }
 
+function getReset(req, res, next) {
+  const message = req.flash('errorReset');
+  res.render('auth/reset', {
+    path: '/reset',
+    pageTitle: 'Reset Password',
+    errorMessage: message.length > 0 ? message[0] : null,
+  });
+}
+
+function postReset(req, res, next) {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.error(err);
+      return res.redirect('/reset');
+    }
+    const token = buffer.toString('hex');
+    User.findOne({ email: req.body.email })
+      .then(user => {
+        if (!user) {
+          req.flash('errorReset', 'No account with that email found.');
+          return res.redirect('/reset');
+        }
+
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        return user
+          .save()
+          .then(_ => {
+            transporter.sendMail({
+              to: req.body.email,
+              from: 'ericpython1980@gmail.com',
+              subject: 'Password reset',
+              html: `
+                <p>You requested a password reset</p>
+                <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>`,
+            });
+            return res.redirect('/');
+          })
+          .catch(error => {
+            console.log('error = ', error, '\n');
+          });
+      })
+      .catch(err => console.error(err));
+  });
+}
+
 export default {
   getLogin,
   postLogin,
   postLogout,
   getSignup,
   postSignup,
+  getReset,
+  postReset,
 };
 
 // function postSignup(req, res, next) {
