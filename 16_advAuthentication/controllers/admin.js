@@ -48,7 +48,8 @@ function postEditProduct(req, res, next) {
 
   Product.findById(prodId)
     .then(product => {
-      if (product.userId !== req.user._id) return res.redirect('/');
+      if (product.userId.toString() !== req.user._id.toString())
+        return res.redirect('/');
       product.title = req.body.title;
       product.price = req.body.price;
       product.description = req.body.description;
@@ -80,9 +81,8 @@ function postDeleteProduct(req, res, next) {
 }
 
 function getProducts(req, res, next) {
-  // Product.find({ userId: req.user._id })
-  Product.find()
-    // .populate('userId')
+  // Product.find()
+  Product.find({ userId: req.user._id })
     .then(products => {
       res.render('admin/products', {
         prods: products.map(obj => ({ ...obj._doc, editing: true })),
