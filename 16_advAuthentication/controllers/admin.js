@@ -5,7 +5,6 @@ function getAddProduct(req, res, next) {
   return res.render('admin/edit-product', {
     pageTitle: 'Add Product',
     path: '/admin/add-product',
-    // editing: false
   });
 }
 
@@ -75,7 +74,7 @@ function postDeleteProduct(req, res, next) {
 }
 
 function getProducts(req, res, next) {
-  Product.find()
+  Product.find({ userId: req.user._id })
     // .populate('userId')
     .then(products => {
       res.render('admin/products', {
