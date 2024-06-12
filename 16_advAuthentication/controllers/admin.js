@@ -48,33 +48,40 @@ function postEditProduct(req, res, next) {
 
   Product.findById(prodId)
     .then(product => {
+      if (product.userId !== req.user._id) return res.redirect('/');
       product.title = req.body.title;
       product.price = req.body.price;
       product.description = req.body.description;
       product.imageUrl = req.body.imageUrl;
-      return product.save();
-    })
-    .then(_ => {
-      console.log('UPDATED PRODUCT !!!');
-      res.redirect('/admin/products');
+      return product.save().then(_ => {
+        console.log('UPDATED PRODUCT !!!');
+        res.redirect('/admin/products');
+      });
     })
     .catch(err => console.error(err));
 }
 
 function postDeleteProduct(req, res, next) {
   const prodId = req.body.productId;
-  Product.findByIdAndDelete(prodId)
-    .then(_ => {
-      console.log('DESTROYED PRODUCT in Products Collection!');
-      req.user.removeFromCart(prodId);
-      console.log('DESTROYED PRODUCT in User Collection (cart.items)!');
+
+  // Product.findByIdAndDelete(prodId)
+  Product.deleteOne({ _id: prodId, userId: req.user._id })
+    .then(result => {
+      if (result.deletedCount > 0) {
+        console.log(result.deletedCount);
+        console.log('DESTROYED PRODUCT in Products Collection!');
+        Promise.resolve(req.user.removeFromCart(prodId)).then(_ => {
+          console.log('DESTROYED PRODUCTin User Collection (cart.items)!');
+        });
+      }
+      return res.redirect('/admin/products');
     })
-    .then(_ => res.redirect('/admin/products'))
     .catch(err => console.error(err));
 }
 
 function getProducts(req, res, next) {
-  Product.find({ userId: req.user._id })
+  // Product.find({ userId: req.user._id })
+  Product.find()
     // .populate('userId')
     .then(products => {
       res.render('admin/products', {
