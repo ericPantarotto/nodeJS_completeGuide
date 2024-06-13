@@ -3316,3 +3316,9 @@ it means that `req.user.id` === `req.user._id.toString()`
 ## Wrap-up
 
 ![image info](./16_sc1.png)
+
+# Understanding Validation
+
+## Why should we use Validation ?
+
+![image info](./18_sc1.png)
