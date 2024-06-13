@@ -3339,6 +3339,8 @@ So this is not a protection that secures you against incorrect data being sent t
 
 `npm i --save express-validator`
 
+**<span style='color: #ffe5c5'>Link:** [https://express-validator.github.io/docs](https://express-validator.github.io/docs)
+
 Typically you want to validate on your *post or your non-get routes* because you want to validate whenever the user sends data and that is not the case for our get routes.
 
 ```js 
@@ -3361,3 +3363,13 @@ const errors = validationResult(req);
 
 To test our server-side validation, we need to disable the default browser / client-side validation (that is normally a good thing )  
 `<form class="login-form" action="/signup" method="POST" novalidate>`
+
+## Built-in & Custom Validators
+
+`express-validator` is a wrapper around the `validator.js` validator, so that's another package that was implicitly installed with express-validator. 
+
+And in the docs of *validator.js*, which is a different package which was installed, you'll find all the built-in validators.
+
+**<span style='color: #ffe5c5'>Link:** [https://github.com/validatorjs/validator.js](https://github.com/validatorjs/validator.js)
+
+**we can also chain our own custom validators, for more specific checks**
