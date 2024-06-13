@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-
+import { validationResult } from 'express-validator';
 import nodemailer from 'nodemailer';
 import User from '../models/user.js';
 
@@ -72,7 +72,15 @@ function getSignup(req, res, next) {
 function postSignup(req, res, next) {
   const email = req.body.email;
   const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
+  // const confirmPassword = req.body.confirmPassword;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty())
+    return res.status(422).render('auth/signup', {
+      path: '/signup',
+      pageTitle: 'Signup',
+      errorMessage: errors.array(),
+    });
 
   User.findOne({ email: email })
     .then(async userDoc => {

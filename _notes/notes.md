@@ -3334,3 +3334,30 @@ So this is not a protection that secures you against incorrect data being sent t
 **<span style='color: #bcdbf9'> Note:** there is also built-in validation in most database engines such as **mongoDB**.
 
 ![image info](./18_sc2.png)
+
+## Set-up and Basic Validation
+
+`npm i --save express-validator`
+
+Typically you want to validate on your *post or your non-get routes* because you want to validate whenever the user sends data and that is not the case for our get routes.
+
+```js 
+router.post('/signup', check('email').isEmail(), authController.postSignup);
+```
+
+**<span style='color: #bcdbf9'> Note:** we then call a method and this will in the end then return a middleware that is understood by *express.js*.
+
+What this will now do is it will use this package to check the email field on the incoming request and it looks for that field in the body, in the query parameters, in the headers and in the cookies and it finds that field and then checks if that is a valid email address and that is the first step.
+
+in the controller, I can now simply extract my errors and store them in a constant, 
+
+**<span style='color: #a8c62c'>/controllers/auth.js:**
+
+```js
+const errors = validationResult(req);
+```
+
+**<span style='color: #a8c62c'>/views/auth/signup.ejs:**
+
+To test our server-side validation, we need to disable the default browser / client-side validation (that is normally a good thing )  
+`<form class="login-form" action="/signup" method="POST" novalidate>`
