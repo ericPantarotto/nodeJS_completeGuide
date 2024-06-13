@@ -3322,3 +3322,15 @@ it means that `req.user.id` === `req.user._id.toString()`
 ## Why should we use Validation ?
 
 ![image info](./18_sc1.png)
+
+## How to Validate ? 
+
+**<span style='color: #bcdbf9'> Note:** **Javascript client-side** validation is optional because, so javascript code that runs in the browser, the user can see that code, the user could change that code and the user can of course disable javascript.
+
+So this is not a protection that secures you against incorrect data being sent to your server, this is not a secure solution. it's only improving the user experience.
+
+**Node.js server-side** validation is more secure because this code can't be seen or changed by the user, the user can't disable us using that code because it happens on the server, not in the browser.
+
+**<span style='color: #bcdbf9'> Note:** there is also built-in validation in most database engines such as **mongoDB**.
+
+![image info](./18_sc2.png)
