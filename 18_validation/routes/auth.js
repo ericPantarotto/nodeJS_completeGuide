@@ -1,5 +1,5 @@
 import express from 'express';
-import { check } from 'express-validator';
+import { body, check } from 'express-validator';
 import authController from '../controllers/auth.js';
 
 const router = express.Router();
@@ -10,14 +10,22 @@ router.post('/logout', authController.postLogout);
 router.get('/signup', authController.getSignup);
 router.post(
   '/signup',
-  check('email')
-    .isEmail()
-    .withMessage('Please enter a valid email.')
-    .custom((value, { req }) => {
-      if (value === 'test@test.com')
-        throw new Error('This email address is forbidden.');
-      return true;
-    }),
+  [
+    check('email')
+      .isEmail()
+      .withMessage('Please enter a valid email.')
+      .custom((value, { req }) => {
+        if (value === 'test@test.com')
+          throw new Error('This email address is forbidden.');
+        return true;
+      }),
+    body(
+      'password',
+      'Please enter a password with only numbers and text and at least 5 characters.'
+    )
+      .isLength({ min: 5 })
+      .isAlphanumeric(),
+  ],
   authController.postSignup
 );
 router.get('/reset', authController.getReset);
