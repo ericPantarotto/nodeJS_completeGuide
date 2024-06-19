@@ -27,19 +27,33 @@ function postLogin(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors.array());
-    return res.status(422).render('auth/login ', {
+    return res.status(422).render('auth/login', {
       path: '/login',
-      pageTitle: 'Signup',
+      pageTitle: 'Login',
       errorMessage: errors.array()[0].msg,
+      oldInput: {
+        email: email,
+        password: password,
+      },
+      validationErrors: errors.array(),
     });
   }
 
   User.findOne({ email: email })
     .then(user => {
       if (!user) {
-        return Promise.resolve(
-          req.flash('errorLogin', 'Invalid email or password.')
-        ).then(_ => res.redirect('/login'));
+        // return Promise.resolve(
+        //   req.flash('errorLogin', 'Invalid email or password.')
+        // ).then(_ => res.redirect('/login'));
+        return res.status(422).render('auth/login', {
+          path: '/login',
+          pageTitle: 'Login',
+          errorMessage: 'Invalid email or password.',
+          oldInput: {
+            email: email,
+            password: password,
+          },
+        });
       }
       bcrypt
         .compare(password, user.password)
@@ -53,9 +67,18 @@ function postLogin(req, res, next) {
             });
           }
 
-          Promise.resolve(
-            req.flash('errorLogin', 'Invalid email or password.')
-          ).then(_ => res.redirect('/login'));
+          // Promise.resolve(
+          //   req.flash('errorLogin', 'Invalid email or password.')
+          // ).then(_ => res.redirect('/login'));
+          return res.status(422).render('auth/login', {
+            path: '/login',
+            pageTitle: 'Login',
+            errorMessage: 'Invalid email or password.',
+            oldInput: {
+              email: email,
+              password: password,
+            },
+          });
         })
         .catch(err => {
           console.log(err);
@@ -85,7 +108,7 @@ function postSignup(req, res, next) {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log(errors.array());
+    // console.log(errors.array());
     return res.status(422).render('auth/signup', {
       path: '/signup',
       pageTitle: 'Signup',
