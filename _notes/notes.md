@@ -3387,3 +3387,11 @@ And in the docs of *validator.js*, which is a different package which was instal
 We check if the email already exists in `postSignup()` of **<span style='color: #a8c62c'>/controllers/auth.js:**
 
 This should be done as part of our validation!
+
+## Sanitize Data
+
+**<span style='color: #ffe5c5'>Link:** [https://express-validator.github.io/docs/6.0.0/sanitization/](https://express-validator.github.io/docs/6.0.0/sanitization/)
+
+**<span style='color: #ffe5c5'>Link:** [https://github.com/validatorjs/validator.js#sanitizers](https://github.com/validatorjs/validator.js#sanitizers)
+
+**<span style='color: #bcdbf9'> Note:**  with an email, `.normalizeEmail()` will bug with an email containing a `.`
