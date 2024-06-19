@@ -1,3 +1,4 @@
+import { validationResult } from 'express-validator';
 import Product from '../models/product.js';
 
 function getAddProduct(req, res, next) {
@@ -9,6 +10,26 @@ function getAddProduct(req, res, next) {
 }
 
 function postAddProduct(req, res, next) {
+  const editMode = req.query.edit;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).render('admin/edit-product', {
+      pageTitle: 'Add Product',
+      path: '/admin/edit-product',
+      editing: editMode,
+      product: {
+        title: req.body.title,
+        price: req.body.price,
+        description: req.body.description,
+        imageUrl: req.body.imageUrl,
+      },
+      hasError: true,
+      errorMessage: errors.array()[0].msg,
+      validationErrors: errors.array(),
+    });
+  }
+
   new Product({
     title: req.body.title,
     price: req.body.price,
@@ -45,6 +66,26 @@ function getEditProduct(req, res, next) {
 
 function postEditProduct(req, res, next) {
   const prodId = req.body.productId;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).render('admin/edit-product', {
+      pageTitle: 'Edit Product',
+      path: '/admin/edit-product',
+      editing: true,
+      product: {
+        title: req.body.title,
+        price: req.body.price,
+        description: req.body.description,
+        imageUrl: req.body.imageUrl,
+        _id: prodId,
+      },
+      hasError: true,
+      errorMessage: errors.array()[0].msg,
+      validationErrors: errors.array(),
+    });
+  }
 
   Product.findById(prodId)
     .then(product => {

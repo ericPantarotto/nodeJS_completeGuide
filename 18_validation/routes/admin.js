@@ -1,5 +1,5 @@
 import { Router } from 'express';
-
+import { body } from 'express-validator';
 import adminController from '../controllers/admin.js';
 import authMiddleware from '../middlewares/is-auth.js';
 const router = Router();
@@ -12,6 +12,20 @@ router.get(
 
 router.post(
   '/add-product',
+  [
+    body('title', 'Title has to be string of min. 3 characters')
+      .isLength({ min: 3 })
+      .isString()
+      .trim(),
+    body('imageUrl', 'Invalid URL').isURL(),
+    body('price', 'Invalid price, format should be float').isFloat(),
+    body(
+      'description',
+      'Description should be minimum 3 characters (up to 200!)'
+    )
+      .isLength({ min: 3, max: 200 })
+      .trim(),
+  ],
   authMiddleware.isAuthenticated,
   adminController.postAddProduct
 );
@@ -30,6 +44,20 @@ router.get(
 
 router.post(
   '/edit-product',
+  [
+    body('title', 'Title has to be string of min. 3 characters')
+      .isLength({ min: 3 })
+      .isString()
+      .trim(),
+    body('imageUrl', 'Invalid URL').isURL(),
+    body('price', 'Invalid price, format should be float').isFloat(),
+    body(
+      'description',
+      'Desscription should be minimum 3 characters (up to 200!)'
+    )
+      .isLength({ min: 3, max: 200 })
+      .trim(),
+  ],
   authMiddleware.isAuthenticated,
   adminController.postEditProduct
 );
