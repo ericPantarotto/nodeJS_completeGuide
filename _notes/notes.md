@@ -3381,3 +3381,9 @@ And in the docs of *validator.js*, which is a different package which was instal
 - if you use `check()`, the particular field will be checked in the cookies, the headers, the body ...
 - or you can be more specific and use `body()` to only validate a field from the body of the request
 - instead of passing with message to all your validators, you can have a single message that you pass as a second argument to `body()`
+
+## Adding Async validation
+
+We check if the email already exists in `postSignup()` of **<span style='color: #a8c62c'>/controllers/auth.js:**
+
+This should be done as part of our validation!

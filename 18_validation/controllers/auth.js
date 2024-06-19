@@ -72,47 +72,39 @@ function getSignup(req, res, next) {
 function postSignup(req, res, next) {
   const email = req.body.email;
   const password = req.body.password;
-  // const confirmPassword = req.body.confirmPassword;
-  const errors = validationResult(req);
 
-  if (!errors.isEmpty())
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
     return res.status(422).render('auth/signup', {
       path: '/signup',
       pageTitle: 'Signup',
       errorMessage: errors.array()[0].msg,
     });
+  }
 
-  User.findOne({ email: email })
-    .then(async userDoc => {
-      if (userDoc) {
-        const _ = await Promise.resolve(
-          req.flash('errorSignup', 'Email exists already ...')
-        );
-        return res.redirect('/signup');
-      }
-
-      const hashedPassword = await bcrypt.hash(password, 12);
+  bcrypt
+    .hash(password, 12)
+    .then(hashedPassword => {
       const user = new User({
         email: email,
         password: hashedPassword,
         cart: { items: [] },
       });
-      await user.save();
-
-      transporter
-        .sendMail({
-          to: email,
-          from: 'ericpython1980@gmail.com',
-          subject: 'Signup succeeded',
-          html: '<h1>You successfully signed up!</h1>',
-        })
-        .catch(error => {
-          console.log('error = ', error, '\n');
-        });
-
-      return res.redirect('/login');
+      return user.save();
     })
-    .catch(err => console.error(err));
+    .then(result => {
+      res.redirect('/login');
+      return transporter.sendMail({
+        to: email,
+        from: 'ericpython1980@gmail.com',
+        subject: 'Signup succeeded!',
+        html: '<h1>You successfully signed up!</h1>',
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
 }
 
 function getReset(req, res, next) {
