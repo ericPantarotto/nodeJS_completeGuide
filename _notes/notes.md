@@ -3395,3 +3395,21 @@ This should be done as part of our validation!
 **<span style='color: #ffe5c5'>Link:** [https://github.com/validatorjs/validator.js#sanitizers](https://github.com/validatorjs/validator.js#sanitizers)
 
 **<span style='color: #bcdbf9'> Note:**  with an email, `.normalizeEmail()` will bug with an email containing a `.`
+
+# Error Handling
+
+## Types of Errors & Error Handling
+
+### Different Types of Errors
+
+![image info](./19_sc1.png)
+
+- We can return an error page, so a dedicated page that informs the user hey we have a problem and that of course should be kind of the last resort because there the user loses all his input, can't continue.  
+- We also can return the page which user was on and just give some error information  
+- We can redirect
+
+### Working with Errors
+
+![image info](./19_sc2.png)
+
+**<span style='color: #bcdbf9'> Note:** In the right block, no errors are thrown, so we call them technical errors
