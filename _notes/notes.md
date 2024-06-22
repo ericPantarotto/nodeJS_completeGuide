@@ -3431,3 +3431,29 @@ You might remember cases where I did something and we got stuck and that refresh
 **<span style='color:   #875c5c'>IMPORTANT:** the code after the `catch` block would still execute, so our server doesn't crash anymore, we are handling gracefully these errors
 - for **synchronous code**, we also have async operations that can fail of course and such operations when using promises are handled with 'then and catch' blocks.  
 **<span style='color: #bcdbf9'> Note:** `Catch` collects all errors that are thrown by any prior then blocks, so if we had more than then block in a chain of code, `catch` would fire on any error thrown in any then block or any operation executed in a then block
+
+## Throwing Errors in Code
+
+**<span style='color: #a8c62c'>/app.js:**
+
+```js 
+app.use((req, res, next) => {
+  User.findById(req.session.user?._id)
+    .then(user => {
+      user && (req.user = user);
+      next();
+    })
+    .catch(err => console.error(err));
+});
+```
+
+**<span style='color:   #875c5c'>IMPORTANT:** this catch block will not fire if I don't find the user with this ID, *it will only fire if there are any technical issues*,  
+- if the database is down 
+- -or if the user of this app does not have sufficient permissions to execute this action.
+
+instead of `.catch(err => console.error(err));`, we will throw a new Error, which has a significant advantage, *express.js gives us a way of taking care of such errors.*
+```js
+.catch(err => {
+      throw new Error(err);
+    });
+```
