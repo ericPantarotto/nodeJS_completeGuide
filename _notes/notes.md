@@ -3413,3 +3413,21 @@ This should be done as part of our validation!
 ![image info](./19_sc2.png)
 
 **<span style='color: #bcdbf9'> Note:** In the right block, no errors are thrown, so we call them technical errors
+
+## Errors - Some Theory
+
+`throw new Error()` is shipped by **Node.js**, that is a built-in functionality. 
+
+This is an *unhandled error.*
+
+**<span style='color: #bcdbf9'> Note:** A lot of the packages we use also throw errors behind the scenes, for example *mongodb* will throw an error if it can't connect or if an operation fails.
+
+**<span style='color:   #875c5c'>IMPORTANT:** So such errors can be thrown and if we don't handle them, then our application just crashes.
+
+You might remember cases where I did something and we got stuck and that refresh icon in the browser kept on spinning and nothing happened, that was because our server crashed because we had an error which we did not handle.
+
+### Handling these unhandled errors
+- for **synchronous code** (no interaction with files, database, no request sent), such code can be wrapped with `try-catch` block.  
+**<span style='color:   #875c5c'>IMPORTANT:** the code after the `catch` block would still execute, so our server doesn't crash anymore, we are handling gracefully these errors
+- for **synchronous code**, we also have async operations that can fail of course and such operations when using promises are handled with 'then and catch' blocks.  
+**<span style='color: #bcdbf9'> Note:** `Catch` collects all errors that are thrown by any prior then blocks, so if we had more than then block in a chain of code, `catch` would fire on any error thrown in any then block or any operation executed in a then block
