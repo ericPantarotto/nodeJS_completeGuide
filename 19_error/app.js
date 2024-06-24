@@ -67,6 +67,7 @@ app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
+app.get('/500', errorController.get500);
 app.use(errorController.get404);
 
 connect(process.env.MONGO_DB_URL)
