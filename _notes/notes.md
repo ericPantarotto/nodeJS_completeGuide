@@ -3457,3 +3457,21 @@ instead of `.catch(err => console.error(err));`, we will throw a new Error, whic
       throw new Error(err);
     });
 ```
+
+## Using the Express.js Error Handling Middleware
+
+**<span style='color: #a8c62c'>/controllers/admin.js:**
+
+```js
+.catch(err => {
+  const error = new Error(err);
+  error.httpStatusCode = 500;
+  return next(error);
+});
+```
+**<span style='color:   #875c5c'>IMPORTANT:** when we call `next()` *with an error passed as an argument*, then we actually let express know that an error occurred and it will skip all other middlewares and move right away to an error handling middleware.
+
+**<span style='color: #bcdbf9'> Note:**  
+- if you got more than one error-handling middleware, they'll execute from top to bottom. just like the normal middlewares.
+- the Express.js middleware takes 4 arguments!
+- `error.httpStatusCode = 500;` is used if instead of always `res.redirect()`, we would render from our *error middleware* `res.status(error.httpStatusCode).render(...)`

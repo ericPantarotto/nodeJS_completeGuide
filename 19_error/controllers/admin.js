@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator';
-import Product from '../models/product.js';
 import { ObjectId } from 'mongodb';
+import Product from '../models/product.js';
 
 function getAddProduct(req, res, next) {
   // if (!req.session.isLoggedIn) return res.redirect('/login');
@@ -45,7 +45,13 @@ function postAddProduct(req, res, next) {
       console.log('CREATED PRODUCT!');
       res.redirect('/admin/products');
     })
-    .catch(_ => res.redirect('/500')); //console.log(err);
+    // .catch(err => console.log(err));
+    // .catch(_ => res.redirect('/500'));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 function getEditProduct(req, res, next) {
@@ -64,7 +70,11 @@ function getEditProduct(req, res, next) {
         product: product,
       });
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 function postEditProduct(req, res, next) {
