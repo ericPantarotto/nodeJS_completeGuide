@@ -3480,7 +3480,8 @@ instead of `.catch(err => console.error(err));`, we will throw a new Error, whic
 
 **<span style='color:   #875c5c'>IMPORTANT:**  
 - Within synchronous places, so outside of callbacks and promises, when you throw an error and express will detect this and execute your next error handling middleware. 
-- Inside of async code, so inside of `then, catch or callbacks`, this does not work however. *Inside of that, you have to use `next()` with an error included.*
+- Inside of async code, so inside of `then, catch or callbacks`, this does not work however.  
+**Inside of that, you have to use `next(new Error(...))` with an error included.**
 So this is then detected by express again and this is what we used in the other files and inside of async code
 
 ```js
@@ -3509,6 +3510,29 @@ app.use((error, req, res, next) => {
   });
 });
 ```
-We create an infinite loop, as res.redirect sends a request, so we are going from one middlware to another. to solve this we have to `render ()` instead.
+**<span style='color: #bcdbf9'> Note:** We create an infinite loop, as res.redirect sends a request, so we are going from one middlware to another. to solve this we have to `render ()` instead.
 
-for async 
+## Http Response/Status Codes
+
+The codes are simply extra information we pass to the browser which helps the browser understand if an operation succeeded or not.
+
+- 2XX: Success
+- 3XX: Redirect
+- 4XX: Client-side error
+- 5XX: Server-side error
+
+**<span style='color: #bcdbf9'> Note:** if you don't set a status code, the default is *200*.
+
+**<span style='color:   #875c5c'>IMPORTANT:**  with restful APIs, where we don't return html (through `res.redirect()`, **which automatically sets a 300 status code**), but only data, for example, for our `postAddProduct()` success, we should return 300.
+
+Below would not make much sense as it would be overriden by a 300.
+```js
+function isAuthenticated(req, res, next) {
+  if (!req.session.isLoggedIn) return res.status(401).redirect('/login');
+  next();
+}
+```
+
+**<span style='color: #bcdbf9'> Note:** returning a 400 status code doesn't mean that the application crashed or that the request failed, we just pass an extra information to the client , and is a way to gracefully handle errors.
+
+**<span style='color: #ffe5c5'>Link:** [https://developer.mozilla.org/en-US/docs/Web/HTTP/Status](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
