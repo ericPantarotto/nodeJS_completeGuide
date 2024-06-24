@@ -3475,3 +3475,40 @@ instead of `.catch(err => console.error(err));`, we will throw a new Error, whic
 - if you got more than one error-handling middleware, they'll execute from top to bottom. just like the normal middlewares.
 - the Express.js middleware takes 4 arguments!
 - `error.httpStatusCode = 500;` is used if instead of always `res.redirect()`, we would render from our *error middleware* `res.status(error.httpStatusCode).render(...)`
+
+## 
+
+**<span style='color:   #875c5c'>IMPORTANT:**  
+- Within synchronous places, so outside of callbacks and promises, when you throw an error and express will detect this and execute your next error handling middleware. 
+- Inside of async code, so inside of `then, catch or callbacks`, this does not work however. *Inside of that, you have to use `next()` with an error included.*
+So this is then detected by express again and this is what we used in the other files and inside of async code
+
+```js
+app.use((req, res, next) => {
+  throw new Error('Sync Dummy');
+
+  User.findById(req.session.user?._id)
+    .then(user => {
+      throw new Error('Async Dummy');
+      user && (req.user = user);
+      next();
+    })
+    .catch(err => {
+      next(new Error(err));
+    });
+});
+
+app.use((error, req, res, next) => res.redirect('/500'));
+
+// solution
+app.use((error, req, res, next) => {
+  console.error(error);
+  res.status(500).render('500', {
+    pageTitle: 'Error!',
+    path: '/500',
+  });
+});
+```
+We create an infinite loop, as res.redirect sends a request, so we are going from one middlware to another. to solve this we have to `render ()` instead.
+
+for async 

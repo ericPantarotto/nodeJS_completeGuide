@@ -45,22 +45,24 @@ app.use(csrfProtection);
 
 app.use(flash());
 
-// HACK: this will be solving all mongoose model related issue, as session middleware doesn't fetch a full mongoose user object with all functions
-app.use((req, res, next) => {
-  User.findById(req.session.user?._id)
-    .then(user => {
-      user && (req.user = user);
-      next();
-    })
-    .catch(err => {
-      throw new Error(err);
-    });
-});
-
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();
   next();
+});
+
+// HACK: this will be solving all mongoose model related issue, as session middleware doesn't fetch a full mongoose user object with all functions
+app.use((req, res, next) => {
+  // throw new Error('Sync Dummy');
+  User.findById(req.session.user?._id)
+    .then(user => {
+      // throw new Error('Async Dummy');
+      user && (req.user = user);
+      next();
+    })
+    .catch(err => {
+      next(new Error(err));
+    });
 });
 
 app.use('/admin', adminRoutes.routes);
@@ -70,7 +72,13 @@ app.use(authRoutes);
 app.get('/500', errorController.get500);
 app.use(errorController.get404);
 
-app.use((error, req, res, next) => res.redirect('/500'));
+app.use((error, req, res, next) => {
+  console.error(error);
+  res.status(500).render('500', {
+    pageTitle: 'Error!',
+    path: '/500',
+  });
+});
 
 connect(process.env.MONGO_DB_URL)
   .then(_ => app.listen(3000))
