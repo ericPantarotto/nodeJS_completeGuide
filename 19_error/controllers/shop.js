@@ -10,7 +10,11 @@ function getProducts(req, res, next) {
         path: '/products',
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 function getProduct(req, res, next) {
@@ -23,7 +27,11 @@ function getProduct(req, res, next) {
         path: '/products',
       });
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 function getIndex(req, res, next) {
@@ -35,7 +43,11 @@ function getIndex(req, res, next) {
         path: '/',
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 function getCart(req, res, next) {
@@ -48,7 +60,11 @@ function getCart(req, res, next) {
         products: user.cart.items,
       });
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 function postCart(req, res, next) {
@@ -64,7 +80,11 @@ function postCartDeleteProduct(req, res, next) {
   req.user
     .removeFromCart(prodId)
     .then(_ => res.redirect('/cart'))
-    .catch(err => console.error(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 function getOrders(req, res, next) {
@@ -100,7 +120,11 @@ function postOrder(req, res, next) {
     })
     .then(_ => req.user.clearCart())
     .then(_ => res.redirect('/orders'))
-    .catch(err => console.error(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 export default {

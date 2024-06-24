@@ -33,7 +33,7 @@ function postAddProduct(req, res, next) {
 
   new Product({
     //HACK: to test 500 page
-    _id: ObjectId.createFromHexString('666417a11967e5424e491328'),
+    // _id: ObjectId.createFromHexString('666417a11967e5424e491328'),
     title: req.body.title,
     price: req.body.price,
     description: req.body.description,
@@ -113,7 +113,11 @@ function postEditProduct(req, res, next) {
         res.redirect('/admin/products');
       });
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 function postDeleteProduct(req, res, next) {
@@ -131,7 +135,11 @@ function postDeleteProduct(req, res, next) {
       }
       return res.redirect('/admin/products');
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 function getProducts(req, res, next) {
@@ -144,7 +152,11 @@ function getProducts(req, res, next) {
         path: '/admin/products',
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 export default {
