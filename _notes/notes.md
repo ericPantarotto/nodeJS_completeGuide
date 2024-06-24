@@ -3536,3 +3536,11 @@ function isAuthenticated(req, res, next) {
 **<span style='color: #bcdbf9'> Note:** returning a 400 status code doesn't mean that the application crashed or that the request failed, we just pass an extra information to the client , and is a way to gracefully handle errors.
 
 **<span style='color: #ffe5c5'>Link:** [https://developer.mozilla.org/en-US/docs/Web/HTTP/Status](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+
+## Wrap-up
+
+Global Express.js error handling middleware is called anytime you `throw new Error()` in synchronous code, or `next(new Error())` in asynchronous code.
+
+**<span style='color: #ffe5c5'>Link:** [https://expressjs.com/en/guide/error-handling.html](https://expressjs.com/en/guide/error-handling.html)
+
+![image info](./19_sc3.png)
