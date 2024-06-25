@@ -13,8 +13,10 @@ function getAddProduct(req, res, next) {
 function postAddProduct(req, res, next) {
   const editMode = req.query.edit;
   const errors = validationResult(req);
+
+  console.log(req.file);
   if (!errors.isEmpty()) {
-    console.log(errors.array());
+    // console.log(errors.array());
     return res.status(422).render('admin/edit-product', {
       pageTitle: 'Add Product',
       path: '/admin/edit-product',

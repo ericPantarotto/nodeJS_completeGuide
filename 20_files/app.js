@@ -6,6 +6,7 @@ import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
 import { connect } from 'mongoose';
+import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -31,6 +32,8 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(multer({ dest: 'images' }).single('image'));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({

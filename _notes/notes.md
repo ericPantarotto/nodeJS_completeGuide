@@ -3566,3 +3566,8 @@ And this basically means it tries to put all the data as text into its form body
 `<form class="product-form" action="/admin/<%= locals.editing ? 'edit-product' : 'add-product' %>" method="POST" enctype="multipart/form-data">`
 
 *application/x-www-form-url-encoded* is the default but now we'll switch to **multipart/form-data** which is simply the content type telling the server that this submission / request will not contain plaintext but will contain mixed data, text and binary data and multer, the package we just installed will be looking for incoming requests
+
+**<span style='color: #bcdbf9'> Note:**  
+- `multer` is some middleware which we execute on every incoming request and it then simply has a look at that request, sees if it's multipart form data and tries to extract files if that is the case.  
+- `app.use(multer({ dest: 'images' }).single('image'));`  
+instead of a buffer, by adding the option `dest`, our file is now saved on our saver (without extension though)
