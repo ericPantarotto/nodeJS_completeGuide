@@ -18,11 +18,16 @@
           value="<%= (locals.editing || locals.hasError) ? product.title : '' %>"
           class="<%= locals.hasError && (validationErrors.find(e => e.path === 'title') ? 'invalid' : '' ) %>">
       </div>
-      <div class="form-control">
+      <!-- <div class="form-control">
         <label for="imageUrl">Image URL</label>
         <input type="text" name="imageUrl" id="imageUrl" 
           value="<%= (locals.editing || locals.hasError) ? product.imageUrl : '' %>"
           class="<%= locals.hasError && (validationErrors.find(e => e.path === 'imageUrl') ? 'invalid' : '' ) %>">
+      </div> -->
+      <div class="form-control">
+        <label for="image">Image URL</label>
+        <input type="file" name="image" id="image" 
+          class="<%= locals.hasError && (validationErrors.find(e => e.path === 'image') ? 'invalid' : '' ) %>">
       </div>
       <div class="form-control">
         <label for="price">Price</label>
