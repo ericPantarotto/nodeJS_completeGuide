@@ -3544,3 +3544,25 @@ Global Express.js error handling middleware is called anytime you `throw new Err
 **<span style='color: #ffe5c5'>Link:** [https://expressjs.com/en/guide/error-handling.html](https://expressjs.com/en/guide/error-handling.html)
 
 ![image info](./19_sc3.png)
+
+# File Upload & Download
+
+## Handling Multipart Form Data
+
+**<span style='color: #a8c62c'>/app.js:**
+
+For extracting the content of our incoming requests, we set up a middleware in `app.js`, we're using a special middleware, this body parser middleware and this middleware uses or exposes a couple of different parsers and we're using the url encoded parser, and  url encoded data is basically text data.
+
+**<span style='color: #bcdbf9'> Note:** Dev Tools / Network / *Request* / Headers / Content-type : `application/x-www-form-urlencoded`
+
+And this basically means it tries to put all the data as text into its form body. But our file is binary data, and cannot be extracted as text, hence is empty
+
+**<span style='color:   #875c5c'>IMPORTANT:** `bodyparser` doesn not include any parser that could handle file data
+
+`npm i --save multer`, which is able to handle file data
+
+**<span style='color: #a8c62c'>/views/admin/edit-product.ejs:**
+
+`<form class="product-form" action="/admin/<%= locals.editing ? 'edit-product' : 'add-product' %>" method="POST" enctype="multipart/form-data">`
+
+*application/x-www-form-url-encoded* is the default but now we'll switch to **multipart/form-data** which is simply the content type telling the server that this submission / request will not contain plaintext but will contain mixed data, text and binary data and multer, the package we just installed will be looking for incoming requests

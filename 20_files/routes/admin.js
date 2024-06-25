@@ -17,7 +17,7 @@ router.post(
       .isLength({ min: 3 })
       .isString()
       .trim(),
-    body('imageUrl', 'Invalid URL').isURL(),
+    // body('imageUrl', 'Invalid URL').isURL(),
     body('price', 'Invalid price, format should be float').isFloat(),
     body(
       'description',
@@ -49,7 +49,7 @@ router.post(
       .isLength({ min: 3 })
       .isString()
       .trim(),
-    body('imageUrl', 'Invalid URL').isURL(),
+    // body('imageUrl', 'Invalid URL').isURL(),
     body('price', 'Invalid price, format should be float').isFloat(),
     body(
       'description',
