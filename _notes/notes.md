@@ -3571,3 +3571,21 @@ And this basically means it tries to put all the data as text into its form body
 - `multer` is some middleware which we execute on every incoming request and it then simply has a look at that request, sees if it's multipart form data and tries to extract files if that is the case.  
 - `app.use(multer({ dest: 'images' }).single('image'));`  
 instead of a buffer, by adding the option `dest`, our file is now saved on our saver (without extension though)
+
+## Configuring Multer to adjust filename & filePath
+
+**<span style='color: #a8c62c'>/app.js:**
+
+`multer.diskStorage()` has 3 parameters and last one is the callback function, to which we can pass
+- an errorMessage as first argument
+- the destination path
+
+we can also configure the file name, **<span style='color: #bcdbf9'> Note:**  Multer `file.fileName` is null if our file has already a name, so we use a third-party library to create a unique GUID.
+
+```js
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'images'), 
+  filename: (req, file, cb) =>
+    cb(null, uuidv4() + '-' + file.originalname), 
+});
+```

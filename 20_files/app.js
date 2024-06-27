@@ -9,6 +9,7 @@ import { connect } from 'mongoose';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { v4 as uuidv4 } from 'uuid';
 
 import errorController from './controllers/error.js';
 import User from './models/user.js';
@@ -28,11 +29,16 @@ const store = new MongoDBStore({
 
 const csrfProtection = csrf();
 
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'images'), 
+  filename: (req, file, cb) =>
+    cb(null, uuidv4() + '-' + file.originalname), 
+});
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(multer({ dest: 'images' }).single('image'));
+app.use(multer({ storage: fileStorage }).single('image'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
