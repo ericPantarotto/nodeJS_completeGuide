@@ -25,6 +25,12 @@ router.post(
     )
       .isLength({ min: 3, max: 200 })
       .trim(),
+    body('image').custom((value, { req }) => {
+      if (!req.file) {
+        throw new Error('Attached file is not an image.');
+      }
+      return true;
+    }),
   ],
   authMiddleware.isAuthenticated,
   adminController.postAddProduct

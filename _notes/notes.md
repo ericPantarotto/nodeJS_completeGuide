@@ -3589,3 +3589,11 @@ const fileStorage = multer.diskStorage({
     cb(null, uuidv4() + '-' + file.originalname), 
 });
 ```
+
+## Storing File Data in the Database
+
+Rather than putting the check in our file **<span style='color: #a8c62c'>/controllers/admin.js:** , I opt to use `express.validator` in file **<span style='color: #a8c62c'>/routes/admin.js:**
+
+**<span style='color: #bcdbf9'> Note:**   
+The file already gets stored on our file system and this is how you should store it, you should not store data like this in the database, files should not be stored in a database, they are too big, it's too inefficient to store them in a database and query them from there.  
+But of course you need to store something in a database, you need to store the path to the file in the database.

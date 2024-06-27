@@ -1,5 +1,4 @@
 import { validationResult } from 'express-validator';
-import { ObjectId } from 'mongodb';
 import Product from '../models/product.js';
 
 function getAddProduct(req, res, next) {
@@ -14,7 +13,23 @@ function postAddProduct(req, res, next) {
   const editMode = req.query.edit;
   const errors = validationResult(req);
 
-  console.log(req.file);
+  // if (!req.file) {
+  //   console.log(errors.array());
+  //   return res.status(422).render('admin/edit-product', {
+  //     pageTitle: 'Add Product',
+  //     path: '/admin/edit-product',
+  //     editing: editMode,
+  //     product: {
+  //       title: req.body.title,
+  //       price: req.body.price,
+  //       description: req.body.description,
+  //     },
+  //     hasError: true,
+  //     errorMessage: 'Attached file is not an image.',
+  //     validationErrors: errors.array(),
+  //   });
+  // }
+
   if (!errors.isEmpty()) {
     // console.log(errors.array());
     return res.status(422).render('admin/edit-product', {
@@ -25,7 +40,6 @@ function postAddProduct(req, res, next) {
         title: req.body.title,
         price: req.body.price,
         description: req.body.description,
-        imageUrl: req.body.imageUrl,
       },
       hasError: true,
       errorMessage: errors.array()[0].msg,
@@ -33,14 +47,15 @@ function postAddProduct(req, res, next) {
     });
   }
 
+  const imageUrl = req.file.path;
   new Product({
     //HACK: to test 500 page
     // _id: ObjectId.createFromHexString('666417a11967e5424e491328'),
     title: req.body.title,
     price: req.body.price,
     description: req.body.description,
-    imageUrl: req.body.imageUrl,
     userId: req.session.user,
+    imageUrl: imageUrl,
   })
     .save()
     .then(_ => {
@@ -93,7 +108,6 @@ function postEditProduct(req, res, next) {
         title: req.body.title,
         price: req.body.price,
         description: req.body.description,
-        imageUrl: req.body.imageUrl,
         _id: prodId,
       },
       hasError: true,
@@ -109,7 +123,7 @@ function postEditProduct(req, res, next) {
       product.title = req.body.title;
       product.price = req.body.price;
       product.description = req.body.description;
-      product.imageUrl = req.body.imageUrl;
+      req.file && (product.imageUrl = req.file.path);
       return product.save().then(_ => {
         console.log('UPDATED PRODUCT !!!');
         res.redirect('/admin/products');
