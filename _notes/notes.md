@@ -3629,3 +3629,11 @@ app.use('/iamges', express.static(path.join(__dirname, 'images')));
 ```js
 router.get('/orders/:orderId', authMiddleware.isAuthenticated, shopController.getInvoice); 
 ```
+
+## Setting File Type Headers
+
+```js
+res.setHeader('Content-Disposition', 'attachment; filename="' + invoiceName + '"');
+```
+
+**<span style='color: #bcdbf9'> Note:** you ca pass `inline` rather than `attachment` if you want to open in the browser (*Firefox* doesn't handle pdf as well as *Chrome*)
