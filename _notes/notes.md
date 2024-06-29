@@ -3650,3 +3650,9 @@ So reading file data into memory to serve it as a response is not really a good 
 - and you can use readable streams to pipe their output into a writable stream, not every object is a writable stream but the response happens to be one. So we can pipe our readable stream, the file stream into the response and that means that the response will be streamed to the browser and will contain the data and the data will basically be downloaded by the browser step by step and for large files
 - this is a huge advantage because node never has to pre-load all the data into memory but just streams it to the client on the fly and the most it has to store is one chunk of data.
 - and here we don't wait for all the chunks to come together and concatenate them into one object, instead we forward them to the browser which then is also able to concatenate the incoming data pieces into the final file.
+
+## Using PDFKit for .pdf Generation
+
+**<span style='color: #ffe5c5'>Link:** [https://pdfkit.org/](<https://expressjs.com/en/>)
+
+it's important to know that this documentation uses coffee script which is like a superset to javascript, it's not supported by node, it's just a tooling for writing your code, it's compiled back to a normal javascript and therefore this documentation can be a bit hard to read.
