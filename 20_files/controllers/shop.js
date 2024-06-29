@@ -1,5 +1,8 @@
+import fs from 'fs';
+import path from 'path';
 import Order from '../models/order.js';
 import Product from '../models/product.js';
+import rootDir from '../util/path.js';
 
 function getProducts(req, res, next) {
   Product.find()
@@ -127,6 +130,18 @@ function postOrder(req, res, next) {
     });
 }
 
+function getInvoice(req, res, next) {
+  const orderId = req.params.orderId;
+  const invoiceName = `invoice-${orderId}.pdf`;
+  console.log(invoiceName);
+  const invoicePath = path.join(rootDir, 'data', 'invoices', invoiceName);
+  console.log(invoicePath);
+  fs.readFile(invoicePath, (err, data) => {
+    if (err) return next(err);
+    res.send(data);
+  });
+}
+
 export default {
   getProducts,
   getIndex,
@@ -137,4 +152,5 @@ export default {
   postCart,
   postCartDeleteProduct,
   postOrder,
+  getInvoice,
 };

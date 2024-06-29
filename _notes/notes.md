@@ -3619,3 +3619,13 @@ we need to adjust and specify that if requests goes to `/images` then serve thes
 ```js
 app.use('/iamges', express.static(path.join(__dirname, 'images')));
 ```
+
+## Downloading Files with Authentication
+
+**<span style='color: #bcdbf9'> Note:** Since I want to handle the invoice privately, I need to set up my own route for working with invoices because that will then allow me to check for things like is the user authenticated and so on.
+
+**<span style='color: #a8c62c'>/routes/shop.js:**
+
+```js
+router.get('/orders/:orderId', authMiddleware.isAuthenticated, shopController.getInvoice); 
+```

@@ -26,6 +26,7 @@ router.post(
   shopController.postOrder
 );
 
+router.get('/orders/:orderId', authMiddleware.isAuthenticated, shopController.getInvoice); 
 // router.get('/checkout', shopController.getCheckout);
 
 export const expRouter = router;
