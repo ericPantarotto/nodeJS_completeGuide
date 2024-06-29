@@ -3597,3 +3597,25 @@ Rather than putting the check in our file **<span style='color: #a8c62c'>/contro
 **<span style='color: #bcdbf9'> Note:**   
 The file already gets stored on our file system and this is how you should store it, you should not store data like this in the database, files should not be stored in a database, they are too big, it's too inefficient to store them in a database and query them from there.  
 But of course you need to store something in a database, you need to store the path to the file in the database.
+
+## Serving Images Statically
+
+**Statically serving a folder simply means that requests to files in that folder will be handled automatically and the files will be returned**, so all the heavy lifting is done behind the scenes by *express.js* then
+
+**<span style='color: #a8c62c'>/app.js:**
+
+```js
+app.use(express.static(path.join(__dirname, 'images')));
+```
+
+we get a `404` response status when we request from:  
+- *host*: http://192.168.1.30:3000/
+- *filename*: images/f3e93aab-4748-4cfc-ab17-0f71dba9519c-3067513.png
+
+And the reason for that is that express assumes that the files in the images folder are served as if they were in the root folder, so **slash nothing**.
+
+we need to adjust and specify that if requests goes to `/images` then serve these files statically from `images` folder:
+
+```js
+app.use('/iamges', express.static(path.join(__dirname, 'images')));
+```
