@@ -3637,3 +3637,16 @@ res.setHeader('Content-Disposition', 'attachment; filename="' + invoiceName + '"
 ```
 
 **<span style='color: #bcdbf9'> Note:** you ca pass `inline` rather than `attachment` if you want to open in the browser (*Firefox* doesn't handle pdf as well as *Chrome*)
+
+## Streaming Data vs Preloading Data
+
+if you read a file `fs.readFile()`, node will first of all access that file, read the entire content into memory and then return it with the response.  
+This means that for bigger files, this will take very long before a response is sent and your memory on the server might actually overflow at some point for many incoming requests because it has to read all the data into memory which of course is limited.
+
+So reading file data into memory to serve it as a response is not really a good practice, for tiny files it might be ok but for bigger files, it certainly is not,
+
+**<span style='color:   #875c5c'>IMPORTANT:** 
+- Instead you should be streaming your response data
+- and you can use readable streams to pipe their output into a writable stream, not every object is a writable stream but the response happens to be one. So we can pipe our readable stream, the file stream into the response and that means that the response will be streamed to the browser and will contain the data and the data will basically be downloaded by the browser step by step and for large files
+- this is a huge advantage because node never has to pre-load all the data into memory but just streams it to the client on the fly and the most it has to store is one chunk of data.
+- and here we don't wait for all the chunks to come together and concatenate them into one object, instead we forward them to the browser which then is also able to concatenate the incoming data pieces into the final file.
