@@ -3656,3 +3656,7 @@ So reading file data into memory to serve it as a response is not really a good 
 **<span style='color: #ffe5c5'>Link:** [https://pdfkit.org/](<https://expressjs.com/en/>)
 
 it's important to know that this documentation uses coffee script which is like a superset to javascript, it's not supported by node, it's just a tooling for writing your code, it's compiled back to a normal javascript and therefore this documentation can be a bit hard to read.
+
+## Generating .PDF Files with Order Data
+
+Great features with *javascript node.js*  of writable and readable streams, where we are creating a pdf on the fly and we were streaming it both into a file and back to the client.
