@@ -3660,3 +3660,17 @@ it's important to know that this documentation uses coffee script which is like 
 ## Generating .PDF Files with Order Data
 
 Great features with *javascript node.js*  of writable and readable streams, where we are creating a pdf on the fly and we were streaming it both into a file and back to the client.
+
+## Deleting Files
+
+**<span style='color: #a8c62c'>/controllers/admin.js:**
+
+Below we don't wait for the deletion to complete but continue with the operation: a fire and forget.  
+otherwise we would need to use async, or pass a callback in our deleteFile function.
+
+```js
+if (req.file) {
+  fileHelper.deleteFile(product.imageUrl);
+  product.imageUrl = req.file.path;
+}
+```

@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import Product from '../models/product.js';
+import fileHelper from '../util/file.js';
 
 function getAddProduct(req, res, next) {
   // if (!req.session.isLoggedIn) return res.redirect('/login');
@@ -123,7 +124,13 @@ function postEditProduct(req, res, next) {
       product.title = req.body.title;
       product.price = req.body.price;
       product.description = req.body.description;
-      req.file && (product.imageUrl = req.file.path);
+
+      // req.file && (product.imageUrl = req.file.path);
+      if (req.file) {
+        fileHelper.deleteFile(product.imageUrl);
+        product.imageUrl = req.file.path;
+      }
+
       return product.save().then(_ => {
         console.log('UPDATED PRODUCT !!!');
         res.redirect('/admin/products');
@@ -138,9 +145,12 @@ function postEditProduct(req, res, next) {
 
 function postDeleteProduct(req, res, next) {
   const prodId = req.body.productId;
-
-  // Product.findByIdAndDelete(prodId)
-  Product.deleteOne({ _id: prodId, userId: req.user._id })
+  Product.findById(prodId)
+    .then(product => {
+      if (!product) return next(new Error('Product Not Found.'));
+      fileHelper.deleteFile(product.imageUrl);
+      return Product.deleteOne({ _id: prodId, userId: req.user._id }); //NOTE: avoiding a race condition
+    })
     .then(result => {
       if (result.deletedCount > 0) {
         console.log(result.deletedCount);
@@ -156,6 +166,24 @@ function postDeleteProduct(req, res, next) {
       error.httpStatusCode = 500;
       return next(error);
     });
+
+  // // Product.findByIdAndDelete(prodId)
+  // Product.deleteOne({ _id: prodId, userId: req.user._id })
+  //   .then(result => {
+  //     if (result.deletedCount > 0) {
+  //       console.log(result.deletedCount);
+  //       console.log('DESTROYED PRODUCT in Products Collection!');
+  //       Promise.resolve(req.user.removeFromCart(prodId)).then(_ => {
+  //         console.log('DESTROYED PRODUCTin User Collection (cart.items)!');
+  //       });
+  //     }
+  //     return res.redirect('/admin/products');
+  //   })
+  //   .catch(err => {
+  //     const error = new Error(err);
+  //     error.httpStatusCode = 500;
+  //     return next(error);
+  //   });
 }
 
 function getProducts(req, res, next) {
