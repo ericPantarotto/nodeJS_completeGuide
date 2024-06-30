@@ -3674,3 +3674,8 @@ if (req.file) {
   product.imageUrl = req.file.path;
 }
 ```
+
+## Links
+
+**<span style='color: #ffe5c5'>Link:**
+[https://medium.freecodecamp.org/node-js-streams-everything-you-need-to-know-c9141306be93](https://medium.freecodecamp.org/node-js-streams-everything-you-need-to-know-c9141306be93)
