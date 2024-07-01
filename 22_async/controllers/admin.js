@@ -143,8 +143,8 @@ function postEditProduct(req, res, next) {
     });
 }
 
-function postDeleteProduct(req, res, next) {
-  const prodId = req.body.productId;
+function deleteProduct(req, res, next) {
+  const prodId = req.params.productId;
   Product.findById(prodId)
     .then(product => {
       if (!product) return next(new Error('Product Not Found.'));
@@ -159,32 +159,60 @@ function postDeleteProduct(req, res, next) {
           console.log('DESTROYED PRODUCTin User Collection (cart.items)!');
         });
       }
-      return res.redirect('/admin/products');
+      // return res.redirect('/admin/products');
+      return res.status(200).json({message: 'Success!'});
     })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
-
-  // // Product.findByIdAndDelete(prodId)
-  // Product.deleteOne({ _id: prodId, userId: req.user._id })
-  //   .then(result => {
-  //     if (result.deletedCount > 0) {
-  //       console.log(result.deletedCount);
-  //       console.log('DESTROYED PRODUCT in Products Collection!');
-  //       Promise.resolve(req.user.removeFromCart(prodId)).then(_ => {
-  //         console.log('DESTROYED PRODUCTin User Collection (cart.items)!');
-  //       });
-  //     }
-  //     return res.redirect('/admin/products');
-  //   })
-  //   .catch(err => {
-  //     const error = new Error(err);
-  //     error.httpStatusCode = 500;
-  //     return next(error);
-  //   });
+    .catch(_ => res.status(500).json({ message: 'Deleting product failed.' }));
+  
+  // .catch(err => {
+  //   const error = new Error(err);
+  //   error.httpStatusCode = 500;
+  //   return next(error);
+  // });
 }
+
+// function postDeleteProduct(req, res, next) {
+//   const prodId = req.body.productId;
+//   Product.findById(prodId)
+//     .then(product => {
+//       if (!product) return next(new Error('Product Not Found.'));
+//       fileHelper.deleteFile(product.imageUrl);
+//       return Product.deleteOne({ _id: prodId, userId: req.user._id }); //NOTE: avoiding a race condition
+//     })
+//     .then(result => {
+//       if (result.deletedCount > 0) {
+//         console.log(result.deletedCount);
+//         console.log('DESTROYED PRODUCT in Products Collection!');
+//         Promise.resolve(req.user.removeFromCart(prodId)).then(_ => {
+//           console.log('DESTROYED PRODUCTin User Collection (cart.items)!');
+//         });
+//       }
+//       return res.redirect('/admin/products');
+//     })
+//     .catch(err => {
+//       const error = new Error(err);
+//       error.httpStatusCode = 500;
+//       return next(error);
+//     });
+
+//   // // Product.findByIdAndDelete(prodId)
+//   // Product.deleteOne({ _id: prodId, userId: req.user._id })
+//   //   .then(result => {
+//   //     if (result.deletedCount > 0) {
+//   //       console.log(result.deletedCount);
+//   //       console.log('DESTROYED PRODUCT in Products Collection!');
+//   //       Promise.resolve(req.user.removeFromCart(prodId)).then(_ => {
+//   //         console.log('DESTROYED PRODUCTin User Collection (cart.items)!');
+//   //       });
+//   //     }
+//   //     return res.redirect('/admin/products');
+//   //   })
+//   //   .catch(err => {
+//   //     const error = new Error(err);
+//   //     error.httpStatusCode = 500;
+//   //     return next(error);
+//   //   });
+// }
 
 function getProducts(req, res, next) {
   // Product.find()
@@ -209,5 +237,6 @@ export default {
   getProducts,
   getEditProduct,
   postEditProduct,
-  postDeleteProduct,
+  // postDeleteProduct,
+  deleteProduct
 };

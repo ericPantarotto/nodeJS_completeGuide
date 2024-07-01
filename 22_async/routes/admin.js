@@ -68,10 +68,16 @@ router.post(
   adminController.postEditProduct
 );
 
-router.post(
-  '/delete-product',
+// router.post(
+//   '/delete-product',
+//   authMiddleware.isAuthenticated,
+//   adminController.postDeleteProduct
+// );
+
+router.delete(
+  '/product/:productId',
   authMiddleware.isAuthenticated,
-  adminController.postDeleteProduct
+  adminController.deleteProduct
 );
 
 export default {
