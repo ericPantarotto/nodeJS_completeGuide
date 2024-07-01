@@ -3715,3 +3715,6 @@ And that allows you to do some work behind the scenes without interrupting the u
 ## Wrap-up
 
 The important thing here is that you can send data to your backend with these asynchronous requests and how you can include data and how you can handle that on the backend.
+
+**<span style='color: #ffe5c5'>Link:**
+[https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data)
