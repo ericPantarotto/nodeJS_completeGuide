@@ -3687,3 +3687,22 @@ if (req.file) {
 **<span style='color: #bcdbf9'> Note:**  
 - It's important for you to understand that since find uses a cursor, it does only retrieve the items you need. Count documents does not retrieve all, it only counts them which is faster than retrieving them. 
 - skip and limit are managed by *mongodb* in a way that you only transfer the items over the wire which you really need, so this is **not doing some server-side filtering of the data, it really filters it on the database server already.**
+
+# Async Requests
+
+## What are Async Requests?
+
+Typically, you send a request from your client to the server and you get back a response, thus far in this course, the response always was a html page or a redirect to another route that then returned a html page.
+
+There are tasks where you don't want to reload the page just to for example delete an item and actually in modern web applications, the portion that happens behind the scenes grows since we can do a lot with javascript in the browser where we never need to fetch a new html page, but where we constantly change the existing page as this is faster than loading a new one.
+
+Now the idea behind asynchronous requests is:
+- you send the request but that request typically contains just some data in a special format named `json`  
+- that data is sent to the server, to a certain url or a route accepted by that server,
+- The server can do whatever it wants to do with that
+- and then we return a response and that response is also returned behind the scenes, so it's not a new html page that needs to be rendered, it's instead again just some data in that `json` format typically.
+
+**<span style='color:   #875c5c'>IMPORTANT:** that is how client-server can communicate through javascript, so through client side javascript and the server side logic without reloading or rebuilding the page, without exchanging a new html page.  
+And that allows you to do some work behind the scenes without interrupting the user flow, without reloading the page.
+
+![image info](./22_sc1.png)
