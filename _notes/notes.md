@@ -3679,3 +3679,11 @@ if (req.file) {
 
 **<span style='color: #ffe5c5'>Link:**
 [https://medium.freecodecamp.org/node-js-streams-everything-you-need-to-know-c9141306be93](https://medium.freecodecamp.org/node-js-streams-everything-you-need-to-know-c9141306be93)
+
+# Adding Pagination
+
+## Wrap-up
+
+**<span style='color: #bcdbf9'> Note:**  
+- It's important for you to understand that since find uses a cursor, it does only retrieve the items you need. Count documents does not retrieve all, it only counts them which is faster than retrieving them. 
+- skip and limit are managed by *mongodb* in a way that you only transfer the items over the wire which you really need, so this is **not doing some server-side filtering of the data, it really filters it on the database server already.**
