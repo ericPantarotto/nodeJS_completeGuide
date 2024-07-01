@@ -3711,3 +3711,7 @@ And that allows you to do some work behind the scenes without interrupting the u
 
 **<span style='color: #ffe5c5'>Link:**
 [https://www.json.org/](https://www.json.org/)
+
+## Wrap-up
+
+The important thing here is that you can send data to your backend with these asynchronous requests and how you can include data and how you can handle that on the backend.
