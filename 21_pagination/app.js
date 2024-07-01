@@ -64,6 +64,7 @@ app.use(flash());
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.userName = req.session.user?.email;
   res.locals.csrfToken = req.csrfToken();
   next();
 });

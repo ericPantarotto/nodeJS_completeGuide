@@ -50,7 +50,11 @@
       <li class="main-header__item">
         <form action="/logout" method="post">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-          <button type="submit">Logout</button>
+           <div class="m-4">
+             <button type="submit" class="btn btn-primary position-relative">Logout
+              <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"><%= userName %></span>
+             </button>
+           </div>
         </form>
       </li>
       <% } %>
