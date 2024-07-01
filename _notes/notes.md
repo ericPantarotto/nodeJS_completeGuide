@@ -3706,3 +3706,8 @@ Now the idea behind asynchronous requests is:
 And that allows you to do some work behind the scenes without interrupting the user flow, without reloading the page.
 
 ![image info](./22_sc1.png)
+
+## JSON Data Format
+
+**<span style='color: #ffe5c5'>Link:**
+[https://www.json.org/](https://www.json.org/)
