@@ -5,6 +5,8 @@ import Order from '../models/order.js';
 import Product from '../models/product.js';
 import rootDir from '../util/path.js';
 
+const ITEMS_PER_PAGE = process.env.ITEMS_PER_PAGE;
+
 function getProducts(req, res, next) {
   Product.find()
     .then(products => {
@@ -39,7 +41,11 @@ function getProduct(req, res, next) {
 }
 
 function getIndex(req, res, next) {
+  const page = req.query.page;
+
   Product.find()
+    .skip((page - 1) * ITEMS_PER_PAGE)
+    .limit(ITEMS_PER_PAGE)
     .then(products => {
       res.render('shop/index', {
         prods: products,
