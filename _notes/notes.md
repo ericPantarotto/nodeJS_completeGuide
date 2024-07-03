@@ -3718,3 +3718,11 @@ The important thing here is that you can send data to your backend with these as
 
 **<span style='color: #ffe5c5'>Link:**
 [https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data)
+
+# Adding Payments
+
+**<span style='color: #ffe5c5'>Link:** [https://docs.stripe.com/payments/checkout/migrating-prices](https://docs.stripe.com/payments/checkout/migrating-prices)
+
+**<span style='color: #ffe5c5'>Link:** [https://docs.stripe.com/checkout/quickstart](https://docs.stripe.com/checkout/quickstart)
+
+**<span style='color: #ffe5c5'>Link:** [https://docs.stripe.com/api](https://docs.stripe.com/api)

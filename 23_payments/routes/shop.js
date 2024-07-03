@@ -19,14 +19,16 @@ router.post(
 );
 
 router.get('/orders', authMiddleware.isAuthenticated, shopController.getOrders);
-router.post(
-  '/create-order',
-  authMiddleware.isAuthenticated,
-  shopController.postOrder
-);
+// router.post(
+//   '/create-order',
+//   authMiddleware.isAuthenticated,
+//   shopController.postOrder
+// );
 
 router.get('/orders/:orderId', authMiddleware.isAuthenticated, shopController.getInvoice); 
 
 router.get('/checkout', shopController.getCheckout);
+router.get('/checkout/success', shopController.getCheckoutSuccess); 
+router.get('/checkout/cancel', shopController.getCheckout);
 
 export const expRouter = router;
