@@ -12,7 +12,6 @@ router.get('/products/:productId', shopController.getProduct);
 
 router.get('/cart', authMiddleware.isAuthenticated, shopController.getCart);
 router.post('/cart', authMiddleware.isAuthenticated, shopController.postCart);
-
 router.post(
   '/cart-delete-item',
   authMiddleware.isAuthenticated,
@@ -27,6 +26,7 @@ router.post(
 );
 
 router.get('/orders/:orderId', authMiddleware.isAuthenticated, shopController.getInvoice); 
-// router.get('/checkout', shopController.getCheckout);
+
+router.get('/checkout', shopController.getCheckout);
 
 export const expRouter = router;
