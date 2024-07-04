@@ -3726,3 +3726,35 @@ The important thing here is that you can send data to your backend with these as
 **<span style='color: #ffe5c5'>Link:** [https://docs.stripe.com/checkout/quickstart](https://docs.stripe.com/checkout/quickstart)
 
 **<span style='color: #ffe5c5'>Link:** [https://docs.stripe.com/api](https://docs.stripe.com/api)
+
+# Working with REST APIS - Basics
+
+## CORS Errors
+
+**<span style='color: #ffe5c5'>Link:** [https://codepen.io/ericpython1980/pen/xxoKRLx](https://codepen.io/ericpython1980/pen/xxoKRLx)
+
+if we simulate an SPA via codepen , and try to reach to our server `localhost`, we get a CORS error, cause we can't share resources acroos domains/servers/origins.
+
+**<span style='color:   #875c5c'>IMPORTANT:** *Access to fetch at 'http://localhost:8080/feed/posts' from origin 'https://cdpn.io' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.*
+
+![image info](./24_sc1.png)
+
+you can only solve such error on the **server** by setting special setters on any response leaving our *node.js* server, not on the browser!
+
+
+**<span style='color: #bcdbf9'> Note:**  instead of passing a `*`, you can specify each domain with coma separation: *'codepen,google'*
+```js
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+})
+```
+
+![image info](./24_sc2.png)
+
+**<span style='color: #bcdbf9'> Note:** Browsers and mobile App send an **options** request.
+
+The browser simply goes ahead and checks whether the request you plan to send will be allowed otherwise it will throw an error.
+
+## Wrap-up
+
+![image info](./24_sc3.png)
