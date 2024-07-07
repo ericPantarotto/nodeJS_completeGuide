@@ -3758,3 +3758,9 @@ The browser simply goes ahead and checks whether the request you plan to send wi
 ## Wrap-up
 
 ![image info](./24_sc3.png)
+
+# Working with REST APIs - Practical Application
+
+## Adding Server Side Validation
+
+You can find the server error message under *Firefox Browser Tools*, by clicking on the `422` response satus message / Response / json.
