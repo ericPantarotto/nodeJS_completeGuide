@@ -11,8 +11,10 @@
   "author": "ecr",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
+    "mongoose": "^8.4.5",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
