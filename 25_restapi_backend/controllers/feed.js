@@ -1,6 +1,5 @@
 import { validationResult } from 'express-validator';
-import { v4 as uuidv4 } from 'uuid';
-
+import Post from '../models/post.js';
 function getPosts(req, res, next) {
   res.status(200).json({
     posts: [
@@ -26,21 +25,28 @@ function createPost(req, res, next) {
       errors: errors.array(),
     });
   }
-  
+
   const title = req.body.title;
   const content = req.body.content;
 
-  res.status(201).json({
-    message: 'Post created succesfully',
-    post: {
-      _id: uuidv4(),
-      title: title,
-      content: content,
-      creator: { name: 'Eric' },
-      createdAt: new Date(),
-    },
+  const post = new Post({
+    title: title,
+    content: content,
+    imageUrl: 'images/duck.jpg',
+    creator: { name: 'Eric' },
   });
+
+  post
+    .save()
+    .then(result =>
+      res.status(201).json({
+        message: 'Post created successfully',
+        post: result,
+      })
+    )
+    .catch(err => console.error(err));
 }
+
 export default {
   getPosts,
   createPost,
