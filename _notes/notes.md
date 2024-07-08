@@ -3764,3 +3764,41 @@ The browser simply goes ahead and checks whether the request you plan to send wi
 ## Adding Server Side Validation
 
 You can find the server error message under *Firefox Browser Tools*, by clicking on the `422` response satus message / Response / json.
+
+## Error Handling
+
+**<span style='color: #a8c62c'>/controllers/feed.js:**
+
+```js
+function createPost(req, res, next) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    throw error;
+  }
+
+ post
+    .save()
+    .then(result =>
+      res.status(201).json({
+        message: 'Post created successfully',
+        post: result,
+      })
+    )
+    .catch(err => {
+      !err.statusCode && (err.statusCode = 500);
+      next(err);
+    });
+}
+```
+
+**<span style='color: #bcdbf9'> Note:**
+
+Now what does throwing an error do here?
+
+Since we are not in an asynchronous code snippet, it will automatically exit the function execution and instead try to reach the next error handling function or error handling middleware provided in the **express application.**
+
+Inside of a promise chain / async code snippet, throwing an error will not do the trick, this will not reach the next error handling middleware.
+
+Instead you have to use the `next()` function  and pass the error to it and this will now go and reach the next error handling express middleware.

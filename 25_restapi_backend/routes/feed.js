@@ -1,5 +1,5 @@
-import { body } from 'express-validator';
 import { Router } from 'express';
+import { body } from 'express-validator';
 import feedController from '../controllers/feed.js';
 
 const router = Router();
