@@ -20,6 +20,8 @@ router.post(
   feedController.createPost
 );
 
+router.get('/post/:postId', feedController.getPost)
+
 export default {
   routes: router,
 };

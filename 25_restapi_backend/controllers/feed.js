@@ -1,20 +1,18 @@
 import { validationResult } from 'express-validator';
 import Post from '../models/post.js';
+
 function getPosts(req, res, next) {
-  res.status(200).json({
-    posts: [
-      {
-        _id: '1',
-        title: 'First Post',
-        content: 'this is the first post!',
-        imageUrl: 'images/duck.jpg',
-        creator: {
-          name: 'Eric',
-        },
-        createdAt: new Date(),
-      },
-    ],
-  });
+  Post.find()
+    .then(posts =>
+      res.status(200).json({
+        message: 'Fetched posts successfully.',
+        posts: posts,
+      })
+    )
+    .catch(err => {
+      !err.statusCode && (err.statusCode = 500);
+      next(err);
+    });
 }
 
 function createPost(req, res, next) {
@@ -49,7 +47,25 @@ function createPost(req, res, next) {
     });
 }
 
+function getPost(req, res, next) {
+  Post.findById(req.params.postId)
+    .then(post => {
+      if (!post) {
+        const error = new Error('Could not find post.');
+        error.statusCode = 404;
+        throw error;
+      }
+
+      res.status(200).json({ message: 'Post fetched', post: post });
+    })
+    .catch(err => {
+      !err.statusCode && (err.statusCode = 500);
+      next(err);
+    });
+}
+
 export default {
   getPosts,
   createPost,
+  getPost,
 };

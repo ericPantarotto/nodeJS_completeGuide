@@ -3323,7 +3323,7 @@ it means that `req.user.id` === `req.user._id.toString()`
 
 ![image info](./18_sc1.png)
 
-## How to Validate ? 
+## How to Validate ?
 
 **<span style='color: #bcdbf9'> Note:** **Javascript client-side** validation is optional because, so javascript code that runs in the browser, the user can see that code, the user could change that code and the user can of course disable javascript.
 
@@ -3343,7 +3343,7 @@ So this is not a protection that secures you against incorrect data being sent t
 
 Typically you want to validate on your *post or your non-get routes* because you want to validate whenever the user sends data and that is not the case for our get routes.
 
-```js 
+```js
 router.post('/signup', check('email').isEmail(), authController.postSignup);
 ```
 
@@ -3351,7 +3351,7 @@ router.post('/signup', check('email').isEmail(), authController.postSignup);
 
 What this will now do is it will use this package to check the email field on the incoming request and it looks for that field in the body, in the query parameters, in the headers and in the cookies and it finds that field and then checks if that is a valid email address and that is the first step.
 
-in the controller, I can now simply extract my errors and store them in a constant, 
+in the controller, I can now simply extract my errors and store them in a constant,
 
 **<span style='color: #a8c62c'>/controllers/auth.js:**
 
@@ -3366,7 +3366,7 @@ To test our server-side validation, we need to disable the default browser / cli
 
 ## Built-in & Custom Validators
 
-`express-validator` is a wrapper around the `validator.js` validator, so that's another package that was implicitly installed with express-validator. 
+`express-validator` is a wrapper around the `validator.js` validator, so that's another package that was implicitly installed with express-validator.
 
 And in the docs of *validator.js*, which is a different package which was installed, you'll find all the built-in validators.
 
@@ -3377,6 +3377,7 @@ And in the docs of *validator.js*, which is a different package which was instal
 ## More Validators
 
 **<span style='color: #bcdbf9'> Note:**  
+
 - you can encapsulate all your check in your *route.js* file in `[]`
 - if you use `check()`, the particular field will be checked in the cookies, the headers, the body ...
 - or you can be more specific and use `body()` to only validate a field from the body of the request
@@ -3416,7 +3417,7 @@ This should be done as part of our validation!
 
 ## Errors - Some Theory
 
-`throw new Error()` is shipped by **Node.js**, that is a built-in functionality. 
+`throw new Error()` is shipped by **Node.js**, that is a built-in functionality.
 
 This is an *unhandled error.*
 
@@ -3427,6 +3428,7 @@ This is an *unhandled error.*
 You might remember cases where I did something and we got stuck and that refresh icon in the browser kept on spinning and nothing happened, that was because our server crashed because we had an error which we did not handle.
 
 ### Handling these unhandled errors
+
 - for **synchronous code** (no interaction with files, database, no request sent), such code can be wrapped with `try-catch` block.  
 **<span style='color:   #875c5c'>IMPORTANT:** the code after the `catch` block would still execute, so our server doesn't crash anymore, we are handling gracefully these errors
 - for **synchronous code**, we also have async operations that can fail of course and such operations when using promises are handled with 'then and catch' blocks.  
@@ -3436,7 +3438,7 @@ You might remember cases where I did something and we got stuck and that refresh
 
 **<span style='color: #a8c62c'>/app.js:**
 
-```js 
+```js
 app.use((req, res, next) => {
   User.findById(req.session.user?._id)
     .then(user => {
@@ -3448,10 +3450,12 @@ app.use((req, res, next) => {
 ```
 
 **<span style='color:   #875c5c'>IMPORTANT:** this catch block will not fire if I don't find the user with this ID, *it will only fire if there are any technical issues*,  
-- if the database is down 
+
+- if the database is down
 - -or if the user of this app does not have sufficient permissions to execute this action.
 
 instead of `.catch(err => console.error(err));`, we will throw a new Error, which has a significant advantage, *express.js gives us a way of taking care of such errors.*
+
 ```js
 .catch(err => {
       throw new Error(err);
@@ -3469,17 +3473,20 @@ instead of `.catch(err => console.error(err));`, we will throw a new Error, whic
   return next(error);
 });
 ```
+
 **<span style='color:   #875c5c'>IMPORTANT:** when we call `next()` *with an error passed as an argument*, then we actually let express know that an error occurred and it will skip all other middlewares and move right away to an error handling middleware.
 
 **<span style='color: #bcdbf9'> Note:**  
+
 - if you got more than one error-handling middleware, they'll execute from top to bottom. just like the normal middlewares.
 - the Express.js middleware takes 4 arguments!
 - `error.httpStatusCode = 500;` is used if instead of always `res.redirect()`, we would render from our *error middleware* `res.status(error.httpStatusCode).render(...)`
 
-## 
+##
 
 **<span style='color:   #875c5c'>IMPORTANT:**  
-- Within synchronous places, so outside of callbacks and promises, when you throw an error and express will detect this and execute your next error handling middleware. 
+
+- Within synchronous places, so outside of callbacks and promises, when you throw an error and express will detect this and execute your next error handling middleware.
 - Inside of async code, so inside of `then, catch or callbacks`, this does not work however.  
 **Inside of that, you have to use `next(new Error(...))` with an error included.**
 So this is then detected by express again and this is what we used in the other files and inside of async code
@@ -3510,6 +3517,7 @@ app.use((error, req, res, next) => {
   });
 });
 ```
+
 **<span style='color: #bcdbf9'> Note:** We create an infinite loop, as res.redirect sends a request, so we are going from one middlware to another. to solve this we have to `render ()` instead.
 
 ## Http Response/Status Codes
@@ -3526,6 +3534,7 @@ The codes are simply extra information we pass to the browser which helps the br
 **<span style='color:   #875c5c'>IMPORTANT:**  with restful APIs, where we don't return html (through `res.redirect()`, **which automatically sets a 300 status code**), but only data, for example, for our `postAddProduct()` success, we should return 300.
 
 Below would not make much sense as it would be overriden by a 300.
+
 ```js
 function isAuthenticated(req, res, next) {
   if (!req.session.isLoggedIn) return res.status(401).redirect('/login');
@@ -3568,6 +3577,7 @@ And this basically means it tries to put all the data as text into its form body
 *application/x-www-form-url-encoded* is the default but now we'll switch to **multipart/form-data** which is simply the content type telling the server that this submission / request will not contain plaintext but will contain mixed data, text and binary data and multer, the package we just installed will be looking for incoming requests
 
 **<span style='color: #bcdbf9'> Note:**  
+
 - `multer` is some middleware which we execute on every incoming request and it then simply has a look at that request, sees if it's multipart form data and tries to extract files if that is the case.  
 - `app.use(multer({ dest: 'images' }).single('image'));`  
 instead of a buffer, by adding the option `dest`, our file is now saved on our saver (without extension though)
@@ -3577,6 +3587,7 @@ instead of a buffer, by adding the option `dest`, our file is now saved on our s
 **<span style='color: #a8c62c'>/app.js:**
 
 `multer.diskStorage()` has 3 parameters and last one is the callback function, to which we can pass
+
 - an errorMessage as first argument
 - the destination path
 
@@ -3594,7 +3605,7 @@ const fileStorage = multer.diskStorage({
 
 Rather than putting the check in our file **<span style='color: #a8c62c'>/controllers/admin.js:** , I opt to use `express.validator` in file **<span style='color: #a8c62c'>/routes/admin.js:**
 
-**<span style='color: #bcdbf9'> Note:**   
+**<span style='color: #bcdbf9'> Note:**
 The file already gets stored on our file system and this is how you should store it, you should not store data like this in the database, files should not be stored in a database, they are too big, it's too inefficient to store them in a database and query them from there.  
 But of course you need to store something in a database, you need to store the path to the file in the database.
 
@@ -3609,7 +3620,8 @@ app.use(express.static(path.join(__dirname, 'images')));
 ```
 
 we get a `404` response status when we request from:  
-- *host*: http://192.168.1.30:3000/
+
+- *host*: <http://192.168.1.30:3000/>
 - *filename*: images/f3e93aab-4748-4cfc-ab17-0f71dba9519c-3067513.png
 
 And the reason for that is that express assumes that the files in the images folder are served as if they were in the root folder, so **slash nothing**.
@@ -3617,7 +3629,7 @@ And the reason for that is that express assumes that the files in the images fol
 we need to adjust and specify that if requests goes to `/images` then serve these files statically from `images` folder:
 
 ```js
-app.use('/iamges', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 ```
 
 ## Downloading Files with Authentication
@@ -3645,7 +3657,8 @@ This means that for bigger files, this will take very long before a response is 
 
 So reading file data into memory to serve it as a response is not really a good practice, for tiny files it might be ok but for bigger files, it certainly is not,
 
-**<span style='color:   #875c5c'>IMPORTANT:** 
+**<span style='color:   #875c5c'>IMPORTANT:**
+
 - Instead you should be streaming your response data
 - and you can use readable streams to pipe their output into a writable stream, not every object is a writable stream but the response happens to be one. So we can pipe our readable stream, the file stream into the response and that means that the response will be streamed to the browser and will contain the data and the data will basically be downloaded by the browser step by step and for large files
 - this is a huge advantage because node never has to pre-load all the data into memory but just streams it to the client on the fly and the most it has to store is one chunk of data.
@@ -3685,7 +3698,8 @@ if (req.file) {
 ## Wrap-up
 
 **<span style='color: #bcdbf9'> Note:**  
-- It's important for you to understand that since find uses a cursor, it does only retrieve the items you need. Count documents does not retrieve all, it only counts them which is faster than retrieving them. 
+
+- It's important for you to understand that since find uses a cursor, it does only retrieve the items you need. Count documents does not retrieve all, it only counts them which is faster than retrieving them.
 - skip and limit are managed by *mongodb* in a way that you only transfer the items over the wire which you really need, so this is **not doing some server-side filtering of the data, it really filters it on the database server already.**
 
 # Async Requests
@@ -3697,6 +3711,7 @@ Typically, you send a request from your client to the server and you get back a 
 There are tasks where you don't want to reload the page just to for example delete an item and actually in modern web applications, the portion that happens behind the scenes grows since we can do a lot with javascript in the browser where we never need to fetch a new html page, but where we constantly change the existing page as this is faster than loading a new one.
 
 Now the idea behind asynchronous requests is:
+
 - you send the request but that request typically contains just some data in a special format named `json`  
 - that data is sent to the server, to a certain url or a route accepted by that server,
 - The server can do whatever it wants to do with that
@@ -3735,14 +3750,14 @@ The important thing here is that you can send data to your backend with these as
 
 if we simulate an SPA via codepen , and try to reach to our server `localhost`, we get a CORS error, cause we can't share resources acroos domains/servers/origins.
 
-**<span style='color:   #875c5c'>IMPORTANT:** *Access to fetch at 'http://localhost:8080/feed/posts' from origin 'https://cdpn.io' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.*
+**<span style='color:   #875c5c'>IMPORTANT:** *Access to fetch at '<http://localhost:8080/feed/posts>' from origin '<https://cdpn.io>' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.*
 
 ![image info](./24_sc1.png)
 
 you can only solve such error on the **server** by setting special setters on any response leaving our *node.js* server, not on the browser!
 
-
 **<span style='color: #bcdbf9'> Note:**  instead of passing a `*`, you can specify each domain with coma separation: *'codepen,google'*
+
 ```js
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
