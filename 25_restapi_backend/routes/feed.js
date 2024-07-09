@@ -16,11 +16,17 @@ router.post(
       .trim()
       .isLength({ min: 5 })
       .isString(),
+    body('image').custom((value, { req }) => {
+      if (!req.file) {
+        throw new Error('Attached file is not an image.');
+      }
+      return true;
+    }),
   ],
   feedController.createPost
 );
 
-router.get('/post/:postId', feedController.getPost)
+router.get('/post/:postId', feedController.getPost);
 
 export default {
   routes: router,

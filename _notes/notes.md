@@ -3817,3 +3817,16 @@ Since we are not in an asynchronous code snippet, it will automatically exit the
 Inside of a promise chain / async code snippet, throwing an error will not do the trick, this will not reach the next error handling middleware.
 
 Instead you have to use the `next()` function  and pass the error to it and this will now go and reach the next error handling express middleware.
+
+
+**Frontend**: **<span style='color: #a8c62c'>/src/Feed/feed.js:**
+
+we can't use `json` for data where we have both a file and normal text data, instead we'll again use `form` data.
+
+We did use form data automatically when earlier in the course where we had a traditional app with rendered views, when we used a form with this multipart form (form html element).
+
+we can create a new form data object with a built-in object that browser side javascript offers, the `formData` object.
+
+**<span style='color: #bcdbf9'> Note:**
+
+We should not set the header to application json anymore because that would be incorrect and would break our app because we would try to parse it incorrectly on the server side, instead the form data will automatically set the headers, that is kind of convenient.

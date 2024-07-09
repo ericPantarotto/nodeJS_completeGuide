@@ -50,7 +50,13 @@ class Feed extends Component {
       page--;
       this.setState({ postPage: page });
     }
-    fetch('http://192.168.1.30:8080/feed/posts')
+    fetch(
+      `${
+        navigator.userAgent.indexOf('Win') !== -1
+          ? 'http://localhost:8080/feed/posts'
+          : 'http://192.168.1.30:8080/feed/posts'
+      }`
+    )
       .then(res => {
         if (res.status !== 200) {
           throw new Error('Failed to fetch posts.');
@@ -106,7 +112,18 @@ class Feed extends Component {
       editLoading: true
     });
     // Set up data (with image!)
-    let url = 'http://192.168.1.30:8080/feed/post';
+    const formData = new FormData();
+    formData.append('title', postData.title);
+    formData.append('content', postData.content);
+    formData.append('image', postData.image);
+
+    // let url = 'http://192.168.1.30:8080/feed/post';
+    // let url = 'http://localhost:8080/feed/post';
+    let url = `${
+      navigator.userAgent.indexOf('Win') !== -1
+        ? 'http://localhost:8080/feed/posts'
+        : 'http://192.168.1.30:8080/feed/posts'
+    }`;
     let method = 'POST';
     if (this.state.editPost) {
       url = 'URL';
@@ -114,11 +131,7 @@ class Feed extends Component {
 
     fetch(url, {
       method: method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: postData.title,
-        content: postData.content
-      })
+      body: formData
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {

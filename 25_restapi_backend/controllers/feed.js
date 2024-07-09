@@ -26,10 +26,11 @@ function createPost(req, res, next) {
   const title = req.body.title;
   const content = req.body.content;
 
+  const imageUrl = req.file.path;
   const post = new Post({
     title: title,
     content: content,
-    imageUrl: 'images/duck.jpg',
+    imageUrl: imageUrl,
     creator: { name: 'Eric' },
   });
 
