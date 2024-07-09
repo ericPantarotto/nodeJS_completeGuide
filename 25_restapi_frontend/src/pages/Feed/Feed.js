@@ -65,7 +65,10 @@ class Feed extends Component {
       })
       .then(resData => {
         this.setState({
-          posts: resData.posts,
+          posts: resData.posts.map(post => ({
+            ...post,
+            imagePath: post.imageUrl
+          })),
           totalPosts: resData.totalItems,
           postsLoading: false
         });
@@ -121,12 +124,18 @@ class Feed extends Component {
     // let url = 'http://localhost:8080/feed/post';
     let url = `${
       navigator.userAgent.indexOf('Win') !== -1
-        ? 'http://localhost:8080/feed/posts'
-        : 'http://192.168.1.30:8080/feed/posts'
+        ? 'http://localhost:8080/feed/post'
+        : 'http://192.168.1.30:8080/feed/post'
     }`;
     let method = 'POST';
     if (this.state.editPost) {
-      url = 'URL';
+      const editUrl = `${
+        navigator.userAgent.indexOf('Win') !== -1
+          ? 'http://localhost:8080/feed/post/'
+          : 'http://192.168.1.30:8080/feed/post/'
+      }${this.state.editPost._id}`;
+      url = editUrl;
+      method = 'PUT';
     }
 
     fetch(url, {
