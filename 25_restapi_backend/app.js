@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 
+import { expRouter as authRoutes } from './routes/auth.js';
 import feedRoutes from './routes/feed.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -42,6 +43,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/feed', feedRoutes.routes);
+app.use('/auth', authRoutes);
 
 app.use((error, req, res, next) => {
   console.error(error);
