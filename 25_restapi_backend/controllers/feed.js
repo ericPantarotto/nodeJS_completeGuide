@@ -6,11 +6,23 @@ import { fileURLToPath } from 'url';
 import Post from '../models/post.js';
 
 function getPosts(req, res, next) {
+  const currentPage = req.query.page || 1;
+  const perPage = 2;
+  let totalItems;
+
   Post.find()
+    .countDocuments()
+    .then(count => {
+      totalItems = count;
+      return Post.find()
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+    })
     .then(posts =>
       res.status(200).json({
         message: 'Fetched posts successfully.',
         posts: posts,
+        totalItems: totalItems,
       })
     )
     .catch(err => {
@@ -108,7 +120,7 @@ function updatePost(req, res, next) {
     });
 }
 
-function deletePost(req, res, next) { 
+function deletePost(req, res, next) {
   const postId = req.params.postId;
   Post.findById(postId)
     .then(post => {
@@ -120,9 +132,7 @@ function deletePost(req, res, next) {
       clearImage(post.imageUrl);
       return Post.findByIdAndDelete(postId);
     })
-    .then(_ =>
-      res.status(200).json({ message: 'Deleted post.' })
-    )
+    .then(_ => res.status(200).json({ message: 'Deleted post.' }))
     .catch(err => {
       !err.statusCode && (err.statusCode = 500);
       next(err);

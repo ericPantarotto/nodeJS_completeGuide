@@ -50,13 +50,13 @@ class Feed extends Component {
       page--;
       this.setState({ postPage: page });
     }
-    fetch(
-      `${
-        navigator.userAgent.indexOf('Win') !== -1
-          ? 'http://localhost:8080/feed/posts'
-          : 'http://192.168.1.30:8080/feed/posts'
-      }`
-    )
+
+    const url = `${
+      navigator.userAgent.indexOf('Win') !== -1
+        ? 'http://localhost:8080/feed/posts'
+        : 'http://192.168.1.30:8080/feed/posts'
+    }`;
+    fetch(`${url}?page=${page}`)
       .then(res => {
         if (res.status !== 200) {
           throw new Error('Failed to fetch posts.');
