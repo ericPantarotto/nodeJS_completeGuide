@@ -43,6 +43,8 @@ router.put(
   feedController.updatePost
 );
 
+router.delete('/post/:postId', feedController.deletePost);
+
 export default {
   routes: router,
 };

@@ -192,7 +192,14 @@ class Feed extends Component {
 
   deletePostHandler = postId => {
     this.setState({ postsLoading: true });
-    fetch('URL')
+
+    const deleteUrl = `${
+      navigator.userAgent.indexOf('Win') !== -1
+        ? 'http://localhost:8080/feed/post/'
+        : 'http://192.168.1.30:8080/feed/post/'
+    }${postId}`;
+
+    fetch(deleteUrl, { method: 'DELETE' })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Deleting a post failed!');
