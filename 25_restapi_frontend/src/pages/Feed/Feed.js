@@ -144,7 +144,10 @@ class Feed extends Component {
 
     fetch(url, {
       method: method,
-      body: formData
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${this.props.token}`
+      }
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
@@ -203,7 +206,12 @@ class Feed extends Component {
         : 'http://192.168.1.30:8080/feed/post/'
     }${postId}`;
 
-    fetch(deleteUrl, { method: 'DELETE' })
+    fetch(deleteUrl, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${this.props.token}`
+      }
+    })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Deleting a post failed!');

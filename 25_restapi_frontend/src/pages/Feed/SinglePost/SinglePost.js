@@ -19,7 +19,11 @@ class SinglePost extends Component {
         ? 'http://localhost:8080/'
         : 'http://192.168.1.30:8080/'
     }`;
-    fetch(`${url}feed/post/${postId}`)
+    fetch(`${url}feed/post/${postId}`, {
+      headers: {
+        Authorization: `Bearer ${this.props.token}`
+      }
+    })
       .then(res => {
         if (res.status !== 200) {
           throw new Error('Failed to fetch status');
