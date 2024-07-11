@@ -152,6 +152,11 @@ function deletePost(req, res, next) {
       clearImage(post.imageUrl);
       return Post.findByIdAndDelete(postId);
     })
+    .then(_ => User.findById(req.userId))
+    .then(user => {
+      user.posts.pull(postId);
+      return user.save();
+    })
     .then(_ => res.status(200).json({ message: 'Deleted post.' }))
     .catch(err => {
       !err.statusCode && (err.statusCode = 500);
