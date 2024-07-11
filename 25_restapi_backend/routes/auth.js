@@ -29,6 +29,6 @@ router.put(
   authController.signup
 );
 
-router.post('/login');
+router.post('/login', authController.login);
 
 export const expRouter = router;

@@ -3851,3 +3851,15 @@ So there in storage in the browser, there are specific storage mechanisms for th
 - Signature
 
 ![image info](./25_sc2.png)
+
+The syntax so that the token becomes invalid after one hour `{expiresIn: '1h'}`, is a security mechanism you should add because the token is stored in the client, now of course by the client to whom it belongs but technically, that token could be stolen. 
+
+If the user does not logout, another person copies the token from his browser storage and then he can use it on his own PC, but for one hour only.
+
+## Logging In & Creating JSON Web Tokens (JWTs)
+
+**<span style='color: #bcdbf9'> Note:** in *DevTools, Local Storage*, you can find your token and userId.
+
+**<span style='color: #ffe5c5'>Link:** [www.jwt.io](www.jwt.io)
+
+**<span style='color:   #875c5c'>IMPORTANT:** if you had your secret, you should end up with the exact same token!

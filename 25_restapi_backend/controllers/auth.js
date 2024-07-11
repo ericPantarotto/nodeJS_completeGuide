@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
 import { validationResult } from 'express-validator';
+import jwt from 'jsonwebtoken';
+
 import User from '../models/user.js';
 
 function signup(req, res, next) {
@@ -39,6 +41,8 @@ function signup(req, res, next) {
 function login(req, res, next) {
   const email = req.body.email;
   const password = req.body.password;
+  let loadedUser;
+
   User.findOne({ email: email })
     .then(user => {
       if (!user) {
@@ -47,15 +51,27 @@ function login(req, res, next) {
         throw error;
       }
 
+      loadedUser = user;
       return bcrypt.compare(password, user.password);
     })
     .then(doMatch => {
-      if (doMatch) {
+      if (!doMatch) {
+        const error = new Error('Wrong password!');
+        error.statusCode = 401;
+        throw error;
       }
 
-      const error = new Error('Wrong password!');
-      error.statusCode = 401;
-      throw error;
+      const token = jwt.sign(
+        {
+          email: loadedUser.email,
+          userId: loadedUser._id.toString(),
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+      );
+      return res
+        .status(200)
+        .json({ token: token, userId: loadedUser._id.toString() });
     })
     .catch(err => {
       !err.statusCode && (err.statusCode = 500);
