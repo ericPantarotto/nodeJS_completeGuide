@@ -1,5 +1,8 @@
 import express from 'express';
+import { body } from 'express-validator';
 import authController from '../controllers/auth.js';
+import User from '../models/user.js';
+
 const router = express.Router();
 
 router.put(
@@ -21,7 +24,7 @@ router.put(
       .trim()
       .isLength({ min: 5 })
       .isAlphanumeric(),
-    body('name ').trim().not().isEmpty(),
+    body('name').trim().not().isEmpty(),
   ],
   authController.signup
 );
