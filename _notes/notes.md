@@ -3818,7 +3818,6 @@ Inside of a promise chain / async code snippet, throwing an error will not do th
 
 Instead you have to use the `next()` function  and pass the error to it and this will now go and reach the next error handling express middleware.
 
-
 **Frontend**: **<span style='color: #a8c62c'>/src/Feed/feed.js:**
 
 we can't use `json` for data where we have both a file and normal text data, instead we'll again use `form` data.
@@ -3852,7 +3851,7 @@ So there in storage in the browser, there are specific storage mechanisms for th
 
 ![image info](./25_sc2.png)
 
-The syntax so that the token becomes invalid after one hour `{expiresIn: '1h'}`, is a security mechanism you should add because the token is stored in the client, now of course by the client to whom it belongs but technically, that token could be stolen. 
+The syntax so that the token becomes invalid after one hour `{expiresIn: '1h'}`, is a security mechanism you should add because the token is stored in the client, now of course by the client to whom it belongs but technically, that token could be stolen.
 
 If the user does not logout, another person copies the token from his browser storage and then he can use it on his own PC, but for one hour only.
 
@@ -3863,3 +3862,38 @@ If the user does not logout, another person copies the token from his browser st
 **<span style='color: #ffe5c5'>Link:** [www.jwt.io](www.jwt.io)
 
 **<span style='color:   #875c5c'>IMPORTANT:** if you had your secret, you should end up with the exact same token!
+
+## Using & Validating the Token
+
+In the frontend, we could:
+
+- append the token as a query parameter
+- include it in the request body, but this is not ideal as `get` request don't have a body
+- best solution is to use a `header`, which makes lot of sense for metadata
+
+**You need to have your authorization in your backend**: **<span style='color: #a8c62c'>/app.js:**
+
+```js
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+  );
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+```
+
+**Frontend**: **<span style='color: #a8c62c'>/src/Feed/feed.js:**
+
+```js
+fetch(`${url}?page=${page}`, {
+      headers: {
+      Authorization: `Bearer ${this.props.token}`
+    }})
+```
+
+we then add an authentication middleware to our **backend**: **<span style='color: #a8c62c'>/middlewares/is-auth.js:**
+
+and add to our `routes` this new authentication middleware for protecting routes

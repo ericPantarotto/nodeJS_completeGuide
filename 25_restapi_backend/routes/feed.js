@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
 import feedController from '../controllers/feed.js';
+import authMiddleware from '../middlewares/is-auth.js';
 
 const router = Router();
 
-router.get('/posts', feedController.getPosts);
+router.get('/posts', authMiddleware.isAuthenticated, feedController.getPosts);
 router.post(
   '/post',
   [

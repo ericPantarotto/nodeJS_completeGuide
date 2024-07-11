@@ -56,7 +56,11 @@ class Feed extends Component {
         ? 'http://localhost:8080/feed/posts'
         : 'http://192.168.1.30:8080/feed/posts'
     }`;
-    fetch(`${url}?page=${page}`)
+    fetch(`${url}?page=${page}`, {
+      headers: {
+        Authorization: `Bearer ${this.props.token}`
+      }
+    })
       .then(res => {
         if (res.status !== 200) {
           throw new Error('Failed to fetch posts.');
