@@ -3,7 +3,6 @@ import { validationResult } from 'express-validator';
 import User from '../models/user.js';
 
 function signup(req, res, next) {
-  console.log('in');
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Signup validation failed.');
@@ -12,7 +11,6 @@ function signup(req, res, next) {
     throw error;
   }
 
-  console.log('in after check');
   const email = req.body.email;
   const name = req.body.name;
   const password = req.body.password;
@@ -33,12 +31,39 @@ function signup(req, res, next) {
         .json({ message: 'User Created!', userId: result._id });
     })
     .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+      !err.statusCode && (err.statusCode = 500);
+      next(err);
+    });
+}
+
+function login(req, res, next) {
+  const email = req.body.email;
+  const password = req.body.password;
+  User.findOne({ email: email })
+    .then(user => {
+      if (!user) {
+        const error = new Error("A user with this email couldn't be found");
+        error.statusCode = 401;
+        throw error;
+      }
+
+      return bcrypt.compare(password, user.password);
+    })
+    .then(doMatch => {
+      if (doMatch) {
+      }
+
+      const error = new Error('Wrong password!');
+      error.statusCode = 401;
+      throw error;
+    })
+    .catch(err => {
+      !err.statusCode && (err.statusCode = 500);
+      next(err);
     });
 }
 
 export default {
   signup,
+  login,
 };
