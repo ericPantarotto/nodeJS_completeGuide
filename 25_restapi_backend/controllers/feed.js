@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import Post from '../models/post.js';
+import User from '../models/user.js';
 
 function getPosts(req, res, next) {
   const currentPage = req.query.page || 1;
@@ -41,23 +42,30 @@ function createPost(req, res, next) {
 
   const title = req.body.title;
   const content = req.body.content;
-
   const imageUrl = req.file.path;
+  let creator;
   const post = new Post({
     title: title,
     content: content,
     imageUrl: imageUrl,
-    creator: { name: 'Eric' },
+    creator: req.userId,
   });
 
   post
     .save()
-    .then(result =>
-      res.status(201).json({
+    .then(_ => User.findById(req.userId))
+    .then(user => {
+      creator = user;
+      user.posts.push(post);
+      return user.save();
+    })
+    .then(_ => {
+      return res.status(201).json({
         message: 'Post created successfully',
-        post: result,
-      })
-    )
+        post: post,
+        creator: { _id: creator._id, name: creator.name },
+      });
+    })
     .catch(err => {
       !err.statusCode && (err.statusCode = 500);
       next(err);
