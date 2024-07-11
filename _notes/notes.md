@@ -3830,3 +3830,24 @@ we can create a new form data object with a built-in object that browser side ja
 **<span style='color: #bcdbf9'> Note:**
 
 We should not set the header to application json anymore because that would be incorrect and would break our app because we would try to parse it incorrectly on the server side, instead the form data will automatically set the headers, that is kind of convenient.
+
+## How does Authentication Work?
+
+In the past, we then would have checked that data on the server and if it is valid, we would have established a session.
+
+**Now we don't use a session anymore because restful APIs are stateless, they don't care about the client, you learned about that strict decoupling of server and client and every request should be treated standalone, that means every request should have all the data it needs to authenticate itself.**
+
+With a session, the server needs to store data about the client, the server then stores that a client is authenticated and that's just not how rest APIs work. The server will not store anything about any client. So we don't store sessions on a rest API and therefore this approach will not be used anymore.
+
+Obviously we will still validate the input on the server, we'll still check for the validity of the e-mail password combination but then instead, **we return a so-called token to the client. That token will be generated on the server and will hold some information which can only be validated by the server** and this token will then be stored in the client.
+
+So there in storage in the browser, there are specific storage mechanisms for this and the client can then attach this token to every subsequent request it sends to the server. So this stored token is then attached to every request that targets a resource on the server which requires authentication.
+
+![image info](./25_sc1.png)
+
+### What's that token?
+
+- JSON Data
+- Signature
+
+![image info](./25_sc2.png)
