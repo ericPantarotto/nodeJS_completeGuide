@@ -112,6 +112,12 @@ function updatePost(req, res, next) {
         throw error;
       }
 
+      if (post.creator.toString() !== req.userId) {
+        const error = new Error('Unauthorized to edit post.');
+        error.statusCode = 403;
+        throw error;
+      }
+
       imageUrl !== post.imageUrl && clearImage(post.imageUrl);
 
       post.title = req.body.title;
@@ -137,6 +143,12 @@ function deletePost(req, res, next) {
         error.statusCode = 404;
         throw error;
       }
+      if (post.creator.toString() !== req.userId) {
+        const error = new Error('Unauthorized to delete post.');
+        error.statusCode = 403;
+        throw error;
+      }
+
       clearImage(post.imageUrl);
       return Post.findByIdAndDelete(postId);
     })
