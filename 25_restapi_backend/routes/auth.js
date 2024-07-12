@@ -1,6 +1,7 @@
 import express from 'express';
 import { body } from 'express-validator';
 import authController from '../controllers/auth.js';
+import authMiddleware from '../middlewares/is-auth.js';
 import User from '../models/user.js';
 
 const router = express.Router();
@@ -30,5 +31,18 @@ router.put(
 );
 
 router.post('/login', authController.login);
+
+router.get(
+  '/status',
+  authMiddleware.isAuthenticated,
+  authController.getUserStatus
+);
+
+router.patch(
+  '/status',
+  authMiddleware.isAuthenticated,
+  [body('status', 'Please enter a status.').trim().not().isEmpty()],
+  authController.updateUserStatus
+);
 
 export const expRouter = router;

@@ -79,7 +79,45 @@ function login(req, res, next) {
     });
 }
 
+function getUserStatus(req, res, next) {
+  User.findById(req.userId)
+    .then(user => {
+      if (!user) {
+        const error = new Error("A user with this email couldn't be found");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      return res.status(200).json({ status: user.status });
+    })
+    .catch(err => {
+      !err.statusCode && (err.statusCode = 500);
+      next(err);
+    });
+}
+
+function updateUserStatus(req, res, next) {
+  const newStatus = req.body.status;
+  User.findById(req.userId)
+    .then(user => {
+      if (!user) {
+        const error = new Error("A user with this email couldn't be found");
+        error.statusCode = 404;
+        throw error;
+      }
+      user.status = newStatus;
+      return user.save();
+    })
+    .then(_ => res.status(200).json({ mesage: 'User updated' }))
+    .catch(err => {
+      !err.statusCode && (err.statusCode = 500);
+      next(err);
+    });
+}
+
 export default {
   signup,
   login,
+  getUserStatus,
+  updateUserStatus,
 };

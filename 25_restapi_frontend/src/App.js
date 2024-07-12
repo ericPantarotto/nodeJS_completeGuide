@@ -60,7 +60,7 @@ class App extends Component {
     event.preventDefault();
     this.setState({ authLoading: true });
 
-    console.log(authData.email, authData.password);
+    // console.log(authData.email, authData.password);
 
     const url = `${
       navigator.userAgent.indexOf('Win') !== -1
