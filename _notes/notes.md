@@ -3897,3 +3897,9 @@ fetch(`${url}?page=${page}`, {
 we then add an authentication middleware to our **backend**: **<span style='color: #a8c62c'>/middlewares/is-auth.js:**
 
 and add to our `routes` this new authentication middleware for protecting routes
+
+## Wrap-up: From classic Node.js App to REST API App
+
+*Classic Application*: simply just an application where you render the views in the server.
+
+![image info](./25_sc3.png)
