@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 import User from '../models/user.js';
 
-function signup(req, res, next) {
+async function signup(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Signup validation failed.');
@@ -17,102 +17,91 @@ function signup(req, res, next) {
   const name = req.body.name;
   const password = req.body.password;
 
-  bcrypt
-    .hash(password, 12)
-    .then(hashedPassword => {
-      const user = new User({
-        email: email,
-        password: hashedPassword,
-        name: name,
-      });
-      return user.save();
-    })
-    .then(result => {
-      return res
-        .status(201)
-        .json({ message: 'User Created!', userId: result._id });
-    })
-    .catch(err => {
-      !err.statusCode && (err.statusCode = 500);
-      next(err);
+  try {
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = new User({
+      email: email,
+      password: hashedPassword,
+      name: name,
     });
+    const result = await user.save();
+    return res
+      .status(201)
+      .json({ message: 'User Created!', userId: result._id });
+  } catch (err) {
+    !err.statusCode && (err.statusCode = 500);
+    next(err);
+  }
 }
 
-function login(req, res, next) {
+async function login(req, res, next) {
   const email = req.body.email;
   const password = req.body.password;
-  let loadedUser;
+  try {
+    const loadedUser = await User.findOne({ email: email });
+    if (!loadedUser) {
+      const error = new Error("A user with this email couldn't be found");
+      error.statusCode = 401;
+      throw error;
+    }
 
-  User.findOne({ email: email })
-    .then(user => {
-      if (!user) {
-        const error = new Error("A user with this email couldn't be found");
-        error.statusCode = 401;
-        throw error;
-      }
+    const doMatch = await bcrypt.compare(password, loadedUser.password);
+    if (!doMatch) {
+      const error = new Error('Wrong password!');
+      error.statusCode = 401;
+      throw error;
+    }
 
-      loadedUser = user;
-      return bcrypt.compare(password, user.password);
-    })
-    .then(doMatch => {
-      if (!doMatch) {
-        const error = new Error('Wrong password!');
-        error.statusCode = 401;
-        throw error;
-      }
-
-      const token = jwt.sign(
-        {
-          email: loadedUser.email,
-          userId: loadedUser._id.toString(),
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' }
-      );
-      return res
-        .status(200)
-        .json({ token: token, userId: loadedUser._id.toString() });
-    })
-    .catch(err => {
-      !err.statusCode && (err.statusCode = 500);
-      next(err);
-    });
+    const token = jwt.sign(
+      {
+        email: loadedUser.email,
+        userId: loadedUser._id.toString(),
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+    return res
+      .status(200)
+      .json({ token: token, userId: loadedUser._id.toString() });
+  } catch (err) {
+    !err.statusCode && (err.statusCode = 500);
+    next(err);
+  }
 }
 
-function getUserStatus(req, res, next) {
-  User.findById(req.userId)
-    .then(user => {
-      if (!user) {
-        const error = new Error("A user with this email couldn't be found");
-        error.statusCode = 404;
-        throw error;
-      }
+async function getUserStatus(req, res, next) {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      const error = new Error("A user with this email couldn't be found");
+      error.statusCode = 404;
+      throw error;
+    }
 
-      return res.status(200).json({ status: user.status });
-    })
-    .catch(err => {
-      !err.statusCode && (err.statusCode = 500);
-      next(err);
-    });
+    res.status(200).json({ status: user.status });
+  } catch (err) {
+    !err.statusCode && (err.statusCode = 500);
+    next(err);
+  }
 }
 
-function updateUserStatus(req, res, next) {
+async function updateUserStatus(req, res, next) {
   const newStatus = req.body.status;
-  User.findById(req.userId)
-    .then(user => {
-      if (!user) {
-        const error = new Error("A user with this email couldn't be found");
-        error.statusCode = 404;
-        throw error;
-      }
-      user.status = newStatus;
-      return user.save();
-    })
-    .then(_ => res.status(200).json({ mesage: 'User updated' }))
-    .catch(err => {
-      !err.statusCode && (err.statusCode = 500);
-      next(err);
-    });
+
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      const error = new Error("A user with this email couldn't be found");
+      error.statusCode = 404;
+      throw error;
+    }
+    user.status = newStatus;
+    await user.save();
+    res.status(200).json({ mesage: 'User updated' });
+  } catch (err) {
+    !err.statusCode && (err.statusCode = 500);
+    next(err);
+  }
 }
 
 export default {
