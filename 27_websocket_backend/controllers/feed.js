@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 
 import Post from '../models/post.js';
 import User from '../models/user.js';
+import ioSocket from '../socket.js';
 
 async function getPosts(req, res, next) {
   const currentPage = req.query.page || 1;
@@ -15,7 +16,7 @@ async function getPosts(req, res, next) {
       .populate('creator')
       .skip((currentPage - 1) * perPage)
       .limit(perPage);
-    
+
     res.status(200).json({
       message: 'Fetched posts successfully.',
       posts: posts,
@@ -50,6 +51,9 @@ async function createPost(req, res, next) {
     const user = await User.findById(req.userId);
     user.posts.push(post);
     await user.save();
+
+    ioSocket.getIO().emit('posts', { action: 'create', post: post });
+
     res.status(201).json({
       message: 'Post created successfully',
       post: post,

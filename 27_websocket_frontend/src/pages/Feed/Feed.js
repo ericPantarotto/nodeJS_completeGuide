@@ -51,8 +51,13 @@ class Feed extends Component {
         ? 'http://172.28.181.56:8080'
         : 'http://192.168.1.30:8080'
     }`;
-    console.log(serverHost);
-    openSocket(serverHost);
+
+    const socket = openSocket(serverHost);
+    socket.on('posts', data => {
+      if (data.action === 'create') {
+        this.addPost(data.post);
+      }
+    });
   }
 
   addPost = post => {
