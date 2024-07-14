@@ -52,7 +52,12 @@ async function createPost(req, res, next) {
     user.posts.push(post);
     await user.save();
 
-    ioSocket.getIO().emit('posts', { action: 'create', post: post });
+    ioSocket
+      .getIO()
+      .emit('posts', {
+        action: 'create',
+        post: { ...post._doc, creator: { _id: req.userId, name: user.name } },
+      });
 
     res.status(201).json({
       message: 'Post created successfully',
