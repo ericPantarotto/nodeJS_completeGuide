@@ -3903,3 +3903,26 @@ and add to our `routes` this new authentication middleware for protecting routes
 *Classic Application*: simply just an application where you render the views in the server.
 
 ![image info](./25_sc3.png)
+
+# Websockets & Socket.io
+
+## What are Websockets?
+
+### How it currently works?
+
+![image info](./26_sc1.png)
+
+To know if something changed on the server:
+
+- You could certainly use some patterns where you send a request every second to see if anything changed on the server, but you'll then hammer your server with requests where most requests will not yield anything.
+- What if something changed on the server and we actively want to inform a client? Well then we can use **web sockets instead of http**
+
+**<span style='color: #bcdbf9'> Note:** Now http is the protocol we used thus far where we send a request and we get a response.
+Web sockets build up on http, they are established via http, they use a so-called http handshake to upgrade the http protocol to the web sockets protocol and the web sockets protocol, that simply talks about how data is exchanged.
+
+ the browser and the server communicate through a protocol and the used protocol defines how the communication can happen.
+
+- With http, it's request response
+- with web sockets, it is push data or actually it's both: We can also send data from the client to the server. **but most importantly, we can push data from the server to the client. **you typically will use both together in the same node app**
+
+![image info](./26_sc2.png)
