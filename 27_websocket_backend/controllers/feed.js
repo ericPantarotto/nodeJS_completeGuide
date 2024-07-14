@@ -52,12 +52,10 @@ async function createPost(req, res, next) {
     user.posts.push(post);
     await user.save();
 
-    ioSocket
-      .getIO()
-      .emit('posts', {
-        action: 'create',
-        post: { ...post._doc, creator: { _id: req.userId, name: user.name } },
-      });
+    ioSocket.getIO().emit('posts', {
+      action: 'create',
+      post: { ...post._doc, creator: { _id: req.userId, name: user.name } },
+    });
 
     res.status(201).json({
       message: 'Post created successfully',
@@ -102,14 +100,14 @@ async function updatePost(req, res, next) {
   }
 
   try {
-    const post = await Post.findById(req.params.postId);
+    const post = await Post.findById(req.params.postId).populate('creator');
     if (!post) {
       const error = new Error('Could not find post.');
       error.statusCode = 404;
       throw error;
     }
 
-    if (post.creator.toString() !== req.userId) {
+    if (post.creator._id.toString() !== req.userId) {
       const error = new Error('Unauthorized to edit post.');
       error.statusCode = 403;
       throw error;
@@ -121,6 +119,9 @@ async function updatePost(req, res, next) {
     post.content = req.body.content;
     post.imageUrl = imageUrl;
     const result = await post.save();
+
+    ioSocket.getIO().emit('posts', { action: 'update', post: result });
+
     res.status(200).json({ message: 'Post updated', post: result });
   } catch (err) {
     !err.statusCode && (err.statusCode = 500);
