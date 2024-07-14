@@ -3926,3 +3926,7 @@ Web sockets build up on http, they are established via http, they use a so-calle
 - with web sockets, it is push data or actually it's both: We can also send data from the client to the server. **but most importantly, we can push data from the server to the client. **you typically will use both together in the same node app**
 
 ![image info](./26_sc2.png)
+
+## Websockets Solutions
+
+**<span style='color: #ffe5c5'>Link:** [https://socket.io/](https://socket.io/)
