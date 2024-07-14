@@ -61,16 +61,30 @@ connect(process.env.MONGO_DB_URL)
 
     server.on('listening', function () {
       console.log(
-        'Express server started \nplatform %s \nport %s at %s',
+        'Express server started \nplatform: %s \nhost: %s \nport: %s',
         process.platform,
-        server.address().port,
-        process.platform === 'linux' ? os.networkInterfaces()['wlp0s20f3'][0].address : 'localhost'
+        process.platform === 'linux' && process.env.WSL_DISTRO_NAME
+          ? os.networkInterfaces()['eth0'][0].address || 'localhost'
+          : os.networkInterfaces()['wlp0s20f3'][0].address,
+        server.address().port
       );
     });
 
-    const io = new Server(server);
+    const io = new Server(server, {
+      cors: {
+        origin: `http://${
+          process.env.WSL_DISTRO_NAME
+            ? os.networkInterfaces()['eth0'][0].address || 'localhost'
+            : os.networkInterfaces()['wlp0s20f3'][0].address
+        }:3000`,
+        methods: ['GET', 'POST'],
+      },
+    });
     io.on('connection', socket => {
       console.log('a user connected');
+      socket.on('disconnect', () => {
+        console.log('user disconnected');
+      });
     });
   })
   .catch(err => console.error(err));

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import openSocket from "socket.io-client";
 
 import Button from '../../components/Button/Button';
 import ErrorHandler from '../../components/ErrorHandler/ErrorHandler';
@@ -44,6 +45,14 @@ class Feed extends Component {
       .catch(this.catchError);
 
     this.loadPosts();
+
+    const serverHost = `${
+      navigator.userAgent.indexOf('Win') !== -1
+        ? 'http://172.28.181.56:8080'
+        : 'http://192.168.1.30:8080'
+    }`;
+    console.log(serverHost);
+    openSocket(serverHost);
   }
 
   loadPosts = direction => {
