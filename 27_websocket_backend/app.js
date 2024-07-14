@@ -5,12 +5,13 @@ import { connect } from 'mongoose';
 import multer from 'multer';
 import os from 'os';
 import path from 'path';
-import { Server } from 'socket.io';
+// import { Server } from 'socket.io';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 
 import { expRouter as authRoutes } from './routes/auth.js';
 import feedRoutes from './routes/feed.js';
+import  ioSocket from "./socket.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,16 +71,18 @@ connect(process.env.MONGO_DB_URL)
       );
     });
 
-    const io = new Server(server, {
-      cors: {
-        origin: `http://${
-          process.env.WSL_DISTRO_NAME
-            ? os.networkInterfaces()['eth0'][0].address || 'localhost'
-            : os.networkInterfaces()['wlp0s20f3'][0].address
-        }:3000`,
-        methods: ['GET', 'POST'],
-      },
-    });
+    // const io = new Server(server, {
+    //   cors: {
+    //     origin: `http://${
+    //       process.env.WSL_DISTRO_NAME
+    //         ? os.networkInterfaces()['eth0'][0].address || 'localhost'
+    //         : os.networkInterfaces()['wlp0s20f3'][0].address
+    //     }:3000`,
+    //     methods: ['GET', 'POST'],
+    //   },
+    // });
+    const io = ioSocket.init(server);
+    
     io.on('connection', socket => {
       console.log('a user connected');
       socket.on('disconnect', () => {
