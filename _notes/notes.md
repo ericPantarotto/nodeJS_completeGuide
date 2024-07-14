@@ -3930,3 +3930,7 @@ Web sockets build up on http, they are established via http, they use a so-calle
 ## Websockets Solutions
 
 **<span style='color: #ffe5c5'>Link:** [https://socket.io/](https://socket.io/)
+
+## Setting Up Socket.io on the Server
+
+Just as we set up our routes for the normal http requests, we can also set up our `socket.io` channels, socket.io uses a different protocol, web sockets, and therefore web socket requests will not interfere with the normal http requests which are sent by default by the browser.

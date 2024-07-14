@@ -3,7 +3,9 @@ import 'dotenv/config';
 import express from 'express';
 import { connect } from 'mongoose';
 import multer from 'multer';
+import os from 'os';
 import path from 'path';
+import { Server } from 'socket.io';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -54,5 +56,21 @@ app.use((error, req, res, next) => {
 });
 
 connect(process.env.MONGO_DB_URL)
-  .then(_ => app.listen(8080))
+  .then(_ => {
+    const server = app.listen(8080);
+
+    server.on('listening', function () {
+      console.log(
+        'Express server started \nplatform %s \nport %s at %s',
+        process.platform,
+        server.address().port,
+        process.platform === 'linux' ? os.networkInterfaces()['wlp0s20f3'][0].address : 'localhost'
+      );
+    });
+
+    const io = new Server(server);
+    io.on('connection', socket => {
+      console.log('a user connected');
+    });
+  })
   .catch(err => console.error(err));
