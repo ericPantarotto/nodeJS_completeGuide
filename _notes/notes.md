@@ -3982,3 +3982,7 @@ It's a JSON object-like structure.
 **<span style='color: #ffe5c5'>Link:** [https://graphql.org/community/tools-and-libraries/?tags=javascript](https://graphql.org/community/tools-and-libraries/?tags=javascript)
 
 **<span style='color:   #875c5c'>IMPORTANT:** `graphql-http` now replaced `express-graphql` which is deprecated.
+
+It's important to understand that we don't filter the data on the frontend, it gets filtered on the server by express *graphql*. In our case which does the heavy lifting here and we simply define our schema and the resolver.
+
+In the resolver, we return all the data but then graphql on the server will filter out just the data that was requested by the client.
