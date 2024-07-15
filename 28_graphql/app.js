@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser';
 import 'dotenv/config';
 import express from 'express';
+import expressPlayground from 'graphql-playground-middleware-express/dist/index.js';
 
 import { createHandler } from 'graphql-http/lib/use/express';
 import { connect } from 'mongoose';
@@ -44,14 +45,16 @@ app.use((req, res, next) => {
   next();
 });
 
-console.log(graphqlResolver)
-app.all(
+app.use(
   '/graphql',
   createHandler({
     schema: graphqlSchema,
     rootValue: graphqlResolver,
+    graphiql: true,
   })
 );
+const playground = expressPlayground.default;
+app.get('/playground', playground({ endpoint: '/graphql' }));
 
 app.use((error, req, res, next) => {
   console.error(error);
@@ -64,9 +67,6 @@ app.use((error, req, res, next) => {
 connect(process.env.MONGO_DB_URL)
   .then(_ => app.listen(8080))
   .catch(err => console.error(err));
-
-
-
 
 // import { buildSchema } from 'graphql';
 
