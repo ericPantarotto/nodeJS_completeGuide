@@ -3974,3 +3974,11 @@ It's a JSON object-like structure.
 ### GraphQL Big Picture
 
 ![image info](./28_sc4.png)
+
+## Understanding the Setup
+
+**<span style='color: #ffe5c5'>Link:** [https://graphql.org/](https://graphql.org/)
+
+**<span style='color: #ffe5c5'>Link:** [https://graphql.org/community/tools-and-libraries/?tags=javascript](https://graphql.org/community/tools-and-libraries/?tags=javascript)
+
+**<span style='color:   #875c5c'>IMPORTANT:** `graphql-http` now replaced `express-graphql` which is deprecated.

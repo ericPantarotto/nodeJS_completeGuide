@@ -1,14 +1,16 @@
 import bodyParser from 'body-parser';
 import 'dotenv/config';
 import express from 'express';
+
+import { createHandler } from 'graphql-http/lib/use/express';
 import { connect } from 'mongoose';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 
-import { expRouter as authRoutes } from './routes/auth.js';
-import feedRoutes from './routes/feed.js';
+import graphqlResolver from './graphql/resolvers.js';
+import graphqlSchema from './graphql/schema.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,8 +44,14 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/feed', feedRoutes.routes);
-app.use('/auth', authRoutes);
+console.log(graphqlResolver)
+app.all(
+  '/graphql',
+  createHandler({
+    schema: graphqlSchema,
+    rootValue: graphqlResolver,
+  })
+);
 
 app.use((error, req, res, next) => {
   console.error(error);
@@ -56,3 +64,28 @@ app.use((error, req, res, next) => {
 connect(process.env.MONGO_DB_URL)
   .then(_ => app.listen(8080))
   .catch(err => console.error(err));
+
+
+
+
+// import { buildSchema } from 'graphql';
+
+// const schema = buildSchema(`
+//   type Query {
+//     hello: String
+//   }
+// `);
+
+// const rootQuery = {
+//   hello() {
+//     return 'Hello world!';
+//   },
+// };
+
+// app.all(
+//   '/graphql',
+//   createHandler({
+//     schema: schema,
+//     rootValue: rootQuery,
+//   })
+// );
