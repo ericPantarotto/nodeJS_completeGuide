@@ -3934,3 +3934,43 @@ Web sockets build up on http, they are established via http, they use a so-calle
 ## Setting Up Socket.io on the Server
 
 Just as we set up our routes for the normal http requests, we can also set up our `socket.io` channels, socket.io uses a different protocol, web sockets, and therefore web socket requests will not interfere with the normal http requests which are sent by default by the browser.
+
+# Working with GraphQL
+
+## What is GraphQL?
+
+API is a stateless client independent API for exchanging data, so it's a node express application or a node with any framework application of course that we build to exchange data.
+
+We don't render views, we don't store sessions, we don't care about the client, we only get requests, parse the data and return responses with data, typically json data.
+
+**GraphQL has higher query flexibility.**
+
+### REST API Limitations
+
+With *GraphQL*, you have a rich query language that you use in your frontend to send it to the backend which is then parsed on the backend and dynamically retrieves just the data you need, so it's almost like a database query language which you use on the backend like SQL or mongodb
+
+![image info](./28_sc1.png)
+
+### How does GraphQL work?
+
+**<span style='color:   #875c5c'>IMPORTANT:** You only have ***one single endpoint*** where you send your http requests to, even for getting data and why is that?
+
+For a `post` request, you can add a request body and that **request body** will contain the query expression, graphql defines its own query language.
+
+![image info](./28_sc2.png)
+
+### A GraphQL query
+
+It's a JSON object-like structure.
+
+![image info](./28_sc3.png)
+
+### Operations Types
+
+- **Query**: Retreive Data ('GET')
+- **Mutation**: Manipulate Data ('POST', 'PUT', 'PATCH', 'DELETE')
+- **Subscription**: Set-up a realtime connection via websockets (not covered)
+
+### GraphQL Big Picture
+
+![image info](./28_sc4.png)
