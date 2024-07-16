@@ -23,6 +23,7 @@ async function createUser({ userInput }, req) {
   const existingUser = await User.findOne({ email: userInput.email }); //return User.findOne({ email: userInput.email }).then()
   if (existingUser) {
     const error = new Error('User exists already!');
+    error.code = 422;
     throw error;
   }
 

@@ -4001,3 +4001,32 @@ mutation {
   hello
 }
 ```
+
+## Connecting the Frontend to the GraphQL API
+
+![image info](./28_sc5.png)
+
+When we test our signup for the first time, our `OPTIONS` request fails **status: 405**.
+
+As explained the browser sends an `options` request, before it sends the post, patch, put, delete requests. 
+
+The problem is the `graphql-http` middleware in our **<span style='color: #a8c62c'>backend/app.js:** automatically declines anything which is not a post or get request.
+
+To solve, we add a req.method test in our CORS middleware to shortcircuit the next middleware `GraphQL`.
+
+```js
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+  );
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+// below starts GraphQL middleware
+```
