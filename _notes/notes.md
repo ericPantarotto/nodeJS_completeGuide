@@ -4067,3 +4067,25 @@ mutation {
   }
 }
 ```
+
+## Sending the Creatpost Query
+
+
+**<span style='color: #a8c62c'>backend/app.js:**
+
+**<span style='color:   #875c5c'>IMPORTANT:** with latest version of `graph-http`, you have to pass a `context` function to extract the `req` variables you are passing 
+```js
+app.use(
+  '/graphql',
+  createHandler({
+    schema: graphqlSchema,
+    rootValue: graphqlResolver,
+    context: (req, res) => {
+      return {
+        isAuth: req.raw.isAuth,
+        userId: req.raw.userId,
+      };
+    },
+```
+
+**<span style='color: #ffe5c5'>Link:** `[https://www.udemy.com/course/nodejs-the-complete-guide/learn/lecture/12197948#questions/21602012](https://www.udemy.com/course/nodejs-the-complete-guide/learn/lecture/12197948#questions/21602012)

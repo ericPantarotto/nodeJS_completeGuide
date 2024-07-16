@@ -50,11 +50,9 @@ class Feed extends Component {
         ? 'http://172.28.181.56:8080'
         : 'http://192.168.1.30:8080'
     }`;
-
-  
   }
 
-    loadPosts = direction => {
+  loadPosts = direction => {
     if (direction) {
       this.setState({ postsLoading: true, posts: [] });
     }
@@ -155,38 +153,47 @@ class Feed extends Component {
     formData.append('content', postData.content);
     formData.append('image', postData.image);
 
-    // let url = 'http://192.168.1.30:8080/feed/post';
-    // let url = 'http://localhost:8080/feed/post';
     let url = `${
       navigator.userAgent.indexOf('Win') !== -1
-        ? 'http://localhost:8080/feed/post'
-        : 'http://192.168.1.30:8080/feed/post'
+        ? 'http://localhost:8080/graphql'
+        : 'http://192.168.1.30:8080/graphql'
     }`;
-    let method = 'POST';
-    if (this.state.editPost) {
-      const editUrl = `${
-        navigator.userAgent.indexOf('Win') !== -1
-          ? 'http://localhost:8080/feed/post/'
-          : 'http://192.168.1.30:8080/feed/post/'
-      }${this.state.editPost._id}`;
-      url = editUrl;
-      method = 'PUT';
-    }
+
+    let graphqlQuery = {
+      query: `mutation {
+        createPost(postInput: {title: "${postData.title}",  content: "${postData.content}", imageUrl: "testurl"}){
+          _id
+          title
+          content
+          imageUrl
+          creator {
+            name
+          }
+          createdAt
+        }
+      }`
+    };
 
     fetch(url, {
-      method: method,
-      body: formData,
+      method: 'POST',
+      body: JSON.stringify(graphqlQuery),
       headers: {
-        Authorization: `Bearer ${this.props.token}`
+        Authorization: `Bearer ${this.props.token}`,
+        'Content-Type': 'application/json'
       }
     })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Creating or editing a post failed!');
-        }
-        return res.json();
-      })
+      .then(res => res.json())
       .then(resData => {
+        if (resData.errors && resData.errors[0].status === 401) {
+          throw new Error('User Not Authenticated!');
+        }
+        if (
+          resData.errors &&
+          resData.errors[0].status !== 200 &&
+          resData.errors[0].status !== 201
+        ) {
+          throw new Error('Creating new post failed!');
+        }
         console.log(resData);
         const post = {
           _id: resData.post._id,

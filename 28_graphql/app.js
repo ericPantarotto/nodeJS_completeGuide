@@ -56,6 +56,13 @@ app.use(
   createHandler({
     schema: graphqlSchema,
     rootValue: graphqlResolver,
+    context: (req, res) => {
+      return {
+        isAuth: req.raw.isAuth,
+        userId: req.raw.userId,
+      };
+    },
+
     graphiql: true,
     formatError(err) {
       if (!err.originalError) {
