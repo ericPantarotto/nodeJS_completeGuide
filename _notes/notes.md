@@ -4121,3 +4121,7 @@ async function posts(args, req) {
   
 }
 ```
+
+## Merging Type Definitions from several files
+
+**<span style='color: #ffe5c5'>Link:** [https://the-guild.dev/graphql/tools/docs/schema-merging](https://the-guild.dev/graphql/tools/docs/schema-merging)
