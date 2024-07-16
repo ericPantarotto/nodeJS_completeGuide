@@ -3988,7 +3988,7 @@ It's important to understand that we don't filter the data on the frontend, it g
 In the resolver, we return all the data but then graphql on the server will filter out just the data that was requested by the client.
 
 ## Adding a mutation Resolver & GraphQL
-```dotnetcli
+```graphiql
 mutation {
   createUser(userInput: {email: "test@test.com", name: "Test user", password: "test123"}){
     _id
@@ -4033,7 +4033,7 @@ app.use((req, res, next) => {
 
 ## Adding a Login Query & Resolver
 
-```
+```graphiql
 {
   login (email: "test@test.com", password: "test123"){
     token
