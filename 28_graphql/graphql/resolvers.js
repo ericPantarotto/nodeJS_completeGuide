@@ -120,8 +120,40 @@ async function createPost({ postInput }, req) {
   }
 }
 
+async function posts(args, req) {
+  if (!req.isAuth) {
+    const error = new Error('Not authenticated.');
+    error.code = 401;
+    throw error;
+  }
+
+  //  const currentPage = req.query.page || 1;
+  //  const perPage = 2;
+  try {
+    const totalPosts = await Post.find().countDocuments();
+    const posts = await Post.find().sort({ createdAt: -1 }).populate('creator');
+    //  .skip((currentPage - 1) * perPage)
+    //  .limit(perPage);
+
+    return {
+      posts: posts.map(p => {
+        return {
+          ...p._doc,
+          _id: p._id.toString(),
+          createdAt: p.createdAt.toISOString(),
+          updatedAt: p.updatedAt.toISOString(),
+        };
+      }),
+      totalPosts: totalPosts,
+    };
+  } catch (err) {
+    !err.statusCode && (err.statusCode = 500);
+    next(err);
+  }
+}
 export default {
   createUser,
   login,
   createPost,
+  posts,
 };

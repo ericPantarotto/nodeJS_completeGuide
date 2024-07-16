@@ -4070,7 +4070,6 @@ mutation {
 
 ## Sending the Creatpost Query
 
-
 **<span style='color: #a8c62c'>backend/app.js:**
 
 **<span style='color:   #875c5c'>IMPORTANT:** with latest version of `graph-http`, you have to pass a `context` function to extract the `req` variables you are passing 
@@ -4088,4 +4087,37 @@ app.use(
     },
 ```
 
-**<span style='color: #ffe5c5'>Link:** `[https://www.udemy.com/course/nodejs-the-complete-guide/learn/lecture/12197948#questions/21602012](https://www.udemy.com/course/nodejs-the-complete-guide/learn/lecture/12197948#questions/21602012)
+**<span style='color: #ffe5c5'>Link:** [https://www.udemy.com/course/nodejs-the-complete-guide/learn/lecture/12197948#questions/21602012](https://www.udemy.com/course/nodejs-the-complete-guide/learn/lecture/12197948#questions/21602012)
+
+
+## Adding a Getpost Query & Resolver
+
+**<span style='color: #bcdbf9'> Note:** To be able to test it with `Graphiql`, you have to commment in your `resolver.js` the part that test the authentication 
+
+**<span style='color: #ffe5c5'>Link:** [http://192.168.1.30:8080/playground](http://192.168.1.30:8080/playground)
+
+```js
+async function posts(args, req) {
+  if (!req.isAuth) {
+    const error = new Error('Not authenticated.');
+    error.code = 401;
+    throw error;
+  }
+//  ...
+}
+```
+
+
+```graphiql
+{
+ posts{
+    posts {
+      _id
+      title
+      content
+    }
+    totalPosts
+  }
+  
+}
+```
