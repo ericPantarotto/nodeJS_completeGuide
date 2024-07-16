@@ -9,6 +9,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
+import authMiddleware from './middlewares/auth.js';
 
 import graphqlResolver from './graphql/resolvers.js';
 import graphqlSchema from './graphql/schema.js';
@@ -47,6 +48,8 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(authMiddleware.isAuthenticated);
 
 app.use(
   '/graphql',

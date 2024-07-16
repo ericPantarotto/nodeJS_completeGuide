@@ -39,10 +39,6 @@ async function createUser({ userInput }, req) {
   return { ...createdUser._doc, _id: createdUser._id.toString() }; //making sure to overwrite _id as string after the spread operator
 }
 
-// async function createUser(args, req) {
-//   const email = args.userInput.email;
-// }
-
 async function login({ email, password }) {
   const user = await User.findOne({ email: email });
   if (!user) {
@@ -70,6 +66,12 @@ async function login({ email, password }) {
 }
 
 async function createPost({ postInput }, req) {
+  if (!req.isAuth) {
+    const error = new Error('Not authenticated.');
+    error.code = 401;
+    throw error;
+  }
+
   const errors = [];
   if (
     validator.isEmpty(postInput.title) ||
@@ -90,20 +92,23 @@ async function createPost({ postInput }, req) {
     throw error;
   }
 
-  const user = await User.findOne(); //INFO: dummy user to have a valid response!
+  const user = await User.findById(req.userId);
+  if (!user) {
+      const error = new Error('Invalid User.');
+      error.code = 401;
+      throw error;
+  }
 
   const post = new Post({
     title: postInput.title,
     content: postInput.content,
     imageUrl: postInput.imageUrl,
     creator: user,
-    // creator: req.userId,
   });
   try {
     const createdPost = await post.save();
-    // const user = await User.findById(req.userId);
-    // user.posts.push(post);
-    // await user.save();
+    user.posts.push(post);
+    await user.save();
     return {
       ...createdPost._doc,
       _id: createdPost._id.toString(),
