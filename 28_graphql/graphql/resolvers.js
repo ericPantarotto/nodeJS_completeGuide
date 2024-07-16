@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import validator from 'validator';
 import User from '../models/user.js';
 
@@ -41,14 +42,35 @@ async function createUser({ userInput }, req) {
 //   const email = args.userInput.email;
 // }
 
-function hello() {
-  // return { text: 'Hello World!', views: 1245 };
-  return 'Hello World!';
+async function login({ email, password }) {
+  const user = await User.findOne({ email: email });
+  if (!user) {
+    const error = new Error('User not found!');
+    error.code = 401;
+    throw error;
+  }
+  const doMatch = await bcrypt.compare(password, user.password);
+  if (!doMatch) {
+    const error = new Error('Wrong password!');
+    error.statusCode = 401;
+    throw error;
+  }
+
+  const token = jwt.sign(
+    {
+      userId: user._id.toString(),
+      email: user.email,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+
+  return { token: token, userId: user._id.toString() };
 }
 
 export default {
   createUser,
-  hello,
+  login,
 };
 
 // function hello() {

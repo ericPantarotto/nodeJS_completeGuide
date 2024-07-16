@@ -4030,3 +4030,14 @@ app.use((req, res, next) => {
 
 // below starts GraphQL middleware
 ```
+
+## Adding a Login Query & Resolver
+
+```
+{
+  login (email: "test@test.com", password: "test123"){
+    token
+    userId
+  }
+}
+```
