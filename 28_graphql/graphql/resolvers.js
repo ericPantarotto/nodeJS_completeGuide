@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import validator from 'validator';
+import Post from '../models/post.js';
 import User from '../models/user.js';
 
 async function createUser({ userInput }, req) {
@@ -68,16 +69,55 @@ async function login({ email, password }) {
   return { token: token, userId: user._id.toString() };
 }
 
+async function createPost({ postInput }, req) {
+  const errors = [];
+  if (
+    validator.isEmpty(postInput.title) ||
+    !validator.isLength(postInput.title, { min: 5 })
+  ) {
+    errors.push({ message: 'Title is invalid.' });
+  }
+  if (
+    validator.isEmpty(postInput.content) ||
+    !validator.isLength(postInput.content, { min: 5 })
+  ) {
+    errors.push({ message: 'Content is invalid.' });
+  }
+  if (errors.length > 0) {
+    const error = new Error('Invalid input for Post Creation.');
+    error.data = errors;
+    error.code = 422;
+    throw error;
+  }
+
+  const user = await User.findOne(); //INFO: dummy user to have a valid response!
+
+  const post = new Post({
+    title: postInput.title,
+    content: postInput.content,
+    imageUrl: postInput.imageUrl,
+    creator: user,
+    // creator: req.userId,
+  });
+  try {
+    const createdPost = await post.save();
+    // const user = await User.findById(req.userId);
+    // user.posts.push(post);
+    // await user.save();
+    return {
+      ...createdPost._doc,
+      _id: createdPost._id.toString(),
+      createdAt: createdPost.createdAt.toISOString(),
+      updatedAt: createdPost.updatedAt.toISOString(),
+    };
+  } catch (err) {
+    !err.statusCode && (err.statusCode = 500);
+    next(err);
+  }
+}
+
 export default {
   createUser,
   login,
+  createPost,
 };
-
-// function hello() {
-//   return { text: 'Hello World!', views: 1245 };
-//   //  return 'Hello World!';
-// }
-
-// export default {
-//   hello,
-// };

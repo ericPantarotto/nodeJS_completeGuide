@@ -4041,3 +4041,29 @@ app.use((req, res, next) => {
   }
 }
 ```
+
+## Adding a CreatePost Mutation
+
+**<span style='color: #a8c62c'>backend/graphql/resolver.js:**
+
+to test with `graphiql` playground, you need to add the creator with dummy user to get a valid response:
+
+```js
+  const user = await User.findOne();
+
+  const post = new Post({
+    title: postInput.title,
+    content: postInput.content,
+    imageUrl: postInput.imageUrl,
+    creator: user,
+  });
+```
+
+```graphiql
+mutation {
+  createPost(postInput: {title: "test title",  content: "Test content - cool", imageUrl: "testurl.com"}){
+    _id
+    title
+  }
+}
+```
