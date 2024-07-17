@@ -91,4 +91,31 @@ async function posts({ page }, req) {
     next(err);
   }
 }
-export { createPost, posts };
+
+async function post({ id }, req) {
+  if (!req.isAuth) {
+    const error = new Error('Not authenticated.');
+    error.code = 401;
+    throw error;
+  }
+
+  try {
+    const post = await Post.findById(id).populate('creator');
+    if (!post) {
+      const error = new Error('Could not find post.');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    return {
+      ...post._doc,
+      _id: post._id.toString(),
+      createdAt: post.createdAt.toISOString(),
+      updatedAt: post.updatedAt.toISOString(),
+    };
+  } catch (err) {
+    !err.statusCode && (err.statusCode = 500);
+    next(err);
+  }
+}
+export { createPost, post, posts };

@@ -4134,3 +4134,9 @@ You can find a couple of articles, third party packages that help you with getti
 **<span style='color: #bcdbf9'> Note:** As we have a single route to add we'll do it directly in **<span style='color: #a8c62c'>backend/app.js:**
 
 In frontend we can  use this rest API endpoint (`/put-image`) and this also shows you that you can use **Rest API**  and **GraphQL** concepts together.
+
+## Viewing a Single Post
+
+if your parameters are **String**, you always have to surround them with `" "`:   `post(id: "${postId}") {`.
+
+You can omit this if your arguments are of type **Integer**.

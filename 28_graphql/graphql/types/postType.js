@@ -26,5 +26,6 @@ export default
 
     type Query {
         posts(page: Int): PostData!
+        post(id: ID!): Post!
     }
 `;

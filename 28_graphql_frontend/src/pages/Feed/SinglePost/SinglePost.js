@@ -4,6 +4,14 @@ import Image from '../../../components/Image/Image';
 import './SinglePost.css';
 
 class SinglePost extends Component {
+  statics = {
+    url: `${
+      navigator.userAgent.indexOf('Win') !== -1
+        ? 'http://localhost:8080/'
+        : 'http://192.168.1.30:8080/'
+    }`
+  };
+
   state = {
     title: '',
     author: '',
@@ -14,29 +22,48 @@ class SinglePost extends Component {
 
   componentDidMount() {
     const postId = this.props.match.params.postId;
+    const graphqlQuery = {
+      query: `
+        {
+          post(id: "${postId}") {
+            _id
+            title
+            content
+            creator {
+              name
+            }
+            imageUrl
+            createdAt
+          }        
+        }`
+    };
+
     const url = `${
       navigator.userAgent.indexOf('Win') !== -1
-        ? 'http://localhost:8080/'
-        : 'http://192.168.1.30:8080/'
+        ? 'http://localhost:8080/graphql'
+        : 'http://192.168.1.30:8080/graphql'
     }`;
-    fetch(`${url}feed/post/${postId}`, {
+    fetch(url, {
+      method: 'POST',
       headers: {
-        Authorization: `Bearer ${this.props.token}`
-      }
+        Authorization: `Bearer ${this.props.token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(graphqlQuery)
     })
-      .then(res => {
-        if (res.status !== 200) {
-          throw new Error('Failed to fetch status');
-        }
-        return res.json();
-      })
+      .then(res => res.json())
       .then(resData => {
+        if (resData.errors) {
+          throw new Error('Fetching post failed!');
+        }
         this.setState({
-          title: resData.post.title,
-          author: resData.post.creator.name,
-          image: `${url}${resData.post.imageUrl}`,
-          date: new Date(resData.post.createdAt).toLocaleDateString('en-US'),
-          content: resData.post.content
+          title: resData.data.post.title,
+          author: resData.data.post.creator.name,
+          image: `${this.statics.url}${resData.data.post.imageUrl}`,
+          date: new Date(resData.data.post.createdAt).toLocaleDateString(
+            'en-US'
+          ),
+          content: resData.data.post.content
         });
       })
       .catch(err => {

@@ -1,4 +1,4 @@
-import { createPost, posts } from './postsResolvers.js';
+import { createPost, post, posts } from './postsResolvers.js';
 import { createUser, login } from './userResolvers.js';
 
 export default {
@@ -6,4 +6,5 @@ export default {
   posts,
   createUser,
   login,
+  post,
 };

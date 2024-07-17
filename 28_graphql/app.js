@@ -2,7 +2,6 @@ import bodyParser from 'body-parser';
 import 'dotenv/config';
 import express from 'express';
 import { unlink } from 'fs';
-import { fileURLToPath } from 'url';
 import { createHandler } from 'graphql-http/lib/use/express';
 import expressPlayground from 'graphql-playground-middleware-express/dist/index.js';
 import { connect } from 'mongoose';
