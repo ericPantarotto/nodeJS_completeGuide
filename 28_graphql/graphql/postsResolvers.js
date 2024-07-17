@@ -1,7 +1,7 @@
 import validator from 'validator';
 import Post from '../models/post.js';
 import User from '../models/user.js';
-import imageUtils from "../util/imageUtils.js";
+import imageUtils from '../util/imageUtils.js';
 
 async function createPost({ postInput }, req) {
   if (!req.isAuth) {

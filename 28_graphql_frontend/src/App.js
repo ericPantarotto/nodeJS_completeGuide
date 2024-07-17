@@ -63,12 +63,16 @@ class App extends Component {
 
     const graphqlQuery = {
       query: `
-        {
-          login(email: "${authData.email}", password: "${authData.password}"){
+        query UserLogin($email: String!, $password: String!) {
+          login(email: $email, password: $password){
             token
             userId
         }
-      }`
+      }`,
+      variables: {
+        email: authData.email,
+        password: authData.password
+      }
     };
 
     const url = `${
@@ -121,13 +125,18 @@ class App extends Component {
   signupHandler = (event, authData) => {
     event.preventDefault();
     this.setState({ authLoading: true });
-    
+
     const graphqlQuery = {
-      query: `mutation {
-        createUser(userInput: {email: "${authData.signupForm.email.value}", name: "${authData.signupForm.name.value}", password: "${authData.signupForm.password.value}"}){
+      query: `mutation CreateNewUser($email: String!, $name: String!, $password: String!) {
+        createUser(userInput: {email: $email, name: $name, password: $password }){
         _id
         email}
-      }`
+      }`,
+      variables: {
+        email: authData.signupForm.email.value,
+        name: authData.signupForm.name.value,
+        password: authData.signupForm.password.value
+      }
     };
 
     const url = `${
