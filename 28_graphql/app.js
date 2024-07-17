@@ -1,7 +1,7 @@
 import bodyParser from 'body-parser';
 import 'dotenv/config';
 import express from 'express';
-import { unlink } from 'fs';
+
 import { createHandler } from 'graphql-http/lib/use/express';
 import expressPlayground from 'graphql-playground-middleware-express/dist/index.js';
 import { connect } from 'mongoose';
@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 import graphqlResolver from './graphql/resolvers.js';
 import graphqlSchema from './graphql/schema.js';
 import authMiddleware from './middlewares/auth.js';
+import imageUtils from "./util/imageUtils.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -59,7 +60,7 @@ app.put('/put-image', (req, res, next) => {
     return res.status(200).json({ message: 'No File provided!' });
   }
   if (req.body.oldPath) {
-    clearImage(req.body.oldPath);
+    imageUtils.clearImage(req.body.oldPath);
   }
   return res
     .status(201)
@@ -128,8 +129,3 @@ connect(process.env.MONGO_DB_URL)
 // );
 
 
-function clearImage(filePath) {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-  unlink(path.join(__dirname, '..', filePath), err => console.error(err));
-}

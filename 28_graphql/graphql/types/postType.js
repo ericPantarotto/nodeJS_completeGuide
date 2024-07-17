@@ -22,6 +22,7 @@ export default `  type Post {
     type Mutation {
         createPost(postInput: PostInputData): Post!
         updatePost(id: ID!, postInput: PostInputData): Post!
+        deletePost(id: ID!): Boolean
     }
 
     type Query {

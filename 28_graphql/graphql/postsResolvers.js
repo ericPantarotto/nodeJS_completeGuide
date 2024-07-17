@@ -1,6 +1,7 @@
 import validator from 'validator';
 import Post from '../models/post.js';
 import User from '../models/user.js';
+import imageUtils from "../util/imageUtils.js";
 
 async function createPost({ postInput }, req) {
   if (!req.isAuth) {
@@ -179,4 +180,36 @@ async function updatePost({ id, postInput }, req) {
   }
 }
 
-export { createPost, post, posts, updatePost };
+async function deletePost({ id }, req) {
+  if (!req.isAuth) {
+    const error = new Error('Not authenticated.');
+    error.code = 401;
+    throw error;
+  }
+
+  try {
+    const post = await Post.findById(id);
+    if (!post) {
+      const error = new Error('Could not find post.');
+      error.statusCode = 404;
+      throw error;
+    }
+    if (post.creator.toString() !== req.userId.toString()) {
+      const error = new Error('Unauthorized to delete post.');
+      error.statusCode = 403;
+      throw error;
+    }
+
+    imageUtils.clearImage(post.imageUrl);
+    await Post.findByIdAndDelete(id);
+    const user = await User.findById(req.userId);
+    user.posts.pull(id);
+    await user.save();
+    return true;
+  } catch (err) {
+    !err.statusCode && (err.statusCode = 500);
+    next(err);
+  }
+}
+
+export { createPost, deletePost, post, posts, updatePost };

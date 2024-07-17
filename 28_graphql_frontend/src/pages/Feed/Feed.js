@@ -247,7 +247,9 @@ class Feed extends Component {
           resData.errors[0].status !== 200 &&
           resData.errors[0].status !== 201
         ) {
-          throw new Error('Creating new post failed!');
+          throw new Error(
+            `${this.state.editPost ? 'Updating' : 'Creating new'} post failed!`
+          );
         }
         console.log(resData);
         const resDataField = this.state.editPost ? 'updatePost' : 'createPost';
@@ -301,25 +303,32 @@ class Feed extends Component {
 
     const deleteUrl = `${
       navigator.userAgent.indexOf('Win') !== -1
-        ? 'http://localhost:8080/feed/post/'
-        : 'http://192.168.1.30:8080/feed/post/'
-    }${postId}`;
+        ? 'http://localhost:8080/graphql'
+        : 'http://192.168.1.30:8080/graphql'
+    }`;
+
+    const graphqlQuery = {
+      query: `
+        mutation {
+          deletePost(id: "${postId}")  
+        }`
+    };
 
     fetch(deleteUrl, {
-      method: 'DELETE',
+      method: 'POST',
       headers: {
-        Authorization: `Bearer ${this.props.token}`
-      }
+        Authorization: `Bearer ${this.props.token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(graphqlQuery)
     })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
+      .then(res => res.json())
+      .then(resData => {
+        if (resData.errors) {
           throw new Error('Deleting a post failed!');
         }
-        return res.json();
-      })
-      .then(resData => {
         console.log(resData);
-        this.addPost.loadPosts();
+        this.loadPosts();
         // this.setState(prevState => {
         //   const updatedPosts = prevState.posts.filter(p => p._id !== postId);
         //   return { posts: updatedPosts, postsLoading: false };
