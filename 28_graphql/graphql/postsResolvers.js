@@ -118,4 +118,65 @@ async function post({ id }, req) {
     next(err);
   }
 }
-export { createPost, post, posts };
+
+async function updatePost({ id, postInput }, req) {
+  if (!req.isAuth) {
+    const error = new Error('Not authenticated.');
+    error.code = 401;
+    throw error;
+  }
+
+  try {
+    const post = await Post.findById(id).populate('creator');
+    if (!post) {
+      const error = new Error('Post not found.');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (post.creator._id.toString() !== req.userId.toString()) {
+      const error = new Error('Unauthorized to edit post.');
+      error.statusCode = 403;
+      throw error;
+    }
+
+    const errors = [];
+    if (
+      validator.isEmpty(postInput.title) ||
+      !validator.isLength(postInput.title, { min: 5 })
+    ) {
+      errors.push({ message: 'Title is invalid.' });
+    }
+    if (
+      validator.isEmpty(postInput.content) ||
+      !validator.isLength(postInput.content, { min: 5 })
+    ) {
+      errors.push({ message: 'Content is invalid.' });
+    }
+    if (errors.length > 0) {
+      const error = new Error('Invalid input for Post Creation.');
+      error.data = errors;
+      error.code = 422;
+      throw error;
+    }
+
+    post.title = postInput.title;
+    post.content = postInput.content;
+    if (post.imageUrl !== undefined) {
+      post.imageUrl = postInput.imageUrl;
+    }
+    const updatedPost = await post.save();
+
+    return {
+      ...updatedPost._doc,
+      _id: updatedPost._id.toString(),
+      createdAt: updatedPost.createdAt.toISOString(),
+      updatedAt: updatedPost.updatedAt.toISOString(),
+    };
+  } catch (err) {
+    !err.statusCode && (err.statusCode = 500);
+    next(err);
+  }
+}
+
+export { createPost, post, posts, updatePost };

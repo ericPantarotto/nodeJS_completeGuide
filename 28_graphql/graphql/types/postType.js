@@ -1,5 +1,4 @@
-export default 
-`  type Post {
+export default `  type Post {
         _id: ID!
         title: String!
         content: String!
@@ -21,7 +20,8 @@ export default
     }
 
     type Mutation {
-        createPost(postInput :PostInputData): Post!
+        createPost(postInput: PostInputData): Post!
+        updatePost(id: ID!, postInput: PostInputData): Post!
     }
 
     type Query {
