@@ -57,20 +57,23 @@ async function createPost({ postInput }, req) {
   }
 }
 
-async function posts(args, req) {
+async function posts({ page }, req) {
+  //NOTE: destructuring args argument on the fly
   if (!req.isAuth) {
     const error = new Error('Not authenticated.');
     error.code = 401;
     throw error;
   }
 
-  //  const currentPage = req.query.page || 1;
-  //  const perPage = 2;
+  const currentPage = page || 1;
+  const perPage = 2;
   try {
     const totalPosts = await Post.find().countDocuments();
-    const posts = await Post.find().sort({ createdAt: -1 }).populate('creator');
-    //  .skip((currentPage - 1) * perPage)
-    //  .limit(perPage);
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .populate('creator')
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage);
 
     return {
       posts: posts.map(p => {
@@ -88,7 +91,4 @@ async function posts(args, req) {
     next(err);
   }
 }
-export {
-  createPost,
-  posts,
-};
+export { createPost, posts };

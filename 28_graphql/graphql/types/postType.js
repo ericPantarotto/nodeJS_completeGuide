@@ -25,6 +25,6 @@ export default
     }
 
     type Query {
-        posts: PostData!
+        posts(page: Int): PostData!
     }
 `;
