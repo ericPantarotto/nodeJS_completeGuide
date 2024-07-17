@@ -4142,3 +4142,7 @@ In frontend we can  use this rest API endpoint (`/put-image`) and this also show
 if your parameters are **String**, you always have to surround them with `" "`:   `post(id: "${postId}") {`.
 
 You can omit this if your arguments are of type **Integer**.
+
+## Wrap-up
+
+![image info](./28_sc6.png)
