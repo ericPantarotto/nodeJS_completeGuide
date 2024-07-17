@@ -3943,6 +3943,8 @@ API is a stateless client independent API for exchanging data, so it's a node ex
 
 We don't render views, we don't store sessions, we don't care about the client, we only get requests, parse the data and return responses with data, typically json data.
 
+**<span style='color: #bcdbf9'> Note:** By moving our entire rest API over to graphql, we are more flexible regarding the data you fetch from the backend and therefore, your frontend development can move faster because your backend gives you the entire bandwidth of data you might be interested in.
+
 **GraphQL has higher query flexibility.**
 
 ### REST API Limitations

@@ -21,8 +21,10 @@ export default
 
     type Mutation {
         createUser(userInput: UserInputData): User!
+        updateStatus(status: String): User!
     }
 
     type Query {
         login(email: String!, password: String!): AuthData!
+        user: User!
     }`

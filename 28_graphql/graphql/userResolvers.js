@@ -65,7 +65,49 @@ async function login({ email, password }) {
   return { token: token, userId: user._id.toString() };
 }
 
-export {
-  createUser,
-  login,
-};
+async function user(args, req) {
+  if (!req.isAuth) {
+    const error = new Error('Not authenticated.');
+    error.code = 401;
+    throw error;
+  }
+
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      const error = new Error("A user with this email couldn't be found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    return { ...user._doc, _id: user._id.toString() };
+  } catch (err) {
+    !err.statusCode && (err.statusCode = 500);
+    next(err);
+  }
+}
+
+async function updateStatus({ status }, req) {
+  if (!req.isAuth) {
+    const error = new Error('Not authenticated.');
+    error.code = 401;
+    throw error;
+  }
+
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      const error = new Error("A user with this email couldn't be found");
+      error.statusCode = 404;
+      throw error;
+    }
+    user.status = status;
+    await user.save();
+    return { ...user._doc, _id: user._id.toString() };
+  } catch (err) {
+    !err.statusCode && (err.statusCode = 500);
+    next(err);
+  }
+}
+
+export { createUser, login, user, updateStatus };

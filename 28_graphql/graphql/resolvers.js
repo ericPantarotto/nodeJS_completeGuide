@@ -1,11 +1,12 @@
 import {
   createPost,
+  deletePost,
   post,
   posts,
   updatePost,
-  deletePost,
 } from './postsResolvers.js';
-import { createUser, login } from './userResolvers.js';
+
+import { createUser, login, user, updateStatus } from './userResolvers.js';
 
 export default {
   createPost,
@@ -15,4 +16,6 @@ export default {
   post,
   updatePost,
   deletePost,
+  user,
+  updateStatus,
 };
