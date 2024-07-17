@@ -4107,7 +4107,6 @@ async function posts(args, req) {
 }
 ```
 
-
 ```graphiql
 {
  posts{
@@ -4125,3 +4124,13 @@ async function posts(args, req) {
 ## Merging Type Definitions from several files
 
 **<span style='color: #ffe5c5'>Link:** [https://the-guild.dev/graphql/tools/docs/schema-merging](https://the-guild.dev/graphql/tools/docs/schema-merging)
+
+## Uploading Images
+
+**GraphQL** only works with json data.
+
+You can find a couple of articles, third party packages that help you with getting data through graphql but one of the cleanest solutions is to use a classic endpoint like a rest endpoint where you send your image to and then let that endpoint store the image and return the path to the image and then send another request with that path to the image and your other data to your graphql
+
+**<span style='color: #bcdbf9'> Note:** As we have a single route to add we'll do it directly in **<span style='color: #a8c62c'>backend/app.js:**
+
+In frontend we can  use this rest API endpoint (`/put-image`) and this also shows you that you can use **Rest API**  and **GraphQL** concepts together.

@@ -1,18 +1,19 @@
 import bodyParser from 'body-parser';
 import 'dotenv/config';
 import express from 'express';
-import expressPlayground from 'graphql-playground-middleware-express/dist/index.js';
-
+import { unlink } from 'fs';
+import { fileURLToPath } from 'url';
 import { createHandler } from 'graphql-http/lib/use/express';
+import expressPlayground from 'graphql-playground-middleware-express/dist/index.js';
 import { connect } from 'mongoose';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
-import authMiddleware from './middlewares/auth.js';
 
 import graphqlResolver from './graphql/resolvers.js';
 import graphqlSchema from './graphql/schema.js';
+import authMiddleware from './middlewares/auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,6 +51,21 @@ app.use((req, res, next) => {
 });
 
 app.use(authMiddleware.isAuthenticated);
+
+app.put('/put-image', (req, res, next) => {
+  if (!req.isAuth) {
+    throw new Error('Not Authenticated!');
+  }
+  if (!req.file) {
+    return res.status(200).json({ message: 'No File provided!' });
+  }
+  if (req.body.oldPath) {
+    clearImage(req.body.oldPath);
+  }
+  return res
+    .status(201)
+    .json({ message: 'File stored!', filePath: req.file.path });
+});
 
 app.use(
   '/graphql',
@@ -111,3 +127,10 @@ connect(process.env.MONGO_DB_URL)
 //     rootValue: rootQuery,
 //   })
 // );
+
+
+function clearImage(filePath) {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  unlink(path.join(__dirname, '..', filePath), err => console.error(err));
+}
