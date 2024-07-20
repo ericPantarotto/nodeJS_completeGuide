@@ -4178,3 +4178,11 @@ for production, we would configure these variables via the hosting provider dash
 this will be set automatically by hosting providers, for production, but you can set your own.
 
  **<span style='color: #bcdbf9'> Note:** it's not set by default by **express.js**. but for production, express.js will change certain things, it will reduce the details for errors it throws and in general, optimize some things for deployment.
+
+## Setting Secure Respponse Headers: helmet
+
+**<span style='color: #ffe5c5'>Link:** [https://helmetjs.github.io/](https://helmetjs.github.io/
+
+## Compression Assets
+
+**<span style='color: #ffe5c5'>Link:** [http://expressjs.com/en/resources/middleware/compression.html](http://expressjs.com/en/resources/middleware/compression.html)

@@ -11,6 +11,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
+import compression from "compression";
 
 import errorController from './controllers/error.js';
 import User from './models/user.js';
@@ -89,6 +90,7 @@ app.use(shopRoutes);
 app.use(authRoutes);
 
 app.use(helmet());
+app.use(compression())
 
 app.get('/500', errorController.get500);
 app.use(errorController.get404);
