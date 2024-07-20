@@ -5,6 +5,7 @@ import csrf from 'csurf';
 // import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
+import helmet from 'helmet';
 import { connect } from 'mongoose';
 import multer from 'multer';
 import path from 'path';
@@ -86,6 +87,8 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 app.use(authRoutes);
+
+app.use(helmet());
 
 app.get('/500', errorController.get500);
 app.use(errorController.get404);
