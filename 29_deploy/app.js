@@ -3,15 +3,17 @@ import flash from 'connect-flash';
 import connectMongoDBSession from 'connect-mongodb-session';
 import csrf from 'csurf';
 // import 'dotenv/config';
+import compression from 'compression';
 import express from 'express';
 import session from 'express-session';
+import { createWriteStream } from 'fs';
 import helmet from 'helmet';
 import { connect } from 'mongoose';
+import morgan from 'morgan';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
-import compression from "compression";
 
 import errorController from './controllers/error.js';
 import User from './models/user.js';
@@ -23,6 +25,35 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      upgradeInsecureRequests: null,
+      'default-src': ["'self'"],
+      'img-src': ["'self'", 'http: images:'],
+      'script-src': [
+        "'self'",
+        "'unsafe-inline'",
+        "'unsafe-hashes'",
+        "'sha256-{HASHED_EVENT_HANDLER}'",
+      ],
+      'script-src': ["'self'", "'unsafe-inline'", 'js.stripe.com'],
+      'script-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+      'style-src': ["'self'", 'https://fonts.googleapis.com'],
+      'style-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+      'frame-src': ["'self'", 'js.stripe.com'],
+      'font-src': ["'self'", 'fonts.googleapis.com', 'fonts.gstatic.com'],
+    },
+  })
+);
+
+app.use(compression());
+const accessLogStream = createWriteStream(path.join(__dirname, 'access.log'), {
+  flags: 'a',
+});
+app.use(morgan('combined', { stream: accessLogStream }));
+
 const MongoDBStore = connectMongoDBSession(session);
 const store = new MongoDBStore({
   uri: process.env.MONGO_DB_URL,
@@ -85,12 +116,21 @@ app.use((req, res, next) => {
     });
 });
 
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       'default-src': ["'self'"],
+//       'script-src': ["'self'", "'unsafe-inline'", 'js.stripe.com'],
+//       'style-src': ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
+//       'frame-src': ["'self'", 'js.stripe.com'],
+//       'font-src': ["'self'", 'fonts.googleapis.com', 'fonts.gstatic.com'],
+//     },
+//   })
+// );
+
 app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 app.use(authRoutes);
-
-app.use(helmet());
-app.use(compression())
 
 app.get('/500', errorController.get500);
 app.use(errorController.get404);

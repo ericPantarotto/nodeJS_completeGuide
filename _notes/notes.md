@@ -3990,6 +3990,7 @@ It's important to understand that we don't filter the data on the frontend, it g
 In the resolver, we return all the data but then graphql on the server will filter out just the data that was requested by the client.
 
 ## Adding a mutation Resolver & GraphQL
+
 ```graphiql
 mutation {
   createUser(userInput: {email: "test@test.com", name: "Test user", password: "test123"}){
@@ -4010,7 +4011,7 @@ mutation {
 
 When we test our signup for the first time, our `OPTIONS` request fails **status: 405**.
 
-As explained the browser sends an `options` request, before it sends the post, patch, put, delete requests. 
+As explained the browser sends an `options` request, before it sends the post, patch, put, delete requests.
 
 The problem is the `graphql-http` middleware in our **<span style='color: #a8c62c'>backend/app.js:** automatically declines anything which is not a post or get request.
 
@@ -4074,7 +4075,8 @@ mutation {
 
 **<span style='color: #a8c62c'>backend/app.js:**
 
-**<span style='color:   #875c5c'>IMPORTANT:** with latest version of `graph-http`, you have to pass a `context` function to extract the `req` variables you are passing 
+**<span style='color:   #875c5c'>IMPORTANT:** with latest version of `graph-http`, you have to pass a `context` function to extract the `req` variables you are passing
+
 ```js
 app.use(
   '/graphql',
@@ -4091,10 +4093,9 @@ app.use(
 
 **<span style='color: #ffe5c5'>Link:** [https://www.udemy.com/course/nodejs-the-complete-guide/learn/lecture/12197948#questions/21602012](https://www.udemy.com/course/nodejs-the-complete-guide/learn/lecture/12197948#questions/21602012)
 
-
 ## Adding a Getpost Query & Resolver
 
-**<span style='color: #bcdbf9'> Note:** To be able to test it with `Graphiql`, you have to commment in your `resolver.js` the part that test the authentication 
+**<span style='color: #bcdbf9'> Note:** To be able to test it with `Graphiql`, you have to commment in your `resolver.js` the part that test the authentication
 
 **<span style='color: #ffe5c5'>Link:** [http://192.168.1.30:8080/playground](http://192.168.1.30:8080/playground)
 
@@ -4181,8 +4182,51 @@ this will be set automatically by hosting providers, for production, but you can
 
 ## Setting Secure Respponse Headers: helmet
 
-**<span style='color: #ffe5c5'>Link:** [https://helmetjs.github.io/](https://helmetjs.github.io/
+**<span style='color: #ffe5c5'>Link:** [https://helmetjs.github.io/](https://helmetjs.github.io)
+
+SSL issues: [**<span style='color: #ffe5c5'>Link:** [https://helmetjs.github.io](https://github.com/helmetjs/helmet/issues/429)
+
+What not to do? This:
+
+```js
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+    })
+);
+```
+
+Why? Because yes, it's true that it will look like it "fix" your broken app, due to using Helmet. But it will also allow everything, defeating the purpose of using Helmet in the first place. It will leave our app exposed to attacks, including malicious xss code.
+
+```js
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      upgradeInsecureRequests: null,
+      'default-src': ["'self'"],
+      'script-src': [
+        "'self'",
+        "'unsafe-inline'",
+        "'unsafe-hashes'",
+        "'sha256-{HASHED_EVENT_HANDLER}'",
+      ],
+      'script-src': ["'self'", "'unsafe-inline'", 'js.stripe.com'],
+      'script-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+      'style-src': ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
+      'style-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+      'frame-src': ["'self'", 'js.stripe.com'],
+      'font-src': ["'self'", 'fonts.googleapis.com', 'fonts.gstatic.com'],
+    },
+  })
+);
+```
 
 ## Compression Assets
 
 **<span style='color: #ffe5c5'>Link:** [http://expressjs.com/en/resources/middleware/compression.html](http://expressjs.com/en/resources/middleware/compression.html)
+
+**<span style='color: #ffe5c5'>Link:** [https://github.com/expressjs/morgan](https://github.com/expressjs/morgan)
+
+## Setting up request logging
+
+**<span style='color: #ffe5c5'>Link:** [https://blog.risingstack.com/node-js-logging-tutorial/](https://blog.risingstack.com/node-js-logging-tutorial/)
