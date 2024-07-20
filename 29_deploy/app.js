@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import flash from 'connect-flash';
 import connectMongoDBSession from 'connect-mongodb-session';
 import csrf from 'csurf';
-import 'dotenv/config';
+// import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
 import { connect } from 'mongoose';
@@ -99,5 +99,5 @@ app.use((error, req, res, next) => {
 });
 
 connect(process.env.MONGO_DB_URL)
-  .then(_ => app.listen(3000))
+  .then(_ => app.listen(process.env.PORT || 3000))
   .catch(err => console.error(err));

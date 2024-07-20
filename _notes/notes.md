@@ -4146,3 +4146,35 @@ You can omit this if your arguments are of type **Integer**.
 ## Wrap-up
 
 ![image info](./28_sc6.png)
+
+# Deploying our App
+
+## Using Environment Variables
+
+Environment variables are a concept supported by nodejs where we can pass certain configurations, certain values into our node application from outside, so we don't hardcode certain values into our node code, instead the values will be injected when our node server starts and that allows us to use different values in development and production and also to conveniently change the values in production without having to redeploy our entire code.
+
+With **nodemon**, we can provide a configuration file `nodemon.json`.
+
+**<span style='color: #bcdbf9'> Note:** we can access environments variables on the process object, this is an object not defined by us but this is globally available in the node app, it's part of the **Node.js core runtime**.
+
+**<span style='color: #a8c62c'>/app.js:**
+
+we want to let our server or our hosting provider set this port because that is the service that does open our app to the web and that does configure all the network settings, so there we don't control the port number but the hosting provider does.
+
+to run our dev set-up, we console `npm run start:dev` that will use our `nodemon.json` key-value pairs.
+
+for production, we would configure these variables via the hosting provider dashboard, or we can run `npm start`.
+
+```powershell-interactive
+ "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "nodemon app.js",
+    "start": "MONGO_DB_URL=url SESSION_SECRET=secret node app.js"
+  },
+```
+
+**<span style='color:   #875c5c'>IMPORTANT:** there's a special node.js *process.env variable*: `process.env.NODE_ENV`
+
+this will be set automatically by hosting providers, for production, but you can set your own.
+
+ **<span style='color: #bcdbf9'> Note:** it's not set by default by **express.js**. but for production, express.js will change certain things, it will reduce the details for errors it throws and in general, optimize some things for deployment.
