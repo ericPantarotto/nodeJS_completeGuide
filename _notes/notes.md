@@ -4308,3 +4308,15 @@ You can easily configure multer to store your files there with the help of anoth
 To also serve your files, you can use packages like s3-proxy: https://www.npmjs.com/package/s3-proxy
 
 For deleting the files (or interacting with them on your own in general), you'd use the AWS SDK: https://aws.amazon.com/sdk-for-node-js/
+
+# Testing Node.js Applications
+
+## Why Testing?
+
+- Automatically test everything after every code adjustment
+- Easily detect breaking changes (even in places you didn't expect)
+- Ensure predictable and clearly defined testing steps
+
+### Testing Tools
+
+![image info](./30_sc1.png)
