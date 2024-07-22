@@ -4287,6 +4287,9 @@ connect(process.env.MONGO_DB_URL)
   )
   .catch(err => console.error(err));
 ```
+## Deployment example with Render
+
+**<span style='color:   #875c5c'>IMPORTANT:** *Node.js* has to be deployed as `Web Service`, and not static app (as React front-end would be)
 
 ## Storing User-generated Files
 
