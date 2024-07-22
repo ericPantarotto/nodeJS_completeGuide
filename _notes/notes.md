@@ -4320,3 +4320,7 @@ For deleting the files (or interacting with them on your own in general), you'd 
 ### Testing Tools
 
 ![image info](./30_sc1.png)
+
+## Set-up and Writing first test
+
+`npm test`
