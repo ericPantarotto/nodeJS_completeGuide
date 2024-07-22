@@ -4230,3 +4230,60 @@ app.use(
 ## Setting up request logging
 
 **<span style='color: #ffe5c5'>Link:** [https://blog.risingstack.com/node-js-logging-tutorial/](https://blog.risingstack.com/node-js-logging-tutorial/)
+
+## Setting up SSL Server
+
+### SSL / TLS Encryption
+
+![image info](./29_sc1.png)
+
+This is about securing your data that is sent from a client to the server because when we communicate between client server, we typically exchange data.
+
+Hence we want to protect that data and we do that with ssl/tls encryption. Now once such encryption is in place, eavesdropping is not possible anymore because while the data is unreadable as long as it is in transit and it will be decrypted on the server. Now to enable that encryption and to be able to decrypt it, we work with a public private key pair, both is known to the server.
+
+The private key will ever only be known by the server because the private key will later be important for decrypting the data,
+
+The public key will be used for encrypting. Now in ssl certificate, we bind that public key to the server identity, the identity is simply something like the domain, the admin email address, you set that data when you create a certificate. That ssl certificate therefore connects a public key and a server and sends that to the client, to the browser so that the client also is aware of the public key and knows that it belongs to that server.
+
+Now typically you will use a certificate authority for that, though you can create your own ssl certificates too and we'll do that in this module. but when you create your own keys, then the browser does not actually trust you that the information in there is correct and that is when you get informations or warnings like hey this page uses ssl but doesn't seem to be secure, "do you really want to visit it?"
+
+Hence in production, you would use a ssl certificate provided by a known certificate authority which the browser trusts and therefore you have a real secure and trusted protection.
+
+Nonetheless the way it works always is the same, we have that public key, part of that certificate, certificate ideally is not created by you but by a trusted authority, we will create it here on our own though because that will be free.
+
+That public key is then received by the client through that certificate and now the client can encrypt the data which it sends to the server and the server can decrypt the data with that private key and only that private key can decrypt that data.
+
+This is how that works and how that secures your data in transit.
+
+`openssl req -nodes -new -x509 -keyout server.key -out server.cert`
+
+**FDQN**: Enter the name from cmd `hostname -f`
+
+- server cert which is the certificate 
+- server key which is the private key. 
+
+Now the private key will always stay on your server, the certificate is what we send to the client.
+
+First of all have to import a new node module and that is the `https` module which allows us to spin up an https server. Thus far, we directly or indirectly through app listen used http, now we'll use https.
+
+Now using ssl encryption and if we now go back to our application and we reload localhost 3000, this will fail because by default it uses http.
+
+if I use https localhost 3000, it will fail because the browser does not accept that custom or that self-signed certificate as you learned but if you click on advanced, you can proceed to localhost and now again, the browser does warn us because it does not like our self-signed certificate but technically we are now using ssl protection
+
+**<span style='color: #ffe5c5'>Link:** [https://192.168.1.30:3000/]https://192.168.1.30:3000/)
+
+
+**<span style='color:   #875c5c'>IMPORTANT:** you would let your hosting provider set this up because technically the hosting provider often also has its own servers in front of yours and the servers of the hosting provider then use ssl and the traffic between your app and the in-between servers does use http because it's blocked or it's not availabl to the public anyways and the hosting providers front servers would implement this logic. So you wouldn't write that code on your own.
+
+But if you would need to start your dev server in **https** protocol, this is how you would do!
+
+```js
+connect(process.env.MONGO_DB_URL)
+  // .then(_ => app.listen(process.env.PORT || 3000))
+  .then(_ =>
+    https
+      .createServer({ key: privateKey, cert: certificate }, app)
+      .listen(process.env.PORT || 3000)
+  )
+  .catch(err => console.error(err));
+```

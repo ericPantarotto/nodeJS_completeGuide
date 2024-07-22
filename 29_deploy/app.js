@@ -8,6 +8,8 @@ import express from 'express';
 import session from 'express-session';
 import { createWriteStream } from 'fs';
 import helmet from 'helmet';
+// import { createWriteStream, readFileSync } from 'fs';
+// import https from 'https';
 import { connect } from 'mongoose';
 import morgan from 'morgan';
 import multer from 'multer';
@@ -61,6 +63,9 @@ const store = new MongoDBStore({
 });
 
 const csrfProtection = csrf();
+
+// const privateKey = readFileSync('./server.key');
+// const certificate = readFileSync('./server.cert');
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'images'),
@@ -116,18 +121,6 @@ app.use((req, res, next) => {
     });
 });
 
-// app.use(
-//   helmet.contentSecurityPolicy({
-//     directives: {
-//       'default-src': ["'self'"],
-//       'script-src': ["'self'", "'unsafe-inline'", 'js.stripe.com'],
-//       'style-src': ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
-//       'frame-src': ["'self'", 'js.stripe.com'],
-//       'font-src': ["'self'", 'fonts.googleapis.com', 'fonts.gstatic.com'],
-//     },
-//   })
-// );
-
 app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 app.use(authRoutes);
@@ -145,4 +138,9 @@ app.use((error, req, res, next) => {
 
 connect(process.env.MONGO_DB_URL)
   .then(_ => app.listen(process.env.PORT || 3000))
+  // .then(_ =>
+  //   https
+  //     .createServer({ key: privateKey, cert: certificate }, app)
+  //     .listen(process.env.PORT || 3000)
+  // )
   .catch(err => console.error(err));
