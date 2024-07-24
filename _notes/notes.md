@@ -4324,3 +4324,7 @@ For deleting the files (or interacting with them on your own in general), you'd 
 ## Set-up and Writing first test
 
 `npm test`
+
+## What not to test!
+
+You don't want to test **external dependencies / third-party packages**, in our **<span style='color: #a8c62c'>middleware/is-auth.js:** file for example we don't want to test a line such as `jwt.verify()`
