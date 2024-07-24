@@ -1421,11 +1421,9 @@ function postAddProduct(req, res, next) {
 
 **<span style='color: #a8c62c'> /views/admin/edit-product.ejs**, we add an hidden input storing the existing `productId` when editing a product:
 
-```html
-<% if (locals.editing) { %>
-  <input type="hidden" value="<%= product.id %>" name="productId">
-<% } %>
-```
+>`<% if (locals.editing) { %>`  
+`<input type="hidden" value="<%= product.id %>"`  `name="productId">`
+`<% } %>`  
 
 ## Adding the Product-Delete functionality
 
@@ -1440,7 +1438,7 @@ our delete is a `POST` request, so we don't need to enclose any information in o
 
 - `filter()` wouldn't error
 
-```js
+```js  
 updatedCart.products = updatedCart.products.filter(
   prod => prod.id !== id
 );
@@ -4259,8 +4257,8 @@ This is how that works and how that secures your data in transit.
 
 **FDQN**: Enter the name from cmd `hostname -f`
 
-- server cert which is the certificate 
-- server key which is the private key. 
+- server cert which is the certificate
+- server key which is the private key.
 
 Now the private key will always stay on your server, the certificate is what we send to the client.
 
@@ -4270,8 +4268,7 @@ Now using ssl encryption and if we now go back to our application and we reload 
 
 if I use https localhost 3000, it will fail because the browser does not accept that custom or that self-signed certificate as you learned but if you click on advanced, you can proceed to localhost and now again, the browser does warn us because it does not like our self-signed certificate but technically we are now using ssl protection
 
-**<span style='color: #ffe5c5'>Link:** [https://192.168.1.30:3000/]https://192.168.1.30:3000/)
-
+**<span style='color: #ffe5c5'>Link:** [https://192.168.1.30:3000/]<https://192.168.1.30:3000/>)
 
 **<span style='color:   #875c5c'>IMPORTANT:** you would let your hosting provider set this up because technically the hosting provider often also has its own servers in front of yours and the servers of the hosting provider then use ssl and the traffic between your app and the in-between servers does use http because it's blocked or it's not availabl to the public anyways and the hosting providers front servers would implement this logic. So you wouldn't write that code on your own.
 
@@ -4287,6 +4284,7 @@ connect(process.env.MONGO_DB_URL)
   )
   .catch(err => console.error(err));
 ```
+
 ## Deployment example with Render
 
 **<span style='color:   #875c5c'>IMPORTANT:** *Node.js* has to be deployed as `Web Service`, and not static app (as React front-end would be)
@@ -4301,13 +4299,13 @@ But your generated and uploaded files are not stored and re-created. They would 
 
 What would be alternatives?
 
-A popular and very efficient + affordable alternative is AWS S3 (Simple Storage Service): https://aws.amazon.com/s3/
+A popular and very efficient + affordable alternative is AWS S3 (Simple Storage Service): <https://aws.amazon.com/s3/>
 
-You can easily configure multer to store your files there with the help of another package: https://www.npmjs.com/package/multer-s3
+You can easily configure multer to store your files there with the help of another package: <https://www.npmjs.com/package/multer-s3>
 
-To also serve your files, you can use packages like s3-proxy: https://www.npmjs.com/package/s3-proxy
+To also serve your files, you can use packages like s3-proxy: <https://www.npmjs.com/package/s3-proxy>
 
-For deleting the files (or interacting with them on your own in general), you'd use the AWS SDK: https://aws.amazon.com/sdk-for-node-js/
+For deleting the files (or interacting with them on your own in general), you'd use the AWS SDK: <https://aws.amazon.com/sdk-for-node-js/>
 
 # Testing Node.js Applications
 
@@ -4325,6 +4323,23 @@ For deleting the files (or interacting with them on your own in general), you'd 
 
 `npm test`
 
-## What not to test!
+## What not to test
 
 You don't want to test **external dependencies / third-party packages**, in our **<span style='color: #a8c62c'>middleware/is-auth.js:** file for example we don't want to test a line such as `jwt.verify()`
+
+## Using Stubs
+
+**<span style='color: #a8c62c'>/test/auth-middleware.js:**
+
+```javascript
+//replacing the built-in jwt.verify() function
+    jwt.verify = function () {
+      return { userId: 'abc' };
+    };
+```
+
+The issue with such approach, if we change the order of test, and have other tests using `jwt.verify()`, they will now error.
+
+jwt.verify(token, process.env.JWT_SECRET)
+
+**<span style='color: #bcdbf9'> Note:** a solution is to use `sinon` which allows us to restore an object/function at the end of a specific test

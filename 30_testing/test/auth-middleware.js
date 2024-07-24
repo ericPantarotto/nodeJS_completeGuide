@@ -1,4 +1,7 @@
 import { expect } from 'chai';
+import jwt from 'jsonwebtoken';
+import sinon from 'sinon';
+
 import authMiddleware from '../middlewares/is-auth.js';
 
 describe('Auth middleware', function () {
@@ -38,14 +41,24 @@ describe('Auth middleware', function () {
     ).to.throw();
   });
 
-  // it('should yield a userId after decoding the token', function () {
-  //   const req = {
-  //     get: function (headerName) {
-  //       return 'Bearer xyz';
-  //     },
-  //   };
+  it('should yield a userId after decoding the token', function () {
+    const req = {
+      get: function (headerName) {
+        return 'Bearer xyz';
+      },
+    };
 
-  //   authMiddleware.isAuthenticated(req, {}, _ => {});
-  //   expect(req).to.property('userId');
-  // });
+    // jwt.verify = function () {
+    //   return { userId: 'abc' };
+    // };
+    sinon.stub(jwt, 'verify');
+    jwt.verify.returns({ userId: 'abc' });
+
+    authMiddleware.isAuthenticated(req, {}, _ => {});
+    expect(req).to.have.property('userId');
+    expect(req).to.have.property('userId', 'abc');
+    expect(jwt.verify.called).to.be.true;
+
+    jwt.verify.restore();
+  });
 });
