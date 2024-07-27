@@ -4364,3 +4364,12 @@ catch (err) {
 with asynchronous code, *mocha* executes this code synchronously, step by step and does not wait for this promise to resolve no matter how fast it is.
 
 To tell *Mocha* to wait,  we add an extra argument in the function call, we pass to it `done` argument.
+
+## Setting up a Testing Database & Testing Code with an Active Database
+
+a better solution to test more than unit tests, would be to set-up a test database, allowing to test the entire flow without risking production database integrity.
+
+create in your `.env` file a new *mongodb* connection url pointing to a test database.
+
+if you run your `  it('should send a response with a valid user status for an existing user')` test multiple time we get an error for duplicate key!
+
