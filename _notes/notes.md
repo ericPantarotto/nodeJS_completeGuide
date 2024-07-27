@@ -4343,3 +4343,24 @@ The issue with such approach, if we change the order of test, and have other tes
 jwt.verify(token, process.env.JWT_SECRET)
 
 **<span style='color: #bcdbf9'> Note:** a solution is to use `sinon` which allows us to restore an object/function at the end of a specific test
+
+## Testing Controllers
+
+### Testing involving database
+
+Strategy number one, for a testing code that involves database operations is that we stub or mock the parts that actually rely on database access.
+
+This could mean, for example, that here when we execute `findOne()`, we again create a **stub** that returns a predefined result and we then test if our code behaves correctly.
+
+for our test where we test the error status code 500, we get `undefined`, but if we add a return `err` in our catch block, then we get the error object:
+
+```js
+catch (err) {
+  !err.statusCode && (err.statusCode = 500);
+  next(err);
+  return err
+}
+```
+with asynchronous code, *mocha* executes this code synchronously, step by step and does not wait for this promise to resolve no matter how fast it is.
+
+To tell *Mocha* to wait,  we add an extra argument in the function call, we pass to it `done` argument.

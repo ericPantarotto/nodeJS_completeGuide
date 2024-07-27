@@ -66,6 +66,7 @@ async function login(req, res, next) {
   } catch (err) {
     !err.statusCode && (err.statusCode = 500);
     next(err);
+    return err
   }
 }
 
