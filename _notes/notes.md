@@ -4373,3 +4373,6 @@ create in your `.env` file a new *mongodb* connection url pointing to a test dat
 
 if you run your `  it('should send a response with a valid user status for an existing user')` test multiple time we get an error for duplicate key!
 
+## Hooks
+
+`beforeEach()` & `afterEach()` runs before/after each `it` test case.
