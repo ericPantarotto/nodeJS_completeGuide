@@ -4322,6 +4322,8 @@ For deleting the files (or interacting with them on your own in general), you'd 
 Extension: Mocha Test Explorer
 VSCode: Add Folder to Workspace, otherwise the test will not be detected if you have a multi-folder project
 
+**<span style='color: #ffe5c5'>Link:** [https://code.visualstudio.com/docs/editor/multi-root-workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces)
+
 ## Set-up and Writing first test
 
 `npm test`
@@ -4399,3 +4401,10 @@ in the controller, for the below line to not error , in our `req` object in our 
 ```js
 res.status(201).json()
 ```
+## Wrap-up
+
+**<span style='color: #ffe5c5'>Link:** [https://mochajs.org/](https://mochajs.org/)
+
+**<span style='color: #ffe5c5'>Link:** [https://www.chaijs.com/](https://www.chaijs.com/)
+
+**<span style='color: #ffe5c5'>Link:** [https://sinonjs.org/](https://sinonjs.org/)
