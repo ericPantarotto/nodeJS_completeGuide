@@ -4319,6 +4319,9 @@ For deleting the files (or interacting with them on your own in general), you'd 
 
 ![image info](./30_sc1.png)
 
+Extension: Mocha Test Explorer
+VSCode: Add Folder to Workspace, otherwise the test will not be detected if you have a multi-folder project
+
 ## Set-up and Writing first test
 
 `npm test`
@@ -4361,6 +4364,7 @@ catch (err) {
   return err
 }
 ```
+
 with asynchronous code, *mocha* executes this code synchronously, step by step and does not wait for this promise to resolve no matter how fast it is.
 
 To tell *Mocha* to wait,  we add an extra argument in the function call, we pass to it `done` argument.
@@ -4371,8 +4375,27 @@ a better solution to test more than unit tests, would be to set-up a test databa
 
 create in your `.env` file a new *mongodb* connection url pointing to a test database.
 
-if you run your `  it('should send a response with a valid user status for an existing user')` test multiple time we get an error for duplicate key!
+if you run your `it('should send a response with a valid user status for an existing user')` test multiple time we get an error for duplicate key!
 
 ## Hooks
 
 `beforeEach()` & `afterEach()` runs before/after each `it` test case.
+
+## Testing Code that Reqires Authentication
+
+in the controller, for the below line to not error , in our `req` object in our test we need to return this, for the `json` method call to be chained:
+
+**<span style='color: #a8c62c'>/test/feed-middleware.js:**
+
+```js
+    const res = {
+      status: _ => this,
+      json: _ => {},
+    };
+```
+
+**<span style='color: #a8c62c'>/controller/feed.js:**
+
+```js
+res.status(201).json()
+```
