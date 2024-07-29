@@ -4408,3 +4408,42 @@ res.status(201).json()
 **<span style='color: #ffe5c5'>Link:** [https://www.chaijs.com/](https://www.chaijs.com/)
 
 **<span style='color: #ffe5c5'>Link:** [https://sinonjs.org/](https://sinonjs.org/)
+
+# Node.js as a Build Tool & Using NPM
+
+## NPM and Node.js
+
+So **node.js** is the programming language we used to execute code, to execute javascript code based on that nodejs runtime with all the features that gives us and especially important when we look at it from a build tool perspective, we have to remember that with nodejs, we were able to interact with files.
+
+**Npm** as I said is node's package manager, we can install packages, download them, manage their versions and so on.
+
+## Using NPM
+
+**Npm** is a CLI; command line interface.
+
+**npm repository**  which is a cloud service, where you can host packages.
+
+for a specific version, use `package@version`
+
+you can run the scripts defined in `package.json` either with `npm start` to run the start script or `npm run` and then any script name you configured
+
+## Versioning in Package.json
+
+![image info](./31_sc1.png)
+
+## Build Tools
+
+Nodejs in this course was primarily used to spin up a web server and write code that runs on the server side and that is indeed the main thing you do with nodejs when you write your own nodejs apps.
+
+Theoretically you can run any javascript code with nodejs and specifically you can also interact with your local file system, you can read and write files
+
+We could use nodejs to execute utility scripts that for example parse certain files, manipulate the content and output the manipulated content back into the original file or into a new file and that is the idea behind so-called build tools and that is something nodejs also is capable of.
+
+About build tooling and build workflows, we mostly talk about frontend web development, like for example with our react application.
+
+When splitting our javascript code here across multiple files and we're using `es module` import syntax for merging these files together. Now this does not natively work in all browsers, only in very modern browsers and therefore this is indeed not the code that will end up in the browser.
+
+This is the code we work with but we use a build tool, a build workflow which is started during development with `npm start` and for production with `npm run build`, this build workflow will take our code and kind of merge it together and transform it into code that runs in older browsers too and that is also minified and optimized because that's also important. We use build tools to optimize our code.
+
+if you run `npm run build` in your project here, you actually start such a production workflow which means now it's creating an optimized production bundle and this is all done by npm which started the script and by node.js  
+this produces a minified version of our code and this condensed code also only contains **current gen** javascript logic, so logic that runs in older browsers too. 
