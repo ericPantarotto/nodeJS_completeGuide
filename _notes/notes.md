@@ -4447,3 +4447,9 @@ This is the code we work with but we use a build tool, a build workflow which is
 
 if you run `npm run build` in your project here, you actually start such a production workflow which means now it's creating an optimized production bundle and this is all done by npm which started the script and by node.js  
 this produces a minified version of our code and this condensed code also only contains **current gen** javascript logic, so logic that runs in older browsers too. 
+
+# Modern Javascript & NodeJS
+
+## Node Core Module & Promises
+
+Node documentation should document if Core APIs can now be used with promises / async-await code, instead of the legacy callback function calls.
