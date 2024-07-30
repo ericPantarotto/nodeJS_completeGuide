@@ -4477,3 +4477,19 @@ TypeScript adds features to javascript:
 To convert from `.ts` to `.js` use `tsc app.ts` , and it is this app.js that you add as a script/defer to your html file.
 
 To test this, right-click on the .html file, open with live-server, go to the console
+
+## Assigning Types
+
+Core Types:
+- number (including negatives and floating)
+- string
+- boolean
+- object (any JS object, or more specific types with their properties and associated types)
+- array
+
+`console.log(add('1', '6'));`: our IDE is already complaining and compiling with `tsc` wouldn't work too.
+
+**<span style='color: #bcdbf9'> Note:** n. In the compiled JavaScript code, that `:number` thing is gone.
+
+It's a pure TypeScript feature. It doesn't exist in JavaScript.  
+It's only there during development to give us exactly that error. We only need it during development, because it allows us to catch bugs like this and get rid of such lines.
