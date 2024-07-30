@@ -4460,6 +4460,8 @@ Node documentation should document if Core APIs can now be used with promises / 
 
 **<span style='color: #bcdbf9'> Note:** TypeSript is a superset of Javascript. and it can avoid unwanted behavior at **runtime**, by adding strict typing (and avoiding unecessary checks in your code on types)
 
+**<span style='color:   #875c5c'>IMPORTANT:** TypeScript builds up on JavaScript. This means that any JavaScript code, works in TypeScript files.
+
 TypeScript adds features to javascript:
 
 - Types
