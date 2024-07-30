@@ -4453,3 +4453,27 @@ this produces a minified version of our code and this condensed code also only c
 ## Node Core Module & Promises
 
 Node documentation should document if Core APIs can now be used with promises / async-await code, instead of the legacy callback function calls.
+
+# NodeJs & TypeScript
+
+## What is TypeScript
+
+**<span style='color: #bcdbf9'> Note:** TypeSript is a superset of Javascript. and it can avoid unwanted behavior at **runtime**, by adding strict typing (and avoiding unecessary checks in your code on types)
+
+TypeScript adds features to javascript:
+
+- Types
+- Next-Gen Javascript features (compiled down for older browsers)
+- non-Javascript features like  interfaces or generics
+- meta-programming features like decorators
+- rich  configuration options
+
+## Typescript Set-up
+
+**<span style='color: #ffe5c5'>Link:** [https://www.typescriptlang.org/download/](https://www.typescriptlang.org/download/)
+
+`sudo npm install -g typescript` should install globally typescript in `/usr/lib/node_modules/typescript`
+
+To convert from `.ts` to `.js` use `tsc app.ts` , and it is this app.js that you add as a script/defer to your html file.
+
+To test this, right-click on the .html file, open with live-server, go to the console
