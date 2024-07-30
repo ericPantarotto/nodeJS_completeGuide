@@ -4495,3 +4495,27 @@ Core Types:
 
 It's a pure TypeScript feature. It doesn't exist in JavaScript.  
 It's only there during development to give us exactly that error. We only need it during development, because it allows us to catch bugs like this and get rid of such lines.
+
+## Configuring TypeScript
+
+
+`tsc --init`
+
+```json
+"strict": true,
+```
+
+this option makes sure that you cannot call a function on a null object.
+
+```typescript
+buttonElement?.addEventListener('click', () => {}
+```
+
+TypeScript cannot know if this button exists, it doesn't check our HTML code, so we can either:
+- add `if(buttonElement) {}`
+- use `?`
+- at declaration: `const buttonElement = document.querySelector('button')!;`
+
+**<span style='color:   #875c5c'>IMPORTANT:** if you have a `tsconfig.json` file, you can do `tsc app.js`, if you want to compile your ts files, you now need to pass `tsc` only and it will compile all `.ts` files of the folder.
+
+**<span style='color: #bcdbf9'> Note:** however the **IDE**, always takes into account the `tsconfif.json` file, and you will have the relevant hints
