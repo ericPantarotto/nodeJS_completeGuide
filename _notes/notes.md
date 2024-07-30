@@ -4519,3 +4519,7 @@ TypeScript cannot know if this button exists, it doesn't check our HTML code, so
 **<span style='color:   #875c5c'>IMPORTANT:** if you have a `tsconfig.json` file, you can do `tsc app.js`, if you want to compile your ts files, you now need to pass `tsc` only and it will compile all `.ts` files of the folder.
 
 **<span style='color: #bcdbf9'> Note:** however the **IDE**, always takes into account the `tsconfif.json` file, and you will have the relevant hints
+
+## Union Types
+
+`number | string`
