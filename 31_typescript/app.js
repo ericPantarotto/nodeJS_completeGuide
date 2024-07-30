@@ -3,6 +3,8 @@
 const num1Element = document.getElementById('num1');
 const num2Element = document.getElementById('num2');
 const buttonElement = document.querySelector('button');
+const numResults = [];
+const stringResults = [];
 function add(num1, num2) {
     if (typeof num1 === 'number' && typeof num2 === 'number') {
         return num1 + num2;
@@ -13,6 +15,9 @@ function add(num1, num2) {
     //HACK: mix of number and string:
     return +num1 + +num2;
 }
+function printResult(resObject) {
+    console.log(resObject.val, resObject.timestamp);
+}
 buttonElement === null || buttonElement === void 0 ? void 0 : buttonElement.addEventListener('click', () => {
     const num1 = num1Element.value;
     const num2 = num2Element.value;
@@ -20,6 +25,10 @@ buttonElement === null || buttonElement === void 0 ? void 0 : buttonElement.addE
     console.log(result);
     const stringResult = add(num1, num2);
     console.log(stringResult);
+    printResult({ val: result, timestamp: new Date() });
+    numResults.push(result);
+    stringResults.push(stringResult);
+    console.log(numResults, stringResults);
 });
 // console.log(add(1, 6));
 //HACK: our IDE is already complaining and compiling tsc... wouldn't work
