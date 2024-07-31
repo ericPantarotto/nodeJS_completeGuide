@@ -30,6 +30,10 @@ buttonElement === null || buttonElement === void 0 ? void 0 : buttonElement.addE
     stringResults.push(stringResult);
     console.log(numResults, stringResults);
 });
+const myPromise = new Promise((resolve, reject) => {
+    setTimeout(() => resolve('it worked!'), 2000);
+});
+myPromise.then(result => console.log(result.split('w')));
 // console.log(add(1, 6));
 //HACK: our IDE is already complaining and compiling tsc... wouldn't work
 // console.log(add('1', '6'));

@@ -24,7 +24,7 @@ function add(num1: NUmOrString, num2: NUmOrString) {
   return +num1 + +num2;
 }
 
-function printResult(resObject: ResultObject ) {
+function printResult(resObject: ResultObject) {
   console.log(resObject.val, resObject.timestamp);
 }
 
@@ -41,9 +41,10 @@ buttonElement?.addEventListener('click', () => {
   numResults.push(result as number);
   stringResults.push(stringResult as string);
   console.log(numResults, stringResults);
-  
 });
 
-// console.log(add(1, 6));
-//HACK: our IDE is already complaining and compiling tsc... wouldn't work
-// console.log(add('1', '6'));
+const myPromise = new Promise<string>((resolve, reject) => {
+  setTimeout(() => resolve('it worked!'), 2000);
+});
+
+myPromise.then(result => console.log(result.split('w')));

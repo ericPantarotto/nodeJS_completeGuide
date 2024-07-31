@@ -4523,3 +4523,27 @@ TypeScript cannot know if this button exists, it doesn't check our HTML code, so
 ## Union Types
 
 `number | string`
+
+## Generics
+
+A generic type simply is a type that interacts with another type, and an array is a great example.
+
+An array is a type on its own. It's a list of data, that's the core type, but it interacts with another type, the type of data inside of the array.
+
+So, you could say that the array is the outer type, but then you have all the elements in the array as an inner type.
+
+`const stringResults: string[] = [];` 
+
+the full syntax would be:
+
+`const stringResults: Array<string> = [];`
+
+Now, what the thing between angle brackets refers to depends on the generic type you are working with.
+
+Another example would be `Promise`, first for that in our `tsconfig.json` file we need to change `"target": "es6"`
+
+A promise is a generic because it resolves to a value, and the value it resolves to, that's the generic type for the promise.
+
+if we wanted to use a string function on our result `console.log(result)`, we need to inform about the type of the promise it resolves to.
+
+**<span style='color: #bcdbf9'> Note:** So, generic types can be tricky the first time you see them, but they make a lot of sense, and they give you extra type safety when working with more complex types or types that are simply connected to each other.
