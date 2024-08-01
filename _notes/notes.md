@@ -4561,3 +4561,19 @@ these translations are available for all major libraries out there.
 In TypeScript we always can and actually should use this `import` from syntax, and it is then still compiled down to that `require` import syntax node uses by default.
 
 **<span style='color: #bcdbf9'> Note:** we also have to activate: `"moduleResolution": "node10",` in tsconfig.json
+
+## Adding REST Routes with TypeScript
+
+And we can then register a new middleware where it call it bodyParser.Json like this.
+
+Now you saw that here I got all the completion, even though we haven't installed the types package for body-parser.
+
+Now, that's actually some extra convenience added by TypeScript and this IDE here. They even analyze JavaScript files.
+
+So even if a library is not using TypeScript, they analyze the JavaScript code in there, and see if they can infer which features you are allowed to use there.
+
+And to a certain extent such inference can be made even with just a JavaScript code.
+
+So for example, here TypeScript and my IDE were able to find out that indeed there is a JSON method exposed on the body-parser object into JavaScript source code off that library.
+
+**<span style='color: #bcdbf9'> Note:** However the recommendation is to always install the @types library with the package you are working with.
