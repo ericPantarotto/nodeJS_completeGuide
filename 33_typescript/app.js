@@ -34,6 +34,3 @@ const myPromise = new Promise((resolve, reject) => {
     setTimeout(() => resolve('it worked!'), 2000);
 });
 myPromise.then(result => console.log(result.split('w')));
-// console.log(add(1, 6));
-//HACK: our IDE is already complaining and compiling tsc... wouldn't work
-// console.log(add('1', '6'));

@@ -4547,3 +4547,17 @@ A promise is a generic because it resolves to a value, and the value it resolves
 if we wanted to use a string function on our result `console.log(result)`, we need to inform about the type of the promise it resolves to.
 
 **<span style='color: #bcdbf9'> Note:** So, generic types can be tricky the first time you see them, but they make a lot of sense, and they give you extra type safety when working with more complex types or types that are simply connected to each other.
+
+## Node and TypeScript
+
+`import express from 'express';` will yield an error, you have to run `npm install --save-dev @types/express`
+
+`@types` packages are packages which provide TypeScript translations for JavaScript features.
+
+So here you don't find the entire node/express code re-written in TypeScript. Instead, these are really just instructions which TypeScript is able to understand so that it knows how to convert your TypeScript code to valid JavaScript code.
+
+these translations are available for all major libraries out there.
+
+In TypeScript we always can and actually should use this `import` from syntax, and it is then still compiled down to that `require` import syntax node uses by default.
+
+**<span style='color: #bcdbf9'> Note:** we also have to activate: `"moduleResolution": "node10",` in tsconfig.json
