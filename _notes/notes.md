@@ -4589,3 +4589,9 @@ Because this feature doesn't create anything that would exist in JavaScript. The
 **<span style='color:   #875c5c'>IMPORTANT:** Node is not capable of running TypeScript code. It's only capable of running JavaScript code.
 
 Therefore, we needed to compile the TypeScript code to JavaScript first, to then run the JavaScript code. So that we during development can use TypeScript, but Node still executes JavaScript.
+
+## Wrap-up
+
+It is important to understand that node itself is not able to execute TypeScript code. So the code we write in the source folder, is not directly the code we're going to execute.
+
+This is just our source code. To execute it, we need to compile it first and we do that with the "tsc" command, which invokes the TypeScript compiler in this project, thanks to the "tsconfig.json" file and of course adhering to the configuration we set up in this file.
