@@ -19,7 +19,7 @@ router.post('/todo', (req, res, next) => {
   res.status(201).json({ message: 'Added Todo', toDo: newToDo, toDos: toDos });
 });
 
-router.put('/todo:todoId', (req, res, next) => {
+router.put('/todo/:todoId', (req, res, next) => {
   const tId = req.params.todoId;
   const todoIndex = toDos.findIndex(item => item.id === tId);
   if (todoIndex >= 0) {
@@ -29,8 +29,10 @@ router.put('/todo:todoId', (req, res, next) => {
   res.status(404).json({ message: "Couldn't find todo for this id" });
 });
 
-router.delete('/todo:todoId', (req, res, next) => {
- toDos.filter(item => item.id !== req.params.todoId) 
+router.delete('/todo/:todoId', (req, res, next) => {
+  toDos = toDos.filter(item => item.id !== req.params.todoId);
+  console.log(toDos);
+
   res.status(200).json({ message: 'Deleted todo', toDos: toDos });
 });
 

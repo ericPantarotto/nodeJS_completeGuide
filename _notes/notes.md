@@ -4577,3 +4577,15 @@ And to a certain extent such inference can be made even with just a JavaScript c
 So for example, here TypeScript and my IDE were able to find out that indeed there is a JSON method exposed on the body-parser object into JavaScript source code off that library.
 
 **<span style='color: #bcdbf9'> Note:** However the recommendation is to always install the @types library with the package you are working with.
+
+## Testing the API
+
+We first compile our Express.js app, using `tsc`.
+
+In the models folder, you'll see the todo JS file is pretty empty. And the reason for that is that interfaces are a pure TypeScript feature, which helps TypeScript during compilation, but which generate no actual code.
+
+Because this feature doesn't create anything that would exist in JavaScript. Therefore, we essentially have an empty file here without anything in it in the end.
+
+**<span style='color:   #875c5c'>IMPORTANT:** Node is not capable of running TypeScript code. It's only capable of running JavaScript code.
+
+Therefore, we needed to compile the TypeScript code to JavaScript first, to then run the JavaScript code. So that we during development can use TypeScript, but Node still executes JavaScript.
