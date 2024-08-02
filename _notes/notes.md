@@ -4712,3 +4712,13 @@ to switch back to node, you need to deactivate `deno` extension (and restart the
 **<span style='color: #bcdbf9'> Note:** as we want tom use `ES6 Import` syntax, either we'd need to do `npm init` and in the package.json, set **type to module**, or use the `.mjs` extension!
 
 **<span style='color:   #875c5c'>IMPORTANT:** we didn't have to assign any permission while running `node app.mjs` !
+
+## How Deno Features are organized
+
+- Deno Namespace APIs (built-in libraries, maintained by Core team) => no import needed (which differs from Node)  
+  https://docs.deno.com/runtime/manual/
+- Standard libraries (unstable but maintained by Core team) => import needed  
+  https://deno.land/std@0.224.0
+- 3rd party libraries (maintained by community team) => import needed  
+
+Standard + 3rd party libraries /  built up on the core APIs to make development easier.
