@@ -4662,3 +4662,20 @@ So that's how you can think about these core APIs:
 - It's basically what you can do in the browser
 - minus features that only makes sense in the browser
 - plus features that can't be used inside of the browser, that can be used outside of it though.
+
+## Using the Deno Runtime
+
+Extensions: install Deno from **denoland**, to improve our VS IDE.
+
+**<span style='color: #a8c62c'>settings.json**
+```json
+  "deno.enable": true,
+```
+
+Now `Deno` object is accessible and all the methods we can access. 
+
+All these are only available if we then later execute this file with the Deno executable, not if we would execute it with Node or anything else.
+
+So this Deno object here is really only available if that script later gets executed by Deno, otherwise it'll not be available.
+
+![image info](./34_sc3.png)
