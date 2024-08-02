@@ -4454,6 +4454,8 @@ this produces a minified version of our code and this condensed code also only c
 
 Node documentation should document if Core APIs can now be used with promises / async-await code, instead of the legacy callback function calls.
 
+**<span style='color: #ffe5c5'>Link:** [https://stackoverflow.com/questions/31978347/fs-writefile-in-a-promise-asynchronous-synchronous-stuff](https://stackoverflow.com/questions/31978347/fs-writefile-in-a-promise-asynchronous-synchronous-stuff)
+
 # NodeJs & TypeScript
 
 ## What is TypeScript
@@ -4702,3 +4704,11 @@ By default, when you execute code with Deno, that code may not:
 ```console
 deno run --allow-write app.ts
 ```
+
+## Repeating the example with Node
+
+to switch back to node, you need to deactivate `deno` extension (and restart the extension)
+
+**<span style='color: #bcdbf9'> Note:** as we want tom use `ES6 Import` syntax, either we'd need to do `npm init` and in the package.json, set **type to module**, or use the `.mjs` extension!
+
+**<span style='color:   #875c5c'>IMPORTANT:** we didn't have to assign any permission while running `node app.mjs` !
