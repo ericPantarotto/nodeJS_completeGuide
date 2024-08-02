@@ -4780,3 +4780,11 @@ Now, you can still manage some versions by including them in the URL from which 
 **<span style='color: #bcdbf9'> Note:** Unlike other runtimes, the oak application doesn’t listen for incoming requests, instead it handles worker fetch requests.
 
 with Oak, we use middleware just like with Exppress.js, but we have a `context` rather than `(req, res, next)` with Express.js. 
+
+## More on Modules URLs
+
+Here are a couple of useful bits of information on those remote imports:
+
+- To get better auto-completion in the IDE, execute your code once and let Deno download + cache those remote files locally. Thereafter, you should get better autocompletion.
+- If you ever want to force Deno to re-fetch the remote files (i.e. to clear the local cache), you can do so by executing your script with the --reload flag (e.g. deno run --reload my_file.ts)
+- If you want to lock in a certain version for a remote file, you can do so: import { serve } from 'https://deno.land/std@0.51.0/http/server.ts';
