@@ -4751,3 +4751,32 @@ Deno out of the box supports top level await (outside of asynchronous functions)
 ```console
 deno run --allow-net app_http.ts
 ```
+## Oak Framework with Deno
+
+### What kind of Web Appdo we build?
+
+![image info](./34_sc4.png)
+
+In Node.js, we have the Express framework. Express is a great and very popular Node framework that takes care of the heavy lifting and allows us, as developer, to focus on our core business logic.
+
+In Deno, we have the Oak framework.
+
+it is inspired by Node.js KOA framework (not Express)
+
+**<span style='color: #ffe5c5'>Link:** [https://deno.land/x/oak@v16.1.0](https://deno.land/x/oak@v16.1.0)
+
+With Express,
+- we had core modules, which we had to import, but which were installed together with Node. 
+- And we had third party modules, like Express, which we had to install with NPM Install.
+
+We had to manage dependencies for our project.
+
+With Deno, this concept does not exist. Because with Deno, you have these URL imports. So you never install anything locally, you never manage local dependencies like this with Deno.
+
+Instead with Deno you really just reach out to a web server, to a file on that server, and you can install it from there.
+
+Now, you can still manage some versions by including them in the URL from which you're importing,
+
+**<span style='color: #bcdbf9'> Note:** Unlike other runtimes, the oak application doesn’t listen for incoming requests, instead it handles worker fetch requests.
+
+with Oak, we use middleware just like with Exppress.js, but we have a `context` rather than `(req, res, next)` with Express.js. 
