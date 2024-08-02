@@ -4678,4 +4678,27 @@ All these are only available if we then later execute this file with the Deno ex
 
 So this Deno object here is really only available if that script later gets executed by Deno, otherwise it'll not be available.
 
+## Working with Deno Permissions
+
+> Deno is "secure by default"
+
 ![image info](./34_sc3.png)
+
+So just because we use Deno does not mean that our code is always secure. We can still open up security holes, when writing Deno code.
+
+it means that when we run a script with Deno, that script does not by default, have all possible permissions.
+
+For example, something like reading or writing files, or sending network requests, or listening to network requests. These are all operations, that are always unlocked and possible with **Node**.
+
+When you execute a JavaScript file with node, that file is able to do everything, it could delete all files on your system, and nothing would stop it from doing that. Therefore, when you execute code with node, you have to trust that code, either because you wrote it on your own, or because it's some third party library, which you trust,
+
+With Deno, there's a different model, that's being used. Deno by default, is not allowed to do everything. Instead, by default, it must not do a lot.
+
+By default, when you execute code with Deno, that code may not:
+- write to files, 
+- that code may not read files,
+- and it may not send or get HTTP requests.
+
+```console
+deno run --allow-write app.ts
+```
