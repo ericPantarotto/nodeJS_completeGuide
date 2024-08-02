@@ -4595,3 +4595,39 @@ Therefore, we needed to compile the TypeScript code to JavaScript first, to then
 It is important to understand that node itself is not able to execute TypeScript code. So the code we write in the source folder, is not directly the code we're going to execute.
 
 This is just our source code. To execute it, we need to compile it first and we do that with the "tsc" command, which invokes the TypeScript compiler in this project, thanks to the "tsconfig.json" file and of course adhering to the configuration we set up in this file.
+
+# Introduction to Deno
+
+## What is Deno
+
+![image info](./34_sc1.png)
+
+## Why Deno
+
+![image info](./34_sc2.png)
+
+## Deno Set-up
+
+**<span style='color: #ffe5c5'>Link:** [https://deno.com/](https://deno.com/)
+
+
+**<span style='color:   #875c5c'>IMPORTANT:**
+
+```console 
+curl -fsSL <https://deno.land/install.sh> | sh
+```
+
+**<span style='color:   #875c5c'>IMPORTANT:**  
+- `nano ~/.bashrc`
+- `nano ~/.zshrc`
+
+```console
+export DENO_INSTALL="/home/ecr/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+```
+
+To check:`deno --version`
+
+**Deno REPL** is just a nice playground. To try out some things in reality, you're going to write JavaScript code or TypeScript code with Deno, and you can then run those code files with the **Deno executable.**
+
+That's how you would run most of the code when working with Deno.
