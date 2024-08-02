@@ -4729,7 +4729,7 @@ To use node *promisified* version of `fs`, here's an interesting link depending 
 
 Standard + 3rd party libraries /  built up on the core APIs to make development easier.
 
-## Using the standard Library
+## Using the Standard Library
 
 What **Node.js** doesn't support, are URL imports. Where we don't import from a local file or a module, but where we instead point at a file on another server to import that file.
 
