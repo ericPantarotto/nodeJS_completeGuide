@@ -4713,6 +4713,12 @@ to switch back to node, you need to deactivate `deno` extension (and restart the
 
 **<span style='color:   #875c5c'>IMPORTANT:** we didn't have to assign any permission while running `node app.mjs` !
 
+To use node *promisified* version of `fs`, here's an interesting link depending if you want to use:
+- `require`
+- `ES6 import`
+
+**<span style='color: #ffe5c5'>Link:** [https://stackoverflow.com/questions/31978347/fs-writefile-in-a-promise-asynchronous-synchronous-stuff](https://stackoverflow.com/questions/31978347/fs-writefile-in-a-promise-asynchronous-synchronous-stuff)
+
 ## How Deno Features are organized
 
 - Deno Namespace APIs (built-in libraries, maintained by Core team) => no import needed (which differs from Node)  
@@ -4722,3 +4728,26 @@ to switch back to node, you need to deactivate `deno` extension (and restart the
 - 3rd party libraries (maintained by community team) => import needed  
 
 Standard + 3rd party libraries /  built up on the core APIs to make development easier.
+
+## Using the standard Library
+
+What **Node.js** doesn't support, are URL imports. Where we don't import from a local file or a module, but where we instead point at a file on another server to import that file.
+
+And that's something **Deno** does.
+
+in newer version for `http`, actually you do run a **package add** command, as per documentation https://jsr.io/@std/http
+
+`deno add @std/http`
+
+but in newer Deno version, you can use the Deno's integrated HTTP server:
+
+**<span style='color: #ffe5c5'>Link:** [https://docs.deno.com/runtime/tutorials/http_server/](https://docs.deno.com/runtime/tutorials/http_server/)
+
+```js
+import * as mod from "@std/http/";
+```
+Deno out of the box supports top level await (outside of asynchronous functions), just like modern versions **node.js** does.
+
+```console
+deno run --allow-net app_http.ts
+```
