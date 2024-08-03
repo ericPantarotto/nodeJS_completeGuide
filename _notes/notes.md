@@ -4812,3 +4812,12 @@ So this tells Oak that we don't just want to start the next middlewares in line,
 - Maturity & An active ecosystem is extremly important
 
 *Recommendation*: Use Deno for side-projects, Node is established and not going to go anywhere
+
+# Deno, CRUD & Databases (MongoDB)
+
+## App Setup
+
+in the frontend, `package.json`, make sure to change the `start` script to:
+```json
+"start": "react-scripts --openssl-legacy-provider start",
+```
