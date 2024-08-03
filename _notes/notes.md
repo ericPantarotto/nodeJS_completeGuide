@@ -4788,3 +4788,13 @@ Here are a couple of useful bits of information on those remote imports:
 - To get better auto-completion in the IDE, execute your code once and let Deno download + cache those remote files locally. Thereafter, you should get better autocompletion.
 - If you ever want to force Deno to re-fetch the remote files (i.e. to clear the local cache), you can do so by executing your script with the --reload flag (e.g. deno run --reload my_file.ts)
 - If you want to lock in a certain version for a remote file, you can do so: import { serve } from 'https://deno.land/std@0.51.0/http/server.ts';
+
+## Re-building Rest API with Deno
+
+Our `TodoRoutes` middlewares, has **async** code, 
+
+but with Deno, if we register other middlewares with `next`, it will not wait for that, therefore, we would actually have the scenario where we often send back a response too early, before the route has been able to process the request.
+
+Therefore, whenever you have any middlewares that do async stuff, you should make all your middlewares async and always `await next();`.
+
+So this tells Oak that we don't just want to start the next middlewares in line, but that we also want to wait for them to finish before we send back that automatically generated response.

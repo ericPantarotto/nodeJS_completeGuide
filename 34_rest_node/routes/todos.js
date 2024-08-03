@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 const router = express.Router();
 
 let todos = [];
+
 router.get('/todos', (req, res, next) =>
   res.status(200).json({ todos: todos })
 );
