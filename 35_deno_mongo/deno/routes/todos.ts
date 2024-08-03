@@ -10,7 +10,7 @@ interface Todo {
 let toDos: Array<Todo> = [];
 
 router.get('/todos', (ctx, next) => {
-  ctx.response.body = { toDos: toDos };
+  ctx.response.body = { todos: toDos };
 });
 
 router.post('/todos', async (ctx, next) => {

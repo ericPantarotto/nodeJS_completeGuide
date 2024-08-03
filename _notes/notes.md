@@ -4821,3 +4821,22 @@ in the frontend, `package.json`, make sure to change the `start` script to:
 ```json
 "start": "react-scripts --openssl-legacy-provider start",
 ```
+
+## Handling CORS Errors
+
+By default browsers prevent GET, POST, PATCH and so on requests, if frontend and backend server are not the same one.
+
+**<span style='color: #875c5c'>IMPORTANT:** And here on localhost, even different ports, imply different servers.
+
+Now this is a default security mechanism. however, we can tell the browser that we do want to allow access, and we have to set this setting on the server where we do host the data.
+
+So on the backend, on the Rest API there, we can set specific response headers, to responses we sent back to the front end application that tell the browser that serves the front end application that getting that data is okay, and the front then should be able to proceed.
+
+![image info](./35_sc1.png)
+
+**<span style='color: #875c5c'>IMPORTANT:** And it's really important to also keep in mind that this is just a browser security mechanism, which is why we had no problems fetching and storing data with Postman. This simply doesn't care about this CORS thing. The browser does, however, and that's where we're getting a CORS error here.
+
+in our middleware, we add this headers in our response:  
+`ctx.response.headers.set('Access-Control-Allow-Headers', 'Content-Type');` 
+
+this is because in the front-end app, we can see that actually for put and for post requests, we do a set to content type two `application/Json`.
