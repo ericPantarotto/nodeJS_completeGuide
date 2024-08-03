@@ -4602,6 +4602,8 @@ This is just our source code. To execute it, we need to compile it first and we 
 
 ## What is Deno
 
+**Deno is built with RUST** under the hood!
+
 ![image info](./34_sc1.png)
 
 ## Why Deno
@@ -4840,3 +4842,28 @@ in our middleware, we add this headers in our response:
 `ctx.response.headers.set('Access-Control-Allow-Headers', 'Content-Type');` 
 
 this is because in the front-end app, we can see that actually for put and for post requests, we do a set to content type two `application/Json`.
+
+as an alternative, you can use the `Oaks` integrated package
+
+**<span style='color: #ffe5c5'>Link:** [https://deno.land/x/cors@v1.2.2](https://deno.land/x/cors@v1.2.2)
+
+## Connecting Deno to MongoDB
+
+To connect our Mongo Db to our Deno app, we'll use a third-party package:
+
+**<span style='color: #ffe5c5'>Link:** [https://deno.land/x/mongo@v0.33.0](https://deno.land/x/mongo@v0.33.0)
+
+So, Deno is built with Rust and you typically don't need to care about this but here it matters because that means that the MongoDB library for Rust also works with Deno. All you need is a wrapper and this package here, this module here, deno_mongo, is such a wrapper.
+
+```js
+await client.connect(...@clusternodejs.ndf98eo.mongodb.net/retryWrites=true&w=majority&appName=ClusterNodejs)
+```
+we don't specify the database but switch to it on the next line of code.
+
+To pass a .env configuration, initiall tested  
+https://deno.land/std@0.224.0/dotenv/mod.ts?s=load, 
+
+but in the end this source  
+https://stackoverflow.com/questions/78382957/deno-env-get-not-loading-envs-from-env-file pointed to:
+
+`deno run --allow-net --env  --allow-env app.ts`, and have your .env set-up with specific `variable=valueWithNoQuotationMark`
