@@ -13,6 +13,8 @@ const Todos = () => {
       const response = await fetch('http://192.168.1.30:8000/todos');
       const todosData = await response.json();
       setTodos(todosData.todos);
+
+      // console.log(todosData);
     } catch (err) {
       // Error handling would be implemented here
       console.log(err);
@@ -54,6 +56,7 @@ const Todos = () => {
     let url = 'http://192.168.1.30:8000/todos';
     let method = 'POST';
     if (editedTodo) {
+      // console.log(editedTodo.id);
       url = url + '/' + editedTodo.id;
       method = 'PUT';
     }
