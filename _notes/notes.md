@@ -4791,6 +4791,9 @@ Here are a couple of useful bits of information on those remote imports:
 
 ## Re-building Rest API with Deno
 
+### uuid
+**<span style='color: #ffe5c5'>Link:** [https://docs.deno.com/examples/uuids/](https://docs.deno.com/examples/uuids/)
+
 Our `TodoRoutes` middlewares, has **async** code, 
 
 but with Deno, if we register other middlewares with `next`, it will not wait for that, therefore, we would actually have the scenario where we often send back a response too early, before the route has been able to process the request.
@@ -4798,3 +4801,14 @@ but with Deno, if we register other middlewares with `next`, it will not wait fo
 Therefore, whenever you have any middlewares that do async stuff, you should make all your middlewares async and always `await next();`.
 
 So this tells Oak that we don't just want to start the next middlewares in line, but that we also want to wait for them to finish before we send back that automatically generated response.
+
+## Should we switch from Node to Deno?
+
+### Deno vs. Node
+
+![image info](./34_sc5.png)
+
+- Which features matter to you? Which style do you prefer?
+- Maturity & An active ecosystem is extremly important
+
+*Recommendation*: Use Deno for side-projects, Node is established and not going to go anywhere
