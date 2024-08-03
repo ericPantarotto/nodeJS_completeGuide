@@ -1,23 +1,29 @@
+// import { ObjectId } from 'https://deno.land/x/mongo@v0.33.0/mod.ts';
 import { Router } from 'https://deno.land/x/oak/mod.ts';
 import * as uuid from 'jsr:@std/uuid';
-import { getDb } from "../helpers/db_clients.ts";
+import { getDb } from '../helpers/db_clients.ts';
 
 const router = new Router();
 
 interface Todo {
-  id: string;
+  id?: string;
   text: string;
 }
 let toDos: Array<Todo> = [];
 
-router.get('/todos', (ctx, next) => {
+router.get('/todos', async (ctx, next) => {
+  const toDos = await (await getDb()).collection('todos').find().toArray();
   ctx.response.body = { todos: toDos };
 });
 
 router.post('/todos', async (ctx, next) => {
   const data = await ctx.request.body.json();
-  const newTodo: Todo = { id: uuid.v1.generate(), text: data.text };
-  toDos.push(newTodo);
+  const newTodoArray: Todo = { id: uuid.v1.generate(), text: data.text };
+  const newTodo: Todo = { text: data.text };
+  
+  (await getDb()).collection('todos').insertOne(newTodo)
+  toDos.push(newTodoArray);
+
   ctx.response.body = { message: 'Todo created!', todo: newTodo };
 });
 

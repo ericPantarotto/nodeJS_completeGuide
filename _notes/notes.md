@@ -4853,6 +4853,9 @@ To connect our Mongo Db to our Deno app, we'll use a third-party package:
 
 **<span style='color: #ffe5c5'>Link:** [https://deno.land/x/mongo@v0.33.0](https://deno.land/x/mongo@v0.33.0)
 
+**<span style='color: #875c5c'>IMPORTANT:** from above documentation, the connection method is SCRAM-SHA-1!  
+mongodb+srv://ericpython1980:xxx@clusternodejs.ndf98eo.mongodb.net/?authMechanism=SCRAM-SHA-1
+
 So, Deno is built with Rust and you typically don't need to care about this but here it matters because that means that the MongoDB library for Rust also works with Deno. All you need is a wrapper and this package here, this module here, deno_mongo, is such a wrapper.
 
 ```js
@@ -4860,10 +4863,22 @@ await client.connect(...@clusternodejs.ndf98eo.mongodb.net/retryWrites=true&w=ma
 ```
 we don't specify the database but switch to it on the next line of code.
 
-To pass a .env configuration, initiall tested  
-https://deno.land/std@0.224.0/dotenv/mod.ts?s=load, 
+To pass a .env configuration, initiall tested
 
-but in the end this source  
-https://stackoverflow.com/questions/78382957/deno-env-get-not-loading-envs-from-env-file pointed to:
+**<span style='color: #ffe5c5'>Link:** [https://deno.land/std@0.224.0/dotenv/mod.ts?s=load](https://deno.land/std@0.224.0/dotenv/mod.ts?s=load)
+
+**<span style='color: #ffe5c5'>Link:** [https://stackoverflow.com/questions/78382957/deno-env-get-not-loading-envs-from-env-file](https://stackoverflow.com/questions/78382957/deno-env-get-not-loading-envs-from-env-file)
+
+but in the end this source showed:
 
 `deno run --allow-net --env  --allow-env app.ts`, and have your .env set-up with specific `variable=valueWithNoQuotationMark`
+
+The MongoClient from the Mongo library will automatically take care about the connection, it will manage that connection.
+
+## Using the MongoDB Client Module
+
+It will even set up multiple simultaneous connections and use a concept called connection pooling to give us the fastest possible way of working with MongoDB.
+
+**<span style='color: #bcdbf9'> Note:** in the course mongo._id.$oid to return a stringified version of the ObjectId is not needed anymore
+
+**<span style='color: #ffe5c5'>Link:** [https://stackoverflow.com/questions/69744489/i-can-not-read-the-iod-from-mongodb-response-in-a-deno-app](https://stackoverflow.com/questions/69744489/i-can-not-read-the-iod-from-mongodb-response-in-a-deno-app)

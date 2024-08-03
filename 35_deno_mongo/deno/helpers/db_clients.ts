@@ -8,9 +8,8 @@ const client = new MongoClient();
 let db: Database;
 
 export async function connect() {
-  console.log();
   // Connecting using srv url
-  await client.connect(Deno.env.get('MONGO_DB_URL') ?? 'missing_mongo_url');
+  await client.connect(Deno.env.get('MONGO_DB_URL')!);
   db = client.database('todo-app');
 }
 export async function getDb() {

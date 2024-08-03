@@ -1,7 +1,7 @@
 import { oakCors } from 'https://deno.land/x/cors/mod.ts';
 import { Application } from 'https://deno.land/x/oak/mod.ts';
 import todosRoutes from './routes/todos.ts';
-import {connect  } from "./helpers/db_clients.ts";
+import { connect } from "./helpers/db_clients.ts";
 
 await connect();
 const app = new Application();
